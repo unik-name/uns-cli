@@ -3,6 +3,10 @@ export const NETWORKS = {
         url: "https://forger1.devnet.uns.network",
         backend: "https://us-central1-unik-name.cloudfunctions.net",
     },
+    dalinet: {
+        url: "https://forger1.dalinet.uns.network",
+        backend: "https://us-central1-unik-name-integration.cloudfunctions.net",
+    },
     local: {
         url: "http://localhost:4003",
         backend: "https://us-central1-unik-name-integration.cloudfunctions.net",
