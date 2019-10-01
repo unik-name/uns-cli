@@ -34,8 +34,14 @@
         "@types/node": "^11.10.5",
         "@types/request-promise": "^4.1.44",
         "globby": "^10.0.1",
+        "husky": "^3.0.7",
         "javascript-obfuscator": "^0.18.1",
+        "lint-staged": "^9.4.1",
+        "prettier": "^1.18.2",
+        "rimraf": "^3.0.0",
         "ts-node": "^8.3.0",
+        "tslint": "^5.13.1",
+        "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.3.3333"
     },
     "engines": {
@@ -62,17 +68,26 @@
     "scripts": {
         "uns": "./bin/run",
         "prepublishOnly": "yarn build && yarn uglify",
-        "pretest": "bash ../../scripts/pre-test.sh",
-        "prepack": "../../node_modules/.bin/oclif-dev manifest && npm shrinkwrap",
-        "postpack": "rm -f oclif.manifest.json",
-        "compile": "../../node_modules/typescript/bin/tsc",
+        "pretest": "yarn lint && yarn build",
+        "prepack": "oclif-dev manifest && npm shrinkwrap",
+        "postpack": "rimraf oclif.manifest.json",
+        "compile": "tsc",
         "build": "yarn clean && yarn compile",
         "build:watch": "yarn clean && yarn compile -w",
-        "clean": "del dist",
-        "uglify": "../../node_modules/javascript-obfuscator/bin/javascript-obfuscator ./dist --output ./lib && del dist && mv ./lib/dist ./dist && del lib",
-        "publishLib": "npm login && npm publish"
+        "clean": "rimraf dist",
+        "uglify": "javascript-obfuscator ./dist --output ./lib && rimraf dist && mv ./lib/dist ./dist && rimraf lib",
+        "publishLib": "npm login && npm publish",
+        "lint": "tslint -p .",
+        "lint:fix": "yarn lint --fix",
+        "format": "yarn lint && yarn prettify",
+        "prettify": "prettier --write \"./*.{json,md}\" \"./src/**/*.{ts,json}\""
     },
     "publishConfig": {
         "access": "public"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     }
 }
