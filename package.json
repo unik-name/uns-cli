@@ -16,6 +16,7 @@
         "@oclif/config": "^1.12.9",
         "@oclif/plugin-help": "^2.1.6",
         "@oclif/plugin-warn-if-update-available": "^1.7.0",
+        "@oclif/test": "^1.2.5",
         "@uns/crypto": "^3.0.0",
         "@uns/ts-sdk": "^1.1.0-beta",
         "cli-ux": "^5.3.1",
