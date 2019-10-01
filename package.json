@@ -31,14 +31,18 @@
     "devDependencies": {
         "@oclif/dev-cli": "^1.21.3",
         "@types/flat": "^0.0.28",
+        "@types/jest": "^24.0.18",
         "@types/node": "^11.10.5",
         "@types/request-promise": "^4.1.44",
         "globby": "^10.0.1",
         "husky": "^3.0.7",
         "javascript-obfuscator": "^0.18.1",
+        "jest": "^24.9.0",
+        "jest-extended": "^0.11.2",
         "lint-staged": "^9.4.1",
         "prettier": "^1.18.2",
         "rimraf": "^3.0.0",
+        "ts-jest": "^24.1.0",
         "ts-node": "^8.3.0",
         "tslint": "^5.13.1",
         "tslint-config-prettier": "^1.18.0",
@@ -77,10 +81,11 @@
         "clean": "rimraf dist",
         "uglify": "javascript-obfuscator ./dist --output ./lib && rimraf dist && mv ./lib/dist ./dist && rimraf lib",
         "publishLib": "npm login && npm publish",
-        "lint": "tslint -p .",
-        "lint:fix": "yarn lint --fix",
+        "lint": "yarn lint:partial -p . -c ./tslint.json",
+        "lint:partial": "tslint './src/**/*.ts' -c ./tslint_partial.json --fix",
         "format": "yarn lint && yarn prettify",
-        "prettify": "prettier --write \"./*.{json,md}\" \"./src/**/*.{ts,json}\""
+        "prettify": "prettier --write \"./*.{json,md}\" \"./src/**/*.{ts,json}\"",
+        "test": "jest"
     },
     "publishConfig": {
         "access": "public"
@@ -89,5 +94,29 @@
         "hooks": {
             "pre-commit": "lint-staged"
         }
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "bail": true,
+        "verbose": true,
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testMatch": [
+            "**/*.test.ts"
+        ],
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ],
+        "collectCoverage": false,
+        "watchman": false,
+        "setupFilesAfterEnv": [
+            "jest-extended"
+        ]
     }
 }
