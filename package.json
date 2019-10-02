@@ -73,7 +73,6 @@
     "scripts": {
         "uns": "./bin/run",
         "prepublishOnly": "yarn build && yarn uglify",
-        "pretest": "yarn lint && yarn build",
         "prepack": "oclif-dev manifest && npm shrinkwrap",
         "postpack": "rimraf oclif.manifest.json",
         "compile": "tsc",
@@ -83,9 +82,13 @@
         "uglify": "javascript-obfuscator ./dist --output ./lib && rimraf dist && mv ./lib/dist ./dist && rimraf lib",
         "publishLib": "npm login && npm publish",
         "lint": "yarn lint:partial -p . -c ./tslint.json",
-        "lint:partial": "tslint './src/**/*.ts' -c ./tslint_partial.json --fix",
-        "format": "yarn lint && yarn prettify",
-        "prettify": "prettier --write \"./*.{json,md}\" \"./src/**/*.{ts,json}\"",
+        "lint:fix": "yarn lint:partial:fix -p . -c ./tslint.json",
+        "lint:partial": "tslint './src/**/*.ts' -c ./tslint_partial.json",
+        "lint:partial:fix": "yarn lint:partial --fix",
+        "format:check": "yarn lint && yarn prettify:check",
+        "prettify": "prettier \"./*.{json,md}\" \"./src/**/*.{ts,json}\"",
+        "prettify:check": "yarn prettify --check",
+        "prettify:fix": "yarn prettify --write",
         "test": "jest"
     },
     "publishConfig": {
