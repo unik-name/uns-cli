@@ -81,17 +81,18 @@ jobs:
       - *setup_envvars
       - *attach_workspace
       - run:
-          command: yarn build
+          command: yarn compile
+      - *persist_repo_to_workspace
       - *slack_notification
 
-  format:
+  check-format:
     <<: *job_config
     steps:
       - *setup_envvars
       - *attach_workspace
       - run:
           command: |
-            yarn format
+            yarn format:check
       - *slack_notification
 
   test:
@@ -120,12 +121,12 @@ workflows:
       - build:
           requires:
             - checkout_prepare_dependencies
-      - format:
+      - check-format:
           requires:
-            - build
+            - checkout_prepare_dependencies
       - test:
           requires:
-            - format
+            - build
 
   weekly:
     triggers:
@@ -140,9 +141,9 @@ workflows:
       - build:
           requires:
             - checkout_prepare_dependencies
-      - format:
+      - check-format:
           requires:
-            - build
+            - checkout_prepare_dependencies
       - test:
           requires:
-            - format
+            - build
