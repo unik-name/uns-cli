@@ -1,6 +1,6 @@
 # uns-cli
 
-uns CLI
+Universal Name System Command Line Interface. You can create wallets on UNS network, UNIK token and manage them with the uns-cli.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/uns-cli.svg)](https://npmjs.org/package/@uns/uns-cli)
@@ -51,11 +51,6 @@ USAGE
 <!-- usagestop -->
 
 # Commands
-
-<!-- commands -->
-
--   [`uns hello [FILE]`](#uns-hello-file)
--   [`uns help [COMMAND]`](#uns-help-command)
 
 ## `uns create-unik [FILE]`
 
