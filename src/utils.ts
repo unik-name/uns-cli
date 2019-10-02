@@ -1,6 +1,6 @@
 import { flags } from "@oclif/parser";
 import { networks } from "@uns/crypto";
-import { Client, constants, ITransactionData } from "@uns/crypto";
+import { Client, ITransactionData } from "@uns/crypto";
 import cli from "cli-ux";
 import { NETWORKS } from "./config";
 
@@ -143,7 +143,6 @@ export const chainmetaFlag = {
 export const confirmedFlag = {
     confirmed: flags.integer({
         default: 3,
-        description:
-            "Minimum number of confirmation since the last update of the UNIK required to return the value.",
+        description: "Minimum number of confirmation since the last update of the UNIK required to return the value.",
     }),
-}
+};
