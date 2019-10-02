@@ -31,6 +31,7 @@ const applyTestCase = (testCase: any) => {
                 },
             }),
         )
+        .env({ UNS_NETWORK: testCase.UNS_NETWORK })
         .stdout()
         .command(testCase.args)
         .it(testCase.description, ctx => {
@@ -48,6 +49,13 @@ describe("status command", () => {
         .exit(2)
         // tslint:disable-next-line:no-empty
         .it("Should exit with code 2 if network is not known", _ => {});
+
+    const network = "customNetwork";
+    test.env({ UNS_NETWORK: network })
+        .command(["status"])
+        .catch(err => expect(err.message.match(`Expected --network=${network} to be one of`)))
+        // tslint:disable-next-line:no-empty
+        .it("Should use UNS_NETWORK env var then throw error", _ => {});
 
     outputCases.forEach(testCase => applyTestCase(testCase));
 });

@@ -54,4 +54,16 @@ export const outputCases = [
         args: ["status", "--network", "devnet", "--format", "table", "--verbose"],
         expected: infoNode + statusResultTable,
     },
+    {
+        description: "Should use env var and return devnet status json",
+        args: ["status"],
+        expected: statusResultJson,
+        UNS_NETWORK: "devnet",
+    },
+    {
+        description: "Should not use env var and return devnet status json",
+        args: ["status", "--network", "devnet"],
+        expected: statusResultJson,
+        UNS_NETWORK: "customnetwork",
+    },
 ];

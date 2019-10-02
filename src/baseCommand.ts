@@ -1,4 +1,5 @@
 import { Command, flags as oFlags } from "@oclif/command";
+import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Client, configManager } from "@uns/crypto";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
@@ -14,6 +15,7 @@ export abstract class BaseCommand extends Command {
             description: "Network used to create UNIK nft token",
             required: true,
             options: UTILS.getNetworksList(),
+            env: "UNS_NETWORK",
         }),
         verbose: oFlags.boolean({
             char: "v",
@@ -49,6 +51,14 @@ export abstract class BaseCommand extends Command {
         /**
          * Configuration
          */
+
+        // This happen when providing network through env var
+        // see Oclif PR: https://github.com/oclif/parser/pull/64
+        // will be removed if PR is accepted
+        if (!UTILS.getNetworksList().includes(flags.network)) {
+            throw new FlagInvalidOptionError(BaseCommand.baseFlags.network, flags.network);
+        }
+
         const networkName = flags.network === "local" ? "testnet" : flags.network;
 
         const networkPreset = configManager.getPreset(networkName);
