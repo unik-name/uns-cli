@@ -1,5 +1,7 @@
 import { expect, test } from "@oclif/test";
 import { NETWORKS } from "../../src/config";
+process.env.DEV_MODE = "true";
+import * as UTILS from "../../src/utils";
 import { outputCases } from "../__fixtures__/commands/status";
 
 const applyTestCase = (testCase: any) => {
@@ -31,6 +33,7 @@ const applyTestCase = (testCase: any) => {
                 },
             }),
         )
+        .env({ UNS_NETWORK: testCase.UNS_NETWORK })
         .stdout()
         .command(testCase.args)
         .it(testCase.description, ctx => {
@@ -48,6 +51,16 @@ describe("status command", () => {
         .exit(2)
         // tslint:disable-next-line:no-empty
         .it("Should exit with code 2 if network is not known", _ => {});
+
+    const network = "customNetwork";
+    test.env({ UNS_NETWORK: network })
+        .command(["status"])
+        .catch(
+            `Expected --network=${network} to be one of: ${UTILS.getNetworksListListForDescription()}
+            See more help with --help`,
+        )
+        // tslint:disable-next-line:no-empty
+        .it("Should use UNS_NETWORK env var then throw error", _ => {});
 
     outputCases.forEach(testCase => applyTestCase(testCase));
 });

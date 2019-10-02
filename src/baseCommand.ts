@@ -15,6 +15,7 @@ export abstract class BaseCommand extends Command {
             description: "Network used to create UNIK nft token",
             required: true,
             options: UTILS.getNetworksList(),
+            env: "UNS_NETWORK",
         }),
         verbose: oFlags.boolean({
             char: "v",
@@ -48,6 +49,15 @@ export abstract class BaseCommand extends Command {
         /**
          * Configuration
          */
+
+        // This happen when providing network through env var
+        if (!UTILS.getNetworksList().includes(flags.network)) {
+            throw new Error(`Expected --network=${
+                flags.network
+            } to be one of: ${UTILS.getNetworksListListForDescription()}
+            See more help with --help`);
+        }
+
         const networkName = flags.network === "local" ? "testnet" : flags.network;
 
         const networkPreset = configManager.getPreset(networkName);
