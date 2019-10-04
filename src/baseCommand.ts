@@ -12,7 +12,7 @@ export abstract class BaseCommand extends Command {
         help: oFlags.help({ char: "h" }),
         network: oFlags.string({
             char: "n",
-            description: "Network used to create UNIK nft token (local are for development only)",
+            description: "Network used to create UNIK nft token",
             required: true,
             options: UTILS.getNetworksList(),
         }),
@@ -59,6 +59,9 @@ export abstract class BaseCommand extends Command {
         this.client = new Client(networkPreset);
 
         try {
+            if (UTILS.isDevMode()) {
+                this.info("DEV MODE IS ACTIVATED");
+            }
             this.info(`node: ${this.api.getCurrentNode()}`);
             const commandResult = await this.do(flags, args);
             if (commandResult && Object.keys(commandResult).length > 0) {
