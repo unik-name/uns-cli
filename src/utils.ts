@@ -4,13 +4,22 @@ import { Client, ITransactionData } from "@uns/crypto";
 import cli from "cli-ux";
 import { NETWORKS } from "./config";
 
+export const isDevMode = () => {
+    return process.env.DEV_MODE === "true";
+};
+
+const getDisableNetworkList = (): string[] => {
+    const networkList = ["unitnet", "mainnet", "testnet"];
+    if (!this.isDevMode()) {
+        networkList.push("dalinet");
+    }
+    return networkList;
+};
+
+const DISABLED_NETWORK_LIST = getDisableNetworkList();
+
 export const getNetworksList = (): string[] => {
-    return [
-        ...Object.keys(networks).filter(
-            network => network !== "unitnet" && network !== "mainnet" && network !== "testnet",
-        ),
-        "local",
-    ];
+    return [...Object.keys(networks).filter(network => !DISABLED_NETWORK_LIST.includes(network)), "local"];
 };
 
 export const getNetworksListListForDescription = () => {
