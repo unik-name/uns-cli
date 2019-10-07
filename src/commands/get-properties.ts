@@ -1,4 +1,3 @@
-import { flags } from "@oclif/command";
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { confirmedFlag, getNetworksListListForDescription, unikidFlag } from "../utils";
@@ -23,10 +22,6 @@ export class GetPropertiesCommand extends BaseCommand {
 
     protected getCommand(): typeof BaseCommand {
         return GetPropertiesCommand;
-    }
-
-    protected getCommandTechnicalName(): string {
-        return "get-properties";
     }
 
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput | CommandOutput[]> {

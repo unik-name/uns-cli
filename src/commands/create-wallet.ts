@@ -1,5 +1,3 @@
-import { color } from "@oclif/color";
-import Command from "@oclif/command";
 import { crypto } from "@uns/crypto";
 import { generateMnemonic } from "bip39";
 import { createHash, randomBytes } from "crypto";
@@ -28,10 +26,6 @@ export class CreateWalletCommand extends BaseCommand {
         return CreateWalletCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "create-wallet";
-    }
-
     protected async do(flags: Record<string, any>): Promise<CommandOutput> {
         const passphrase = await this.randomMnemonicSeed(128);
         const keys = crypto.getKeys(passphrase);
@@ -45,12 +39,7 @@ export class CreateWalletCommand extends BaseCommand {
         };
 
         // Do not use this.error. It throws error and close. {exit: 0} option closes too.
-        console.error(
-            color.red(
-                "\n⚠️  WARNING: this information is not saved anywhere. You need to copy and save it by your own. ⚠️\n",
-            ),
-        );
-
+        this.warn("This information is not saved anywhere. You need to copy and save it by your own.");
         return wallet;
     }
 
