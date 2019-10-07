@@ -1,7 +1,7 @@
 import { DidParserError, didResolve, ResourceWithChainMeta, UnikToken } from "@uns/ts-sdk";
 import flatten from "flat";
 import { BaseCommand } from "../baseCommand";
-import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { Formater, OUTPUT_FORMAT } from "../formater";
 import { confirmedFlag, getNetworksListListForDescription } from "../utils";
 
 export class DidResolveCommand extends BaseCommand {
@@ -37,39 +37,40 @@ export class DidResolveCommand extends BaseCommand {
         return DidResolveCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "did-resolve";
-    }
-
-    protected async do(
-        flags: Record<string, any>,
-        args?: Record<string, any>,
-    ): Promise<NestedCommandOutput | CommandOutput[]> {
+    protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
         const didResolveNetwork = flags.network === "local" ? "TESTNET" : flags.network;
 
-        const resolved: ResourceWithChainMeta<UnikToken | string | number> | DidParserError = await didResolve(
-            args.did,
-            didResolveNetwork,
-        );
-
-        if (resolved instanceof Error) {
-            throw resolved;
-        }
-
-        if (resolved.confirmations && resolved.confirmations < flags.confirmed) {
-            this.warn("DID has not reach the requested confirmation level.");
-            return undefined;
-        } else {
-            delete resolved.chainmeta;
-            delete resolved.confirmations;
-
-            if (flags.format === OUTPUT_FORMAT.raw.key && resolved.data instanceof Object) {
-                const flattenResult = flatten(resolved.data);
-                this.log("", flattenResult);
-                return flattenResult;
+        let resolved: ResourceWithChainMeta<UnikToken | string | number> | DidParserError;
+        try {
+            resolved = await didResolve(args.did, didResolveNetwork);
+        } catch (error) {
+            if (error.response.status === 404) {
+                this.stop("DID does not exist");
+            } else {
+                this.stop("An error occurred. Please see details below:\n", error);
             }
-
-            return resolved;
         }
+
+        if (resolved) {
+            if (resolved instanceof Error) {
+                // DidParserError
+                this.stop("DID does not match expected format");
+            } else {
+                if (resolved.confirmations && resolved.confirmations < flags.confirmed) {
+                    this.warn("DID has not reach the requested confirmation level.");
+                } else {
+                    delete resolved.chainmeta;
+                    delete resolved.confirmations;
+
+                    if (flags.format === OUTPUT_FORMAT.raw.key && resolved.data instanceof Object) {
+                        const flattenResult = flatten(resolved.data);
+                        this.log("", flattenResult);
+                        return flattenResult;
+                    }
+                    return resolved;
+                }
+            }
+        }
+        return "DID not resolved";
     }
 }

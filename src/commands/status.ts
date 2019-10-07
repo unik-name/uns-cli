@@ -19,10 +19,6 @@ export class StatusCommand extends BaseCommand {
         return StatusCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "status";
-    }
-
     protected async do(flags: Record<string, any>): Promise<CommandOutput> {
         const unsSupply: any = await this.api.getSupply();
 

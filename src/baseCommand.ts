@@ -1,10 +1,9 @@
-import { color } from "@oclif/color";
 import { Command, flags as oFlags } from "@oclif/command";
 import { Client, configManager } from "@uns/crypto";
 import { cli } from "cli-ux";
-import util from "util";
 import { UNSCLIAPI } from "./api";
-import { CommandOutput, Formater, getFormatFlag, NestedCommandOutput, OUTPUT_FORMAT } from "./formater";
+import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
+import * as LOGGER from "./logger";
 import * as UTILS from "./utils";
 
 export abstract class BaseCommand extends Command {
@@ -41,8 +40,10 @@ export abstract class BaseCommand extends Command {
         this.formater = OUTPUT_FORMAT[flags.format];
         this.verbose = flags.verbose;
 
-        if (!this.verbose) {
-            this.disableLogs();
+        if (this.verbose) {
+            LOGGER.bindConsole();
+        } else {
+            LOGGER.disableLogs(this);
         }
 
         /**
@@ -58,27 +59,45 @@ export abstract class BaseCommand extends Command {
 
         this.client = new Client(networkPreset);
 
+        if (UTILS.isDevMode()) {
+            this.info("DEV MODE IS ACTIVATED");
+        }
         try {
-            if (UTILS.isDevMode()) {
-                this.info("DEV MODE IS ACTIVATED");
-            }
             this.info(`node: ${this.api.getCurrentNode()}`);
             const commandResult = await this.do(flags, args);
-            if (commandResult && Object.keys(commandResult).length > 0) {
-                // Keep super.log to force log
-                super.log(this.formater && this.formater.action ? this.formater.action(commandResult) : commandResult);
+            if (commandResult && typeof commandResult === "string") {
+                super.log(commandResult);
+            } else {
+                if (commandResult && Object.keys(commandResult).length > 0) {
+                    // Keep super.log to force log
+                    super.log(
+                        this.formater && this.formater.action ? this.formater.action(commandResult) : commandResult,
+                    );
+                }
             }
         } catch (globalCatchException) {
-            this.promptErrAndExit(globalCatchException.message);
+            this.stop(globalCatchException.message);
+            this.exit(1);
         }
     }
 
     public info(message: string, ...args: any[]): void {
         if (this.verbose || this._helpOverride()) {
-            message = typeof message === "string" ? message : util.inspect(message);
-            const info = color.yellowBright(`:info: ${util.format(message, ...args)}\n`);
-            process.stdout.write(info);
+            LOGGER.logWithLevel("info", message, ...args);
         }
+    }
+
+    public warn(message: string, ...args: any[]): void {
+        LOGGER.logWithLevel("warn", message, ...args);
+    }
+
+    /**
+     * Always log and exit
+     * @param message
+     * @param args
+     */
+    public stop(message: string, ...args: any[]): void {
+        LOGGER.logWithLevel("stop", message, ...args);
     }
 
     protected getAvailableFormats(): Formater[] {
@@ -88,12 +107,8 @@ export abstract class BaseCommand extends Command {
     protected getDefaultFormat(): Formater {
         return OUTPUT_FORMAT.json;
     }
-    protected abstract do(
-        flags: Record<string, any>,
-        args?: Record<string, any>,
-    ): Promise<CommandOutput> | Promise<NestedCommandOutput>;
+    protected abstract do(flags: Record<string, any>, args?: Record<string, any>): Promise<any>;
     protected abstract getCommand(): typeof BaseCommand;
-    protected abstract getCommandTechnicalName(): string;
 
     protected logAttribute(label: string, value: string) {
         this.log(`\t${label}: ${value}`);
@@ -149,23 +164,5 @@ export abstract class BaseCommand extends Command {
             );
         }
         return transactionFromNetwork;
-    }
-
-    /**
-     *
-     * @param errorMsg Prompt error and exit command.
-     */
-    private promptErrAndExit(errorMsg: string): void {
-        this.error(`[${this.getCommandTechnicalName()}] ${errorMsg}`);
-        this.exit(1);
-    }
-
-    private disableLogs(): void {
-        const disableFunction = (...args) => {
-            /*doNothing*/
-        };
-        ["debug", "log", "info", "warn"].forEach(level => (console[level] = disableFunction));
-        ["log", "warn", "info"].forEach(level => (this[level] = disableFunction));
-        // Do not override console.error and this.error
     }
 }
