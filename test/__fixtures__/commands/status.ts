@@ -21,7 +21,7 @@ lastBlockUrl: https://explorer.devnet.uns.network/block/100015
 const statusResultTable = `height;network;totalTokenSupply;tokenSymbol;numberOfUniks;activeDelegates;lastBlockUrl
 100015;devnet;21199994;DUNS;1;7;https://explorer.devnet.uns.network/block/100015
 `;
-const infoNode = ":info: node: https://forger1.devnet.uns.network\n";
+const infoNode = "» :info: node: https://forger1.devnet.uns.network;\n";
 
 export const outputCases = [
     {

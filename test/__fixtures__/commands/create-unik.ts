@@ -40,7 +40,7 @@ export const meta = {
     },
 };
 
-const verboseOutput = `:info: node: https://forger1.devnet.uns.network
+const verboseOutput = `» :info: node: https://forger1.devnet.uns.network;
 unikid: ${UNIK_ID}
 Transaction id: ${TRANSACTION_ID}
 Transaction in explorer: https://explorer.devnet.uns.network/transaction/${TRANSACTION_ID}

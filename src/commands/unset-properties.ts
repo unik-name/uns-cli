@@ -30,10 +30,6 @@ export class UnsetProperties extends UpdateProperties {
         return UnsetProperties;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "set-properties";
-    }
-
     protected getProperties(flags: Record<string, any>): { [_: string]: string } {
         const properties: { [_: string]: string } = {};
 

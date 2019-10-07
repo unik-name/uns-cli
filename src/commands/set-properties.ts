@@ -32,10 +32,6 @@ export class SetPropertiesCommand extends UpdatePropertiesCommand {
         return SetPropertiesCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "set-properties";
-    }
-
     protected getProperties(flags: Record<string, any>): { [_: string]: string } {
         const properties: { [_: string]: string } = {};
         for (const prop of flags.properties) {

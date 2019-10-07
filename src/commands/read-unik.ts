@@ -24,10 +24,6 @@ export class ReadUnikCommand extends ReadCommand {
         return ReadUnikCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "read-unik";
-    }
-
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
         checkUnikIdFormat(flags.unikid);
 

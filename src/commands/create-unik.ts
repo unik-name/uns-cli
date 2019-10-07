@@ -41,10 +41,6 @@ export class CreateUnikCommand extends WriteCommand {
         return CreateUnikCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "create-unik";
-    }
-
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
         if (flags.explicitValue.length > EXPLICIT_VALUE_MAX_LENGTH) {
             throw new Error(

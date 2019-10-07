@@ -32,10 +32,6 @@ export class ReadWalletCommand extends ReadCommand {
         return ReadWalletCommand;
     }
 
-    protected getCommandTechnicalName(): string {
-        return "read-wallet";
-    }
-
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<NestedCommandOutput> {
         const walletId = args.walletId;
         const wallet: any = await this.api.getWallet(walletId);
