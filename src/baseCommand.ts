@@ -124,7 +124,7 @@ export abstract class BaseCommand extends Command {
      */
     protected checkDataConsistency(...heights: number[]) {
         if (!heights.every(v => v === heights[0])) {
-            throw new Error("Data consistency error. Please retry.");
+            throw new Error("Unable to read right now. Please retry.");
         }
     }
 
