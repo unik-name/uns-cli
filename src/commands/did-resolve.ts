@@ -22,6 +22,7 @@ export class DidResolveCommand extends BaseCommand {
             name: "did",
             description:
                 "The identifier to resolve. Expected format : '@[unik:][type,1]/expliciteValue[?propertyKey|?*]'",
+            required: true,
         },
     ];
 
