@@ -30,10 +30,6 @@ export class DidResolveCommand extends BaseCommand {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml, OUTPUT_FORMAT.raw];
     }
 
-    protected getDefaultFormat(): Formater {
-        return OUTPUT_FORMAT.raw;
-    }
-
     protected getCommand(): typeof BaseCommand {
         return DidResolveCommand;
     }
