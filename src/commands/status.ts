@@ -1,6 +1,6 @@
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
-import { getNetworksListListForDescription } from "../utils";
+import { fromSatoshi, getNetworksListListForDescription } from "../utils";
 
 export class StatusCommand extends BaseCommand {
     public static description = "Display blockchain status";
@@ -30,7 +30,7 @@ export class StatusCommand extends BaseCommand {
         let result: any = {
             height: currentHeight,
             network: flags.network,
-            totalTokenSupply: this.fromSatoshi(unsSupply),
+            totalTokenSupply: fromSatoshi(unsSupply),
             tokenSymbol: this.api.getToken(),
             numberOfUniks: uniks,
             activeDelegates: this.api.getActiveDelegates(),

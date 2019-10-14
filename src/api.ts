@@ -3,7 +3,7 @@ import { getPropertyValue, PropertyValue, ResponseWithChainMeta } from "@uns/ts-
 import delay from "delay";
 import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
-import { handleErrors } from "./errorHandler";
+import { handleErrors, HTTPNotFoundError } from "./errorHandler";
 import * as UTILS from "./utils";
 
 export class UNSCLIAPI {
@@ -187,9 +187,9 @@ export class UNSCLIAPI {
             .catch(e => {
                 const error =
                     e.statusCode === 404
-                        ? `No wallet found with id ${walletIdentifier}.`
-                        : `Error fetching wallet ${walletIdentifier}. Caused by ${e.message}`;
-                throw new Error(error);
+                        ? new HTTPNotFoundError(`No wallet found with id ${walletIdentifier}.`)
+                        : new Error(`Error fetching wallet ${walletIdentifier}. Caused by ${e.message}`);
+                throw error;
             });
     }
 
