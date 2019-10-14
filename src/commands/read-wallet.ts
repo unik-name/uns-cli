@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 import { BaseCommand } from "../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import { getNetworksListListForDescription } from "../utils";
+import { fromSatoshi, getNetworksListListForDescription } from "../utils";
 
 export class ReadWalletCommand extends ReadCommand {
     public static description = "Read current data of a specified wallet, ic. balance";
@@ -44,7 +44,7 @@ export class ReadWalletCommand extends ReadCommand {
             publicKey: wallet.publicKey,
             username: wallet.username,
             secondPublicKey: wallet.secondPublicKey,
-            balance: this.fromSatoshi(wallet.balance),
+            balance: fromSatoshi(wallet.balance),
             token: this.api.getToken(),
             isDelegate: wallet.isDelegate,
             vote: wallet.vote,

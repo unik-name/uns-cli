@@ -110,6 +110,12 @@ export abstract class BaseCommand extends Command {
         LOGGER.logWithLevel("stop", message, ...args);
     }
 
+    protected debug = (...args: any[]): void => {
+        if (this.verbose || this._helpOverride()) {
+            LOGGER.logWithLevel("debug", "", ...args);
+        }
+    };
+
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json];
     }
@@ -122,10 +128,6 @@ export abstract class BaseCommand extends Command {
 
     protected logAttribute(label: string, value: string) {
         this.log(`\t${label}: ${value}`);
-    }
-
-    protected fromSatoshi(value: number): number {
-        return value / 100000000;
     }
 
     /**

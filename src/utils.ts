@@ -82,6 +82,41 @@ export const createNFTUpdateTransaction = (
         .getStruct();
 };
 
+/**
+ *
+ * @param client Create transfer transaction structure
+ * @param amount
+ * @param fees
+ * @param recipientId
+ * @param networkVersion
+ * @param passphrase
+ * @param secondPassPhrase
+ */
+export function createTransferTransaction(
+    client: Client,
+    amount: number,
+    fees: number,
+    recipientId: string,
+    networkVersion: number,
+    passphrase: string,
+    secondPassPhrase?: string,
+) {
+    const builder = client
+        .getBuilder()
+        .transfer()
+        .amount(amount)
+        .fee(fees)
+        .network(networkVersion)
+        .recipientId(recipientId)
+        .sign(passphrase);
+
+    if (secondPassPhrase) {
+        builder.secondSign(secondPassPhrase);
+    }
+
+    return builder.getStruct();
+}
+
 export const checkUnikIdFormat = (unikid: string) => {
     const valid = unikid && unikid.length === 64;
     if (!valid) {
@@ -103,14 +138,31 @@ export const checkPassphraseFormat = (passphrase: string) => {
     }
 };
 
+function promptHidden(text: string): Promise<string> {
+    return cli.prompt(text, { type: "hide" });
+}
+
 export const getPassphraseFromUser = (): Promise<string> => {
-    return cli.prompt("Enter your wallet passphrase (12 words phrase)", { type: "mask" });
+    return promptHidden("Enter your wallet passphrase (12 words phrase)");
+};
+
+export const getSecondPassphraseFromUser = (): Promise<string> => {
+    return promptHidden(
+        "You have associated a second passphrase to your wallet. This second passphrase is needed to validate this transaction.\nPlease, enter it (12 words phrase)",
+    );
 };
 
 export const passphraseFlag = {
     passphrase: flags.string({
         description:
             "The passphrase of the owner of UNIK. If you do not enter a passphrase you will be prompted for it.",
+    }),
+};
+
+export const secondPassphraseFlag = {
+    secondPassPhrase: flags.string({
+        description:
+            "The second wallet passphrase. If you have created a second passphrase on your wallet, you have to enter it.",
     }),
 };
 
@@ -173,3 +225,11 @@ export const propertyKeyFlag = (description: string, multiple: boolean = true) =
         }),
     };
 };
+
+export function fromSatoshi(value: number): number {
+    return value / 100000000;
+}
+
+export function toSatoshi(value: number): number {
+    return value * 100000000;
+}
