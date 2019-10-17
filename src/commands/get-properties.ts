@@ -1,6 +1,12 @@
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
-import { confirmedFlag, getNetworksListListForDescription, unikidFlag } from "../utils";
+import {
+    checkUnikIdFormat,
+    checkUnikPropertyFormat,
+    confirmedFlag,
+    getNetworksListListForDescription,
+    unikidFlag,
+} from "../utils";
 
 export class GetPropertiesCommand extends BaseCommand {
     public static description = "Get properties of UNIK token.";
@@ -25,6 +31,9 @@ export class GetPropertiesCommand extends BaseCommand {
     }
 
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput | CommandOutput[]> {
+        checkUnikIdFormat(flags.unikid);
+        checkUnikPropertyFormat(flags.propertyKey);
+
         const unik = await this.api.getUnikById(flags.unikid);
         const lastTransaction = await this.api.getTransaction(unik.transactions.last.id);
         const properties: any = await this.api.getUnikProperties(flags.unikid);

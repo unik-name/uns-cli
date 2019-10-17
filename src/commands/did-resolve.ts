@@ -1,4 +1,4 @@
-import { DidParserError, didResolve, ResourceWithChainMeta, UnikToken } from "@uns/ts-sdk";
+import { DidParserError, DidResolution, didResolve, PropertyValue, Unik } from "@uns/ts-sdk";
 import flatten from "flat";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
@@ -35,9 +35,9 @@ export class DidResolveCommand extends BaseCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
-        const didResolveNetwork = flags.network === "local" ? "TESTNET" : flags.network;
+        const didResolveNetwork = flags.network === "local" ? "testnet" : flags.network;
 
-        let resolved: ResourceWithChainMeta<UnikToken | string | number> | DidParserError;
+        let resolved: DidResolution<PropertyValue | Unik> | DidParserError;
         try {
             resolved = await didResolve(args.did, didResolveNetwork);
         } catch (error) {
