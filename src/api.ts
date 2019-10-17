@@ -1,4 +1,5 @@
 import { ITransactionData } from "@uns/crypto";
+import { getPropertyValue, PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
@@ -141,6 +142,18 @@ export class UNSCLIAPI {
                         : `Error fetching UNIK token ${unikid} properties. Caused by ${e.message}`;
                 throw new Error(error);
             });
+    }
+
+    public async getUnikProperty(
+        unikid: string,
+        propertyKey: string,
+        withChainmeta: boolean,
+    ): Promise<ResponseWithChainMeta<PropertyValue> | PropertyValue> {
+        return getPropertyValue(unikid, propertyKey, this.network.name, {
+            withChainmeta,
+            confirmations: true,
+            disableHtmlEscape: true,
+        });
     }
 
     /**

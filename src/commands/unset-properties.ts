@@ -2,7 +2,7 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { UpdateProperties } from "../updatePropertiesCommand";
-import { getNetworksListListForDescription } from "../utils";
+import { getNetworksListListForDescription, propertyKeyFlag } from "../utils";
 
 export class UnsetProperties extends UpdateProperties {
     public static description = "Unset properties of UNIK token.";
@@ -14,12 +14,7 @@ export class UnsetProperties extends UpdateProperties {
 
     public static flags = {
         ...UpdateProperties.flags,
-        propertyKey: flags.string({
-            char: "k",
-            description: "Key of the property to unset. (multiple occurrences)",
-            required: true,
-            multiple: true,
-        }),
+        ...propertyKeyFlag("Key of the property to unset. (multiple occurrences)"),
     };
 
     protected getAvailableFormats(): Formater[] {

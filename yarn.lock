@@ -659,9 +659,9 @@
     wif "^2.0.6"
 
 "@uns/crypto@^3.1.0-alpha.0":
-  version "3.1.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-3.1.0-alpha.0.tgz#0f4128c0d0523fa6921399eac88e877db30e1ae6"
-  integrity sha512-JlvMPNRNC0lgfIAhwgutbluXOMEELMgYl6gcoN72U1WrNad/UpJfg4fAS8vkEIzT3ZZNQlVcyU/obsvu+tvyCw==
+  version "3.1.0-beta"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-3.1.0-beta.tgz#841e52fbf2aff903b126ce904756de2027c42b26"
+  integrity sha512-Qe5nHpBdL5+EflfcnlUifirLLLyj1A17VLUPwBz38Mv7M4TsHQyMZWZUtobw9415EgqYQH4IME7eMLgsyTGTEg==
   dependencies:
     "@faustbrian/dato" "^0.2.0"
     ajv "^6.10.0"
@@ -689,9 +689,9 @@
     wif "^2.0.6"
 
 "@uns/ts-sdk@^1.1.0-beta":
-  version "1.1.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.1.0-beta.1.tgz#7061a51e17c426d6e0d9a5759508a5ea7620a8bd"
-  integrity sha512-7Y2pceh/ImqEUQjE/SYAbtT4iTwFB9P0i3BELWuLF3mx/YfM2oXGaN5fj0YPkD1btHWjOn2vRNKgNculFfpHBA==
+  version "1.1.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.1.0-beta.4.tgz#90d548c7650d22adcba25f36d1e3f7b83d9470e6"
+  integrity sha512-xkxChOsgnliLbNl9LhcPrz4hIuv9rqKIAgXc1hA6eoerXnZZ9Ys3zAe6qL6FtMXh/PdeWXR+GUUYAv0qED0Pzg==
   dependencies:
     "@uns/crypto" "^3.0.0-alpha.3"
     deepmerge "^4.0.0"
@@ -1714,9 +1714,9 @@ deepmerge@^3.2.0:
   integrity sha512-GRQOafGHwMHpjPx9iCvTgpu9NojZ49q794EEL94JVEw6VaeA8XTUyBKvAkOOjBX9oJNiV6G3P+T+tihFjo2TqA==
 
 deepmerge@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.0.0.tgz#3e3110ca29205f120d7cb064960a39c3d2087c09"
-  integrity sha512-YZ1rOP5+kHor4hMAH+HRQnBQHg+wvS1un1hAOuIcxcBy0hzcUf6Jg2a1w65kpoOUnurOfZbERwjI1TfZxNjcww==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.1.1.tgz#ee0866e4019fe62c1276b9062d4c4803d9aea14c"
+  integrity sha512-+qO5WbNBKBaZez95TffdUDnGIo4+r5kmsX8aOb7PDHvXsTbghAmleuxjs6ytNaf5Eg4FGBXDS5vqO61TRi6BMg==
 
 define-properties@^1.1.2, define-properties@^1.1.3:
   version "1.1.3"
@@ -1880,12 +1880,12 @@ end-of-stream@^1.1.0, end-of-stream@^1.4.1:
     once "^1.4.0"
 
 enhanced-resolve@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.1.0.tgz#41c7e0bfdfe74ac1ffe1e57ad6a5c6c9f3742a7f"
-  integrity sha512-F/7vkyTtyc/llOIn8oWclcB25KdRaiPBpZYDgJHgh/UHtpgT2p2eldQgtQnLtUvfMKPKxbRaQM/hHkvLHt1Vng==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-4.1.1.tgz#2937e2b8066cd0fe7ce0990a98f0d71a35189f66"
+  integrity sha512-98p2zE+rL7/g/DzMHMTF4zZlCgeVdJ7yr6xzEpJRYwFYrGi9ANdn5DnJURg6RpBkyk60XYDnWIv51VfIhfNGuA==
   dependencies:
     graceful-fs "^4.1.2"
-    memory-fs "^0.4.0"
+    memory-fs "^0.5.0"
     tapable "^1.0.0"
 
 errno@^0.1.3:
@@ -3913,10 +3913,10 @@ md5@2.2.1:
     crypt "~0.0.1"
     is-buffer "~1.1.1"
 
-memory-fs@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.4.1.tgz#3a9a20b8462523e447cfbc7e8bb80ed667bfc552"
-  integrity sha1-OpoguEYlI+RHz7x+i7gO1me/xVI=
+memory-fs@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.5.0.tgz#324c01288b88652966d161db77838720845a8e3c"
+  integrity sha512-jA0rdU5KoQMC0e6ppoNRtpp6vjFq6+NY7r8hywnC7V+1Xj/MtHwGIbB1QaK/dunyjWteJzmkpd7ooeWg10T7GA==
   dependencies:
     errno "^0.1.3"
     readable-stream "^2.0.1"

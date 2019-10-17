@@ -10,6 +10,7 @@ import {
     TRANSACTION_TIMESTAMP,
     UNIK_ID,
 } from "../__fixtures__/commands/create-unik";
+import { applyExitCase } from "../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
     test.nock(NETWORKS.devnet.backend, api =>
@@ -43,22 +44,19 @@ const applyTestCase = (testCase: any) => {
         });
 };
 
-const applyExitCase = (exitCase: any) => {
-    test.command(exitCase.args)
-        .exit(exitCase.exitCode)
-        // tslint:disable-next-line:no-empty
-        .it(exitCase.description, _ => {});
-};
-
 describe("creat-unik command", () => {
-    // Mock function that create transaction timestamp
-    jest.spyOn(slots, "getTime").mockImplementation(() => TRANSACTION_TIMESTAMP);
+    describe("Exit cases", () => {
+        shouldExit.forEach(exitCase => applyExitCase(exitCase));
+    });
 
-    // Mock function that create transaction id
-    jest.spyOn(crypto, "getId").mockImplementation(() => TRANSACTION_ID);
+    describe("Run cases", () => {
+        // Mock function that create transaction timestamp
+        jest.spyOn(slots, "getTime").mockImplementation(() => TRANSACTION_TIMESTAMP);
 
-    shouldExit.forEach(exitCase => applyExitCase(exitCase));
+        // Mock function that create transaction id
+        jest.spyOn(crypto, "getId").mockImplementation(() => TRANSACTION_ID);
 
-    jest.setTimeout(10000);
-    outputCases.forEach(testCase => applyTestCase(testCase));
+        jest.setTimeout(10000);
+        outputCases.forEach(testCase => applyTestCase(testCase));
+    });
 });

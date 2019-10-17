@@ -89,6 +89,13 @@ export const checkUnikIdFormat = (unikid: string) => {
     }
 };
 
+export const checkUnikPropertyFormat = (propertyKey: string) => {
+    const valid = propertyKey && propertyKey.match(/[a-zA-Z0-9]+/)[0] === propertyKey;
+    if (!valid) {
+        throw new Error(`Property ${propertyKey} does not match expected format`);
+    }
+};
+
 export const checkPassphraseFormat = (passphrase: string) => {
     const valid = passphrase && passphrase.split(" ").length === 12;
     if (!valid) {
@@ -154,4 +161,15 @@ export const confirmedFlag = {
         default: 3,
         description: "Minimum number of confirmation since the last update of the UNIK required to return the value.",
     }),
+};
+
+export const propertyKeyFlag = (description: string, multiple: boolean = true) => {
+    return {
+        propertyKey: flags.string({
+            char: "k",
+            description,
+            required: true,
+            multiple,
+        }),
+    };
 };
