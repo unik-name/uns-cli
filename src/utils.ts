@@ -56,6 +56,31 @@ export const createNFTMintTransaction = (
 };
 
 /**
+ * Create NFTTransfer transaction structure
+ * @param client
+ * @param tokenId
+ * @param passphrase
+ * @param networkVerion
+ */
+export const createNFTTransferTransaction = (
+    client: Client,
+    tokenId: string,
+    recipient: string,
+    fee: number,
+    passphrase: string,
+    networkVerion: number,
+): ITransactionData => {
+    return client
+        .getBuilder()
+        .nftTransfer(tokenId)
+        .recipientId(recipient)
+        .fee(fee)
+        .network(networkVerion)
+        .sign(passphrase)
+        .getStruct();
+};
+
+/**
  * Create NFTUpdate transaction structure
  * @param client
  * @param tokenId
