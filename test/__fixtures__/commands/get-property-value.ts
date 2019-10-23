@@ -1,17 +1,8 @@
+import { getMeta } from "../commons";
+
 export const UNIK_ID = "51615becbd39ad96344919dffa7b972f293b0a3973b05145fd6d0a1a20cac169";
 const WALLET_ADDRESS: string = "DQLiVPs2b6rHYCANjVk7vWVfQqdo5rLvDU";
 export const TRANSACTION_ID: string = "1473aa7b0d95ccbe66da2a06bc4f279c671e15fb02b7b6a69038b749265f2986";
-
-const getMeta = (blockHeight: number) => {
-    return {
-        height: `${blockHeight}`,
-        timestamp: {
-            epoch: 79391124,
-            unix: 1569488724,
-            human: "2019-09-26T09:05:24.000Z",
-        },
-    };
-};
 
 export const UNIK_RESULT = {
     data: {
