@@ -14,3 +14,5 @@ export const NETWORKS = {
 };
 
 export const FINGERPRINT_API: string = "/api/v1/unik-name-fingerprint";
+
+export const EXPLICIT_VALUE_MAX_LENGTH: number = 100;

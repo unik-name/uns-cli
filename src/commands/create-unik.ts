@@ -1,6 +1,7 @@
 import { flags } from "@oclif/command";
 import { ITransactionData } from "@uns/crypto";
 import { BaseCommand } from "../baseCommand";
+import { EXPLICIT_VALUE_MAX_LENGTH } from "../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { getTypeValue, getUnikTypesList } from "../types";
 import {
@@ -10,8 +11,6 @@ import {
     passphraseFlag,
 } from "../utils";
 import { WriteCommand } from "../writeCommand";
-
-const EXPLICIT_VALUE_MAX_LENGTH: number = 100;
 
 export class CreateUnikCommand extends WriteCommand {
     public static description = "Create UNIK token";

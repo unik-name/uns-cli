@@ -126,7 +126,6 @@ export function createDiscloseTransaction(
     passphrase: string,
     secondPassphrase?: string,
 ): ITransactionData {
-    console.log("FEES: ", fees);
     const builder = client
         .getBuilder()
         .unsDiscloseExplicit()
