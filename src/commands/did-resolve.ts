@@ -1,4 +1,4 @@
-import { DidParserError, DidResolution, didResolve, PropertyValue, Unik } from "@uns/ts-sdk";
+import { DidResolution, didResolve } from "@uns/ts-sdk";
 import flatten from "flat";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
@@ -37,7 +37,8 @@ export class DidResolveCommand extends BaseCommand {
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
         const didResolveNetwork = flags.network === "local" ? "testnet" : flags.network;
 
-        let resolved: DidResolution<PropertyValue | Unik> | DidParserError;
+        let resolved: DidResolution<any>;
+
         try {
             resolved = await didResolve(args.did, didResolveNetwork);
         } catch (error) {
@@ -49,7 +50,7 @@ export class DidResolveCommand extends BaseCommand {
         }
 
         if (resolved) {
-            if (resolved instanceof Error) {
+            if (resolved.error) {
                 // DidParserError
                 this.stop("DID does not match expected format");
             } else {
