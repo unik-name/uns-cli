@@ -45,7 +45,7 @@ const getMappedError = (errorsAsStringArray: string): string => {
     return errorsAsStringArray;
 };
 
-export class HTTPNotFoundError extends Error {
+export class HttpNotFoundError extends Error {
     constructor(message: string) {
         super(message);
     }
