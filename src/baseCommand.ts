@@ -59,7 +59,7 @@ export abstract class BaseCommand extends Command {
             throw new FlagInvalidOptionError(BaseCommand.baseFlags.network, flags.network);
         }
 
-        const networkName = flags.network === "local" ? "testnet" : flags.network;
+        const networkName = flags.network === "local" ? "dalinet" : flags.network;
 
         const networkPreset = configManager.getPreset(networkName);
 
