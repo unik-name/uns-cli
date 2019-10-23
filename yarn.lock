@@ -688,10 +688,10 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/ts-sdk@^1.1.0-beta":
-  version "1.1.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.1.0-beta.4.tgz#90d548c7650d22adcba25f36d1e3f7b83d9470e6"
-  integrity sha512-xkxChOsgnliLbNl9LhcPrz4hIuv9rqKIAgXc1hA6eoerXnZZ9Ys3zAe6qL6FtMXh/PdeWXR+GUUYAv0qED0Pzg==
+"@uns/ts-sdk@^1.2.0-alpha":
+  version "1.2.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.2.0-alpha.0.tgz#9c2adbe17fc58a27d80539d262fd6cc34977cdc2"
+  integrity sha512-7zSmkzcRbearKZWyG+8UwRaSEYAymPmsv2ClFnTbbcG6LNwiIIXE4FvUHJOp++0obdyHiTLIGncS8nX0Si5Wgw==
   dependencies:
     "@uns/crypto" "^3.0.0-alpha.3"
     deepmerge "^4.0.0"
