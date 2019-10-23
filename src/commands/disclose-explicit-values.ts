@@ -44,6 +44,33 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     private secondPassphrase: string;
     private unikType: DIDType;
 
+    public async formatResult(transactionFromNetwork: any, transactionId: string) {
+        /**
+         * Result prompt
+         */
+        if (transactionFromNetwork) {
+            if (transactionFromNetwork.confirmations) {
+                this.info("Transaction confirmed by the network.");
+            }
+        } else {
+            this.error(
+                `Transaction not found yet, the network can be slow. Check this url in a while: ${this.getTransactionUrl(
+                    transactionId,
+                )}`,
+            );
+        }
+        return {
+            data: {
+                transaction: transactionFromNetwork.id,
+                confirmations: transactionFromNetwork.confirmations,
+            },
+        };
+    }
+
+    public getTransactionUrl(transactionId: string): string {
+        return `${this.api.getExplorerUrl()}/transaction/${transactionId}`;
+    }
+
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
     }
@@ -227,32 +254,5 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
             passphrase,
             secondPassphrase,
         );
-    }
-
-    private async formatResult(transactionFromNetwork: any, transactionId: string) {
-        /**
-         * Result prompt
-         */
-        if (transactionFromNetwork) {
-            if (transactionFromNetwork.confirmations) {
-                this.info("Transaction confirmed by the network.");
-            }
-        } else {
-            this.error(
-                `Transaction not found yet, the network can be slow. Check this url in a while: ${this.getTransactionUrl(
-                    transactionId,
-                )}`,
-            );
-        }
-        return {
-            data: {
-                transaction: transactionFromNetwork.id,
-                confirmations: transactionFromNetwork.confirmations,
-            },
-        };
-    }
-
-    private getTransactionUrl(transactionId: string): string {
-        return `${this.api.getExplorerUrl()}/transaction/${transactionId}`;
     }
 }
