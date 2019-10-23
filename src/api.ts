@@ -3,7 +3,7 @@ import { getPropertyValue, PropertyValue, ResponseWithChainMeta } from "@uns/ts-
 import delay from "delay";
 import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
-import { handleErrors, HTTPNotFoundError } from "./errorHandler";
+import { handleErrors, HttpNotFoundError } from "./errorHandler";
 import * as UTILS from "./utils";
 
 export class UNSCLIAPI {
@@ -119,9 +119,9 @@ export class UNSCLIAPI {
             .catch(e => {
                 const error =
                     e.statusCode === 404
-                        ? `No UNIK token found with id ${unikid}.`
-                        : `Error fetching UNIK token ${unikid}. Caused by ${e.message}`;
-                throw new Error(error);
+                        ? new HttpNotFoundError(`No UNIK token found with id ${unikid}.`)
+                        : new Error(`Error fetching UNIK token ${unikid}. Caused by ${e.message}`);
+                throw error;
             });
     }
 
@@ -187,7 +187,7 @@ export class UNSCLIAPI {
             .catch(e => {
                 const error =
                     e.statusCode === 404
-                        ? new HTTPNotFoundError(`No wallet found with id ${walletIdentifier}.`)
+                        ? new HttpNotFoundError(`No wallet found with id ${walletIdentifier}.`)
                         : new Error(`Error fetching wallet ${walletIdentifier}. Caused by ${e.message}`);
                 throw error;
             });
