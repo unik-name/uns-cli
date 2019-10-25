@@ -1,6 +1,7 @@
 import { Command, flags as oFlags } from "@oclif/command";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Client, configManager } from "@uns/crypto";
+import { UNSClient } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
@@ -24,6 +25,7 @@ export abstract class BaseCommand extends Command {
     };
 
     protected client: Client;
+    protected unsClient: UNSClient;
     protected api;
     protected verbose: boolean;
 
@@ -68,6 +70,8 @@ export abstract class BaseCommand extends Command {
         this.api = new UNSCLIAPI(networkPreset);
 
         this.client = new Client(networkPreset);
+
+        this.unsClient = new UNSClient(networkName);
 
         if (UTILS.isDevMode()) {
             this.info("DEV MODE IS ACTIVATED");
@@ -176,5 +180,26 @@ export abstract class BaseCommand extends Command {
             );
         }
         return transactionFromNetwork;
+    }
+
+    protected async withAction<T>(actionDescription: string, callback, ...args): Promise<T> {
+        let callBackResult: T;
+        let error;
+        this.actionStart(actionDescription);
+
+        try {
+            callBackResult = await callback(...args);
+        } catch (e) {
+            error = e;
+            this.debug(e);
+        } finally {
+            this.actionStop();
+        }
+
+        if (error) {
+            throw error;
+        }
+
+        return callBackResult;
     }
 }

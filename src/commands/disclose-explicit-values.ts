@@ -1,11 +1,11 @@
+import { ITransactionData } from "@uns/crypto";
 import {
     buildDiscloseDemand,
     DIDHelpers,
+    DIDType,
     DiscloseDemand,
     DiscloseDemandCertification,
-    Network,
     Response,
-    UNSClient,
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { BaseCommand } from "../baseCommand";
@@ -40,6 +40,10 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         ...explicitValueFlag("Array of explicit value to disclose, separated with a space.", true),
     };
 
+    private passphrase: string;
+    private secondPassphrase: string;
+    private unikType: DIDType;
+
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
     }
@@ -49,39 +53,9 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     }
 
     protected async do(flags: Record<string, any>): Promise<any> {
-        // Check unikid format
-        checkUnikIdFormat(flags.unikid);
+        await this.checkUnik(flags.unikid);
 
-        try {
-            this.api.getUnikById(flags.unikid);
-        } catch (e) {
-            throw new Error("unikid is not valid");
-        }
-
-        /**
-         * Get passphrase
-         */
-        let passphrase = flags.passphrase;
-        if (!passphrase) {
-            passphrase = await getPassphraseFromUser();
-        }
-
-        // Check passphrase format
-        checkPassphraseFormat(passphrase);
-
-        /**
-         * Get second passphrase
-         */
-        let secondPassphrase = flags.secondPassphrase;
-
-        if (!secondPassphrase && (await this.isSecondPassphraseNeeded(passphrase))) {
-            secondPassphrase = await getSecondPassphraseFromUser();
-        }
-
-        if (secondPassphrase) {
-            // Check second passphrase format
-            checkPassphraseFormat(secondPassphrase);
-        }
+        await this.getInformationsFromUser(flags);
 
         const confirmation = await cli.confirm(
             "Disclosing a @unik-name to the network can't be cancelled nor revoked. Your ID will be disclosed forever. Do you confirm the disclose demand? [y/n]",
@@ -91,85 +65,171 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
             return "Command aborted by user";
         }
 
-        const network: Network = flags.network === "local" ? "dalinet" : flags.network.toLowerCase();
-        const unsClient = new UNSClient(network);
+        await this.checkExplicitValues(flags.unikid, flags.explicitValue);
 
+        const transactionStruct: ITransactionData = await this.createTransactionStruct(flags);
+
+        const transactionFromNetwork = await this.sendAndWaitConfirmations(
+            transactionStruct,
+            flags.await,
+            flags.confirmations,
+        );
+
+        return await this.formatResult(transactionFromNetwork, transactionStruct.id);
+    }
+
+    private async checkUnik(unikId: string) {
+        // Check unikid format
+        checkUnikIdFormat(unikId);
+
+        try {
+            await this.api.getUnikById(unikId);
+        } catch (e) {
+            throw new Error("unikid is not valid");
+        }
+    }
+
+    private async sendAndWaitConfirmations(
+        transactionStruct: ITransactionData,
+        awaitDuring: number,
+        confirmations: number,
+    ) {
+        /**
+         * Transaction broadcast
+         */
+
+        await this.withAction(
+            "Sending transaction",
+            async transactionStruct => {
+                const sendResponse = await this.api.sendTransaction(transactionStruct);
+                if (sendResponse.errors) {
+                    throw new Error(sendResponse.errors);
+                }
+                this.info(
+                    `Transaction to disclose explicit values sent to the pool (${this.getTransactionUrl(
+                        transactionStruct.id,
+                    )})`,
+                );
+                return sendResponse;
+            },
+            transactionStruct,
+        );
+
+        const transactionFromNetwork = await this.withAction(
+            "Waiting for transaction confirmation",
+            this.waitTransactionConfirmations.bind(this), // needs .bind(this) to use the correct this in waitTransactionConfirmations function
+            this.api.getBlockTime(),
+            transactionStruct.id,
+            awaitDuring,
+            confirmations,
+        );
+
+        if (!transactionFromNetwork) {
+            return transactionStruct.id;
+        }
+
+        return transactionFromNetwork;
+    }
+
+    private async getInformationsFromUser(flags: Record<string, any>) {
+        /**
+         * Get passphrase
+         */
+        this.passphrase = flags.passphrase;
+        if (!this.passphrase) {
+            this.passphrase = await getPassphraseFromUser();
+        }
+
+        // Check passphrase format
+        checkPassphraseFormat(this.passphrase);
+
+        /**
+         * Get second passphrase
+         */
+        this.secondPassphrase = flags.secondPassphrase;
+
+        if (!this.secondPassphrase && (await this.isSecondPassphraseNeeded(this.passphrase))) {
+            this.secondPassphrase = await getSecondPassphraseFromUser();
+        }
+
+        if (this.secondPassphrase) {
+            // Check second passphrase format
+            checkPassphraseFormat(this.secondPassphrase);
+        }
+    }
+
+    private async checkExplicitValues(unikId: string, listOfExplicitValues: string[]) {
         // get unik type
-        const type: number = Number.parseInt((await unsClient.unik.property(flags.unikid, "type")).data);
+        const type: number = Number.parseInt((await this.unsClient.unik.property(unikId, "type")).data);
 
-        const unikType = DIDHelpers.fromCode(type);
+        this.unikType = DIDHelpers.fromCode(type);
 
         // Check explicit values
-        for (const explicit of flags.explicitValue as string[]) {
-            const fingerPrintResult = await unsClient.fingerprint.compute(explicit, unikType);
+        for (const explicit of listOfExplicitValues) {
+            const fingerPrintResult = await this.unsClient.fingerprint.compute(explicit, this.unikType);
 
             if (fingerPrintResult.error) {
                 this.debug(`disclose-explicit-values - ${fingerPrintResult.error.message}`);
                 throw new Error("At least one expliciteValue does not match expected format");
             }
-            if (fingerPrintResult.data.fingerprint !== flags.unikid) {
+            if (fingerPrintResult.data.fingerprint !== unikId) {
                 throw new Error("At least one expliciteValue is not valid for this unikid");
             }
         }
 
         this.info("ExpliciteValues valid for this unikid");
+    }
 
+    private async createTransactionStruct(flags: Record<string, any>): Promise<any | string> {
         // Create Disclose Demand
         const discloseDemand: DiscloseDemand = buildDiscloseDemand(
             flags.unikid,
             flags.explicitValue,
-            unikType,
-            passphrase,
+            this.unikType,
+            this.passphrase,
         );
 
         const discloseDemandCertification: Response<
             DiscloseDemandCertification
-        > = await unsClient.discloseDemandCertification.get(discloseDemand);
+        > = await this.unsClient.discloseDemandCertification.get(discloseDemand);
 
         if (discloseDemandCertification.error) {
-            return this.error(discloseDemandCertification.error.message);
+            throw new Error(discloseDemandCertification.error.message);
         }
 
         /**
          * Transaction creation
          */
-        this.actionStart("Creating transaction");
-        const transactionStruct = createDiscloseTransaction(
-            this.client,
+        return await this.createTransaction(
             discloseDemand,
             discloseDemandCertification.data,
             flags.fee,
+            this.passphrase,
+            this.secondPassphrase,
+        );
+    }
+
+    private async createTransaction(
+        discloseDemand: DiscloseDemand,
+        discloseDemandCertification: DiscloseDemandCertification,
+        fees: number,
+        passphrase: string,
+        secondPassphrase?: string,
+    ): Promise<ITransactionData> {
+        return await this.withAction<ITransactionData>(
+            "Creating transaction",
+            createDiscloseTransaction,
+            this.client,
+            discloseDemand,
+            discloseDemandCertification,
+            fees,
             this.api.getVersion(),
             passphrase,
             secondPassphrase,
         );
+    }
 
-        this.actionStop();
-
-        /**
-         * Transaction broadcast
-         */
-        this.actionStart("Sending transaction");
-        const sendResponse = await this.api.sendTransaction(transactionStruct);
-        this.actionStop();
-        if (sendResponse.errors) {
-            throw new Error(sendResponse.errors);
-        }
-        const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transactionStruct.id}`;
-        this.info(`Transaction to disclose explicit values sent to the pool (${transactionUrl})`);
-
-        /**
-         * Wait for the first transaction confirmation (2 blocktimes max)
-         */
-        this.actionStart("Waiting for transaction confirmation");
-        const transactionFromNetwork = await this.waitTransactionConfirmations(
-            this.api.getBlockTime(),
-            transactionStruct.id,
-            flags.await,
-            flags.confirmations,
-        );
-        this.actionStop();
-
+    private async formatResult(transactionFromNetwork: any, transactionId: string) {
         /**
          * Result prompt
          */
@@ -179,14 +239,20 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
             }
         } else {
             this.error(
-                `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,
+                `Transaction not found yet, the network can be slow. Check this url in a while: ${this.getTransactionUrl(
+                    transactionId,
+                )}`,
             );
         }
         return {
             data: {
-                transaction: transactionStruct.id,
+                transaction: transactionFromNetwork.id,
                 confirmations: transactionFromNetwork.confirmations,
             },
         };
+    }
+
+    private getTransactionUrl(transactionId: string): string {
+        return `${this.api.getExplorerUrl()}/transaction/${transactionId}`;
     }
 }
