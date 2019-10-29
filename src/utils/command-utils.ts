@@ -1,4 +1,5 @@
 import { Client, crypto, DiscloseDemand, DiscloseDemandCertification, ITransactionData, networks } from "@uns/crypto";
+import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
 import { NETWORKS } from "../config";
 
@@ -183,5 +184,16 @@ export function getWalletFromPassphrase(passphrase: string, network: any) {
         privateKey: keys.privateKey,
         passphrase,
         network: network.name,
+    };
+}
+
+export function getChainContext(chainmeta: ChainMeta, networkName: string, currentNode: string) {
+    return {
+        chainmeta: {
+            network: networkName,
+            node: currentNode,
+            date: chainmeta.timestamp.human,
+            height: chainmeta.height,
+        },
     };
 }

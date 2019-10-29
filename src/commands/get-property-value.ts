@@ -6,6 +6,7 @@ import {
     checkUnikIdFormat,
     checkUnikPropertyFormat,
     confirmedFlag,
+    getChainContext,
     getNetworksListListForDescription,
     propertyKeyFlag,
     unikidFlag,
@@ -55,7 +56,9 @@ export class GetPropertyValueCommand extends ReadCommand {
                 value: propertyValue,
                 confirmations: property.confirmations,
             },
-            ...(flags.chainmeta ? this.showContext(property.chainmeta) : {}),
+            ...(flags.chainmeta
+                ? getChainContext(property.chainmeta, this.api.network.name, this.api.getCurrentNode())
+                : {}),
         };
     }
 }

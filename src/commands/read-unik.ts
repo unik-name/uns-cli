@@ -1,7 +1,7 @@
 import { BaseCommand } from "../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import { checkUnikIdFormat, getNetworksListListForDescription, unikidFlag } from "../utils";
+import { checkUnikIdFormat, getChainContext, getNetworksListListForDescription, unikidFlag } from "../utils";
 
 export class ReadUnikCommand extends ReadCommand {
     public static description = "Display UNIK token informations";
@@ -47,7 +47,9 @@ export class ReadUnikCommand extends ReadCommand {
 
         return {
             data,
-            ...(flags.chainmeta ? this.showContext(unik.chainmeta) : {}),
+            ...(flags.chainmeta
+                ? getChainContext(unik.chainmeta, this.api.network.name, this.api.getCurrentNode())
+                : {}),
         };
     }
 }

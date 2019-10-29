@@ -4,7 +4,7 @@ import { createHash, randomBytes } from "crypto";
 import * as MoreEntropy from "promised-entropy";
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
-import { getNetworksListListForDescription } from "../utils";
+import { getNetworksListListForDescription, getWalletFromPassphrase } from "../utils";
 
 export class CreateWalletCommand extends BaseCommand {
     public static description = "Create UNS wallet";
@@ -28,15 +28,7 @@ export class CreateWalletCommand extends BaseCommand {
 
     protected async do(flags: Record<string, any>): Promise<CommandOutput> {
         const passphrase = await this.randomMnemonicSeed(128);
-        const keys = crypto.getKeys(passphrase);
-        const address = crypto.getAddress(keys.publicKey, this.api.network.version);
-        const wallet = {
-            address,
-            publicKey: keys.publicKey,
-            privateKey: keys.privateKey,
-            passphrase,
-            network: this.api.network.name,
-        };
+        const wallet = getWalletFromPassphrase(passphrase, this.api.network);
 
         // Do not use this.error. It throws error and close. {exit: 0} option closes too.
         this.warn("This information is not saved anywhere. You need to copy and save it by your own.");
