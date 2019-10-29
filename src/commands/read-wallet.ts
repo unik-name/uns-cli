@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 import { BaseCommand } from "../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import { fromSatoshi, getNetworksListListForDescription } from "../utils";
+import { fromSatoshi, getChainContext, getNetworksListListForDescription } from "../utils";
 
 export class ReadWalletCommand extends ReadCommand {
     public static description = "Read current data of a specified wallet, ic. balance";
@@ -70,7 +70,9 @@ export class ReadWalletCommand extends ReadCommand {
 
         return {
             data,
-            ...(flags.chainmeta ? this.showContext(wallet.chainmeta) : {}),
+            ...(flags.chainmeta
+                ? getChainContext(wallet.chainmeta, this.api.network.name, this.api.getCurrentNode())
+                : {}),
         };
     }
 }

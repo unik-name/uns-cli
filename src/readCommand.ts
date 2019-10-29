@@ -1,4 +1,3 @@
-import { ChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "./baseCommand";
 import { chainmetaFlag } from "./utils";
 
@@ -7,18 +6,4 @@ export abstract class ReadCommand extends BaseCommand {
         ...BaseCommand.baseFlags,
         ...chainmetaFlag,
     };
-
-    protected showContext(chainmeta: ChainMeta) {
-        /**
-         * CONTEXT
-         */
-        return {
-            chainmeta: {
-                network: this.api.network.name,
-                node: this.api.getCurrentNode(),
-                date: chainmeta.timestamp.human,
-                height: chainmeta.height,
-            },
-        };
-    }
 }
