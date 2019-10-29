@@ -1,6 +1,9 @@
+export function isPassphrase(passphrase: string) {
+    return passphrase && passphrase.split(" ").length === 12;
+}
+
 export const checkPassphraseFormat = (passphrase: string) => {
-    const valid = passphrase && passphrase.split(" ").length === 12;
-    if (!valid) {
+    if (!isPassphrase(passphrase)) {
         throw new Error("Wrong pass phrase format");
     }
 };
