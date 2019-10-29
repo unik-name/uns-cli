@@ -13,10 +13,8 @@
     "dependencies": {
         "@oclif/color": "^0.0.0",
         "@oclif/command": "^1.5.11",
-        "@oclif/config": "^1.12.9",
         "@oclif/plugin-help": "^2.1.6",
         "@oclif/plugin-warn-if-update-available": "^1.7.0",
-        "@oclif/test": "^1.2.5",
         "@uns/crypto": "^3.1.0-alpha.0",
         "@uns/ts-sdk": "^1.1.0-beta",
         "cli-ux": "^5.3.1",
@@ -31,11 +29,11 @@
     },
     "devDependencies": {
         "@oclif/dev-cli": "^1.21.3",
+        "@oclif/test": "^1.2.5",
         "@types/flat": "^0.0.28",
         "@types/jest": "^24.0.18",
         "@types/node": "^11.10.5",
         "@types/request-promise": "^4.1.44",
-        "globby": "^10.0.1",
         "husky": "^3.0.7",
         "javascript-obfuscator": "^0.18.1",
         "jest": "^24.9.0",
