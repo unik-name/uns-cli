@@ -1,7 +1,7 @@
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import { checkConfirmations, checkUnikIdFormat, confirmedFlag } from "../utils";
+import { checkConfirmations, checkUnikIdFormat, confirmedFlag, getChainContext } from "../utils";
 
 export class IsDisclosedCommand extends ReadCommand {
     public static description = "Check if UNIK has one or more disclosed explicit values.";
@@ -64,7 +64,7 @@ export class IsDisclosedCommand extends ReadCommand {
         }
         return {
             data,
-            ...(flags.chainmeta ? this.showContext(chainmeta) : {}),
+            ...(flags.chainmeta ? getChainContext(chainmeta, this.api.network.name, this.api.getCurrentNode()) : {}),
         };
     }
 }

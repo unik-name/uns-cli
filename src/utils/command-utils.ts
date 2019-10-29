@@ -154,13 +154,6 @@ export const getSecondPassphraseFromUser = (): Promise<string> => {
     );
 };
 
-export const checkUnikPropertyFormat = (propertyKey: string) => {
-    const valid = propertyKey && propertyKey.match(/[a-zA-Z0-9]+/)[0] === propertyKey;
-    if (!valid) {
-        throw new Error(`Property ${propertyKey} does not match expected format`);
-    }
-};
-
 export function fromSatoshi(value: number): number {
     return value / 100000000;
 }
