@@ -212,7 +212,7 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         const discloseDemand: DiscloseDemand = buildDiscloseDemand(
             flags.unikid,
             flags.explicitValue,
-            this.unikType,
+            DIDHelpers.fromLabel(this.unikType),
             this.passphrase,
         );
 
