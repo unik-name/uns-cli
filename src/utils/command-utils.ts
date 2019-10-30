@@ -131,8 +131,7 @@ export function createDiscloseTransaction(
         .unsDiscloseExplicit()
         .fee(fees)
         .network(networkVerion)
-        .discloseDemand(discloseDemand)
-        .discloseDemandCertification(discloseDemandCertification)
+        .discloseDemand(discloseDemand, discloseDemandCertification)
         .sign(passphrase);
 
     if (secondPassphrase) {
