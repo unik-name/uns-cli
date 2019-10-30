@@ -2,7 +2,6 @@ import { flags } from "@oclif/command";
 import { crypto, ITransactionData, KeyPair } from "@uns/crypto";
 import cli from "cli-ux";
 import { BaseCommand } from "../baseCommand";
-import { HttpNotFoundError } from "../errorHandler";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import {
     awaitFlag,
@@ -189,39 +188,12 @@ export class SendCommand extends WriteCommand {
     }
 
     /**
-     * Return true if a second wallet passphrase is needed
-     */
-    protected async isSecondPassphraseNeeded(passphrase: string): Promise<boolean> {
-        const keys: KeyPair = crypto.getKeys(passphrase);
-        return this.applyWalletPredicate(keys.publicKey, wallet => wallet && !!wallet.secondPublicKey);
-    }
-
-    /**
      * Check if wallet exists
      * @param recipient
      */
     private async checkRecipientWalletExistence(recipient: string): Promise<boolean> {
         return this.applyWalletPredicate(recipient, wallet => !!wallet);
     }
-
-    /**
-     * Get wallet with recipientId, apply predicate and returns result
-     * @param recipientId
-     * @param predicate
-     */
-    private async applyWalletPredicate(recipientId: string, predicate: (wallet) => boolean) {
-        try {
-            const wallet = await this.api.getWallet(recipientId);
-            return predicate(wallet);
-        } catch (e) {
-            if (e instanceof HttpNotFoundError) {
-                this.info(`Wallet ${recipientId} not found.`);
-                return false;
-            }
-            throw e;
-        }
-    }
-
     private formatOutput(transactionFromNetwork: any, transactionId: string) {
         if (!transactionFromNetwork) {
             this.error(

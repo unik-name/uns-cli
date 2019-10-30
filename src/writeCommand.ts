@@ -14,15 +14,24 @@ export abstract class WriteCommand extends BaseCommand {
      */
     protected async isSecondPassphraseNeeded(passphrase: string): Promise<boolean> {
         const keys: KeyPair = crypto.getKeys(passphrase);
+        return this.applyWalletPredicate(keys.publicKey, wallet => wallet && !!wallet.secondPublicKey);
+    }
+
+    /**
+     * Get wallet with recipientId, apply predicate and returns result
+     * @param recipientId
+     * @param predicate
+     */
+    protected async applyWalletPredicate(recipientId: string, predicate: (wallet) => boolean) {
         try {
-            const wallet = await this.api.getWallet(keys.publicKey);
-            return wallet && !!wallet.secondPublicKey;
+            const wallet = await this.api.getWallet(recipientId);
+            return predicate(wallet);
         } catch (e) {
             if (e instanceof HttpNotFoundError) {
-                this.debug(`Wallet ${keys.publicKey} not found.`);
+                this.info(`Wallet ${recipientId} not found.`);
                 return false;
             }
             throw e;
         }
-    };
+    }
 }

@@ -93,28 +93,28 @@ export const createNFTUpdateTransaction = (
  * @param secondPassPhrase
  */
 export function createTransferTransaction(
-  client: Client,
-  amount: number,
-  fees: number,
-  recipientId: string,
-  networkVersion: number,
-  passphrase: string,
-  secondPassPhrase?: string,
+    client: Client,
+    amount: number,
+    fees: number,
+    recipientId: string,
+    networkVersion: number,
+    passphrase: string,
+    secondPassPhrase?: string,
 ) {
-  const builder = client
-      .getBuilder()
-      .transfer()
-      .amount(amount)
-      .fee(fees)
-      .network(networkVersion)
-      .recipientId(recipientId)
-      .sign(passphrase);
+    const builder = client
+        .getBuilder()
+        .transfer()
+        .amount(amount)
+        .fee(fees)
+        .network(networkVersion)
+        .recipientId(recipientId)
+        .sign(passphrase);
 
-  if (secondPassPhrase) {
-      builder.secondSign(secondPassPhrase);
-  }
+    if (secondPassPhrase) {
+        builder.secondSign(secondPassPhrase);
+    }
 
-  return builder.getStruct();
+    return builder.getStruct();
 }
 
 export function createDiscloseTransaction(
@@ -164,9 +164,9 @@ export const checkUnikPropertyFormat = (propertyKey: string) => {
 };
 
 export function fromSatoshi(value: number): number {
-  return value / 100000000;
+    return value / 100000000;
 }
 
 export function toSatoshi(value: number): number {
-  return value * 100000000;
+    return value * 100000000;
 }
