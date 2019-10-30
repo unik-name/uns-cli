@@ -8,10 +8,10 @@ export const passphraseFlag = {
 };
 
 export const secondPassphraseFlag = {
-  secondPassPhrase: flags.string({
-      description:
-          "The second wallet passphrase. If you have created a second passphrase on your wallet, you have to enter it.",
-  }),
+    secondPassPhrase: flags.string({
+        description:
+            "The second wallet passphrase. If you have created a second passphrase on your wallet, you have to enter it.",
+    }),
 };
 
 export const awaitFlag = {
