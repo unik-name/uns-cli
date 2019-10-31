@@ -248,7 +248,7 @@ export class UNSCLIAPI {
      * Get network node version
      */
     public getVersion() {
-        return this.network.client.pubKeyHash;
+        return this.network.pubKeyHash;
     }
 
     public getExplorerUrl() {
