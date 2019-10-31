@@ -13,7 +13,7 @@ export class UnsetProperties extends UpdateProperties {
     ];
 
     public static flags = {
-        ...UpdateProperties.flags,
+        ...UpdateProperties.getUpdateCommandFlags(),
         ...propertyKeyFlag("Key of the property to unset. (multiple occurrences)"),
     };
 

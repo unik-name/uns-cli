@@ -22,7 +22,7 @@ export class CreateUnikCommand extends WriteCommand {
     ];
 
     public static flags = {
-        ...WriteCommand.flags,
+        ...WriteCommand.getWriteCommandFlags(),
         explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
         type: flags.string({
             description: "UNIK nft type",

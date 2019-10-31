@@ -1,6 +1,5 @@
-import { networks } from "@uns/crypto";
-import { Client, ITransactionData } from "@uns/crypto";
-import { DiscloseDemand, DiscloseDemandCertification } from "@uns/ts-sdk";
+import { flags } from "@oclif/parser";
+import { Client, crypto, ITransactionData, networks, DiscloseDemand, DiscloseDemandCertification } from "@uns/crypto";
 import cli from "cli-ux";
 import { NETWORKS } from "../config";
 
@@ -175,3 +174,15 @@ export const checkConfirmations = (confirmations: number, expected: number) => {
         throw new Error(`Not enough confirmations (expected: ${expected}, actual: ${confirmations})`);
     }
 };
+
+export function getWalletFromPassphrase(passphrase: string, network: any) {
+    const keys = crypto.getKeys(passphrase);
+    const address = crypto.getAddress(keys.publicKey, network.version);
+    return {
+        address,
+        publicKey: keys.publicKey,
+        privateKey: keys.privateKey,
+        passphrase,
+        network: network.name,
+    };
+}

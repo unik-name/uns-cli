@@ -12,13 +12,15 @@ import {
 import { WriteCommand } from "./writeCommand";
 
 export abstract class UpdateProperties extends WriteCommand {
-    public static flags = {
-        ...WriteCommand.flags,
-        ...unikidFlag("The UNIK token on which to update the properties."),
-        ...awaitFlag,
-        ...confirmationsFlag,
-        ...passphraseFlag,
-    };
+    protected static getUpdateCommandFlags(fees: number = 100000000) {
+        return {
+            ...WriteCommand.getWriteCommandFlags(fees),
+            ...unikidFlag("The UNIK token on which to update the properties."),
+            ...awaitFlag,
+            ...confirmationsFlag,
+            ...passphraseFlag,
+        };
+    }
 
     protected abstract getProperties(flags: Record<string, any>): { [_: string]: string };
 

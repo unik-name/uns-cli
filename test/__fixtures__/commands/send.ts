@@ -112,4 +112,14 @@ export const shouldExit = [
         args: ["send", "--network", "devnet", "10", "--to", "DDwxZwjZQJUjeu7P"],
         exitCode: 1,
     },
+    {
+        description: "Should exit with code 1 recipient is not a valid @unik-name",
+        args: ["send", "--network", "devnet", "10", "--to", "@test?*"],
+        exitCode: 1,
+    },
+    {
+        description: "Should exit with code 1 recipient is not a valid @unik-name",
+        args: ["send", "--network", "devnet", "10", "--to", "@?*"],
+        exitCode: 1,
+    },
 ];

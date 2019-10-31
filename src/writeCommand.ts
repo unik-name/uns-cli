@@ -4,10 +4,12 @@ import { HttpNotFoundError } from "./errorHandler";
 import { feeFlag } from "./utils";
 
 export abstract class WriteCommand extends BaseCommand {
-    public static flags = {
-        ...BaseCommand.baseFlags,
-        ...feeFlag(),
-    };
+    protected static getWriteCommandFlags(fees: number = 100000000) {
+        return {
+            ...BaseCommand.baseFlags,
+            ...feeFlag(fees),
+        };
+    }
 
     /**
      * Return true if a second wallet passphrase is needed
