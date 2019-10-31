@@ -15,7 +15,7 @@ export class SetPropertiesCommand extends UpdatePropertiesCommand {
     ];
 
     public static flags = {
-        ...UpdatePropertiesCommand.flags,
+        ...UpdatePropertiesCommand.getUpdateCommandFlags(),
         properties: flags.string({
             description: `Array of properties to set: "key1:value1"
                 "key3:" Sets "value1" to "key1" and empty string to "key3"`,

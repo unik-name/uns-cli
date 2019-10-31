@@ -1,5 +1,6 @@
 import { flags } from "@oclif/command";
-import { crypto, ITransactionData, KeyPair } from "@uns/crypto";
+import { Address, crypto, ITransactionData } from "@uns/crypto";
+import { didResolve } from "@uns/ts-sdk";
 import cli from "cli-ux";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
@@ -8,9 +9,9 @@ import {
     checkPassphraseFormat,
     confirmationsFlag,
     createTransferTransaction,
-    fromSatoshi,
     getPassphraseFromUser,
     getSecondPassphraseFromUser,
+    getWalletFromPassphrase,
     passphraseFlag,
     secondPassphraseFlag,
     toSatoshi,
@@ -26,12 +27,14 @@ export class SendCommand extends WriteCommand {
         `$ uns send 1237.77 --to DNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 --network devnet --format json`,
     ];
 
+    public static DEFAULT_FEES: number = 1; // 1UNS fees (100000000 if sato flag is activated)
+
     public static flags = {
-        ...WriteCommand.flags,
+        ...WriteCommand.getWriteCommandFlags(SendCommand.DEFAULT_FEES),
         ...passphraseFlag,
         ...secondPassphraseFlag,
         to: flags.string({
-            description: "The recipient address.",
+            description: "The recipient public address OR the @unik-name of the recipient.",
             required: true,
         }),
         check: flags.boolean({
@@ -46,6 +49,13 @@ export class SendCommand extends WriteCommand {
         }),
         ...awaitFlag,
         ...confirmationsFlag,
+        sato: flags.boolean({
+            description: "Specify that the provided amount is in sato-UNS, not in UNS",
+            default: false,
+        }),
+        senderAccount: flags.string({
+            description: "The @unik-name OR the public address of the wallet of the sender.",
+        }),
     };
 
     public static args = [
@@ -56,9 +66,6 @@ export class SendCommand extends WriteCommand {
         },
     ];
 
-    private passphrase: string;
-    private secondPassphrase: string;
-
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
     }
@@ -68,61 +75,99 @@ export class SendCommand extends WriteCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
+        if (flags.to === flags.senderAccount) {
+            throw new Error("Recipient and Owner are the same");
+        }
+
         // Check and get amount
-        const amount: number = this.checkAndGetAmount(args.amount);
+        const amount: number = this.checkAndGetAmount(args.amount, flags.sato);
+        const satoAmount = flags.sato ? amount : toSatoshi(amount);
+
+        const recipientAddress = await this.resolveWalletAddress(flags.to);
 
         // Check recipient wallet existence if needed
-        const canContinue = await this.checkAndConfirmRecipient(flags.check, flags.to, amount);
+        const canContinue = await this.checkAndConfirmWallet(flags.check, recipientAddress);
         if (!canContinue) {
             return "Command aborted by user";
         }
 
-        await this.askForPassphrases(flags);
+        const passphrases = await this.askForPassphrases(flags);
 
-        const transactionAmount: number = flags[feesIncludedFlagId] ? amount - fromSatoshi(flags.fee) : amount;
+        if (flags.senderAccount) {
+            // Check if senderAccount correspond to first passphrase
+            const unikNameSenderAddress = await this.resolveWalletAddress(flags.senderAccount, false);
+            await this.checkAndConfirmWallet(false, unikNameSenderAddress, passphrases.first);
+        }
 
-        const transaction: ITransactionData = this.createTransactionStruct(transactionAmount, flags.fee, flags.to);
+        const satoFees = this.getFees(flags.sato, flags.fee);
+
+        const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - satoFees : satoAmount;
+
+        const transaction: ITransactionData = this.createTransactionStruct(
+            transactionSatoAmount,
+            satoFees,
+            recipientAddress,
+            this.api.getVersion(),
+            passphrases.first,
+            passphrases.second,
+        );
 
         const transactionFromNetwork = await this.sendAndWaitTransactionConfirmations(transaction);
 
         return this.formatOutput(transactionFromNetwork, transaction.id);
     }
 
-    private async askForPassphrases(flags) {
+    private getFees(isSato: boolean, fee: number): number {
+        return isSato ? (fee === SendCommand.DEFAULT_FEES ? toSatoshi(fee) : fee) : toSatoshi(fee);
+    }
+
+    private async askForPassphrases(flags): Promise<{ first: string; second: string }> {
         /**
          * Get passphrase
          */
-        this.passphrase = flags.passphrase;
-        if (!this.passphrase) {
-            this.passphrase = await getPassphraseFromUser();
+        let passphrase: string = flags.passphrase;
+        if (!passphrase) {
+            passphrase = await getPassphraseFromUser();
         }
 
-        checkPassphraseFormat(this.passphrase);
+        checkPassphraseFormat(passphrase);
 
         /**
          * Get second passphrase
          */
-        this.secondPassphrase = flags.secondPassphrase;
+        let secondPassphrase: string = flags.secondPassphrase;
 
-        if (!this.secondPassphrase && (await this.isSecondPassphraseNeeded(this.passphrase))) {
-            this.secondPassphrase = await getSecondPassphraseFromUser();
+        if (!secondPassphrase && (await this.isSecondPassphraseNeeded(passphrase))) {
+            secondPassphrase = await getSecondPassphraseFromUser();
         }
 
-        if (this.secondPassphrase) {
-            checkPassphraseFormat(this.secondPassphrase);
+        if (secondPassphrase) {
+            checkPassphraseFormat(secondPassphrase);
         }
+
+        return {
+            first: passphrase,
+            second: secondPassphrase,
+        };
     }
 
-    private createTransactionStruct(amount: number, fees: number, to: string): ITransactionData {
+    private createTransactionStruct(
+        satoAmount: number,
+        satoFees: number,
+        to: string,
+        networkVersion: number,
+        passphrase: string,
+        secondPassphrase: string,
+    ): ITransactionData {
         this.actionStart("Creating transaction");
         const sendTransactionStruct = createTransferTransaction(
             this.client,
-            toSatoshi(amount),
-            fees,
+            satoAmount,
+            satoFees,
             to,
-            this.api.getVersion(),
-            this.passphrase,
-            this.secondPassphrase,
+            networkVersion,
+            passphrase,
+            secondPassphrase,
         );
         this.actionStop();
         return sendTransactionStruct;
@@ -147,7 +192,7 @@ export class SendCommand extends WriteCommand {
         return transactionFromNetwork;
     }
 
-    private checkAndGetAmount(amountArg: string) {
+    private checkAndGetAmount(amountArg: string, isSatoAmount: boolean) {
         // Check amount
         const amountParts = amountArg.replace(" ", "").split(".");
 
@@ -166,22 +211,58 @@ export class SendCommand extends WriteCommand {
             throw new Error("The amount should be a positive number");
         }
 
+        if (isSatoAmount && !Number.isInteger(amount)) {
+            throw new Error("sato UNS amount has to be an integer");
+        }
+
         return amount;
     }
 
-    private async checkAndConfirmRecipient(checkExistence: boolean, recipient: string, amount: number) {
-        // check recipient address format
-        if (!crypto.validateAddress(recipient)) {
-            throw new Error("Recipient address does not match expected format");
-        }
+    private async resolveWalletAddress(id: string, isRecipient: boolean = true): Promise<string> {
+        let resolvedAddress: string;
 
-        if (checkExistence) {
+        if (id && id.startsWith("@")) {
+            try {
+                const resolveResult = await didResolve(`${id}?*`, this.api.network.name);
+                if (resolveResult.error) {
+                    throw resolveResult.error;
+                }
+                resolvedAddress = resolveResult.data as string;
+            } catch (e) {
+                if (e && e.response && e.response.status === 404) {
+                    throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not exist`);
+                }
+                throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not match expected format`);
+            }
+        } else {
+            if (!crypto.validateAddress(id, this.api.getVersion())) {
+                try {
+                    resolvedAddress = Address.fromPublicKey(id);
+                } catch (_) {
+                    throw new Error(`${isRecipient ? "Recipient" : "Sender"} address does not match expected format`);
+                }
+            } else {
+                resolvedAddress = id;
+            }
+        }
+        return resolvedAddress;
+    }
+
+    private async checkAndConfirmWallet(checkWalletExistence: boolean, address: string, passphrase?: string) {
+        if (checkWalletExistence) {
             this.actionStart("Check recipient existence");
-            const exists = await this.checkRecipientWalletExistence(recipient);
+            const exists = await this.checkWalletExistence(address);
             this.actionStop();
             if (!exists) {
                 this.warn("The recipient address does not exist on chain yet");
-                return await cli.confirm(`Do really want to send ${amount} to this wallet?`);
+                return await cli.confirm(`Do really want to send tokens to this wallet?`);
+            }
+        }
+
+        if (passphrase) {
+            const wallet = await getWalletFromPassphrase(passphrase, this.api.network);
+            if (wallet.address !== address) {
+                throw new Error(`Wrong passphrase for wallet ${address}`);
             }
         }
         return true;
@@ -189,15 +270,16 @@ export class SendCommand extends WriteCommand {
 
     /**
      * Check if wallet exists
-     * @param recipient
+     * @param walletAddress
      */
-    private async checkRecipientWalletExistence(recipient: string): Promise<boolean> {
-        return this.applyWalletPredicate(recipient, wallet => !!wallet);
+    private async checkWalletExistence(walletAddress: string): Promise<boolean> {
+        return this.applyWalletPredicate(walletAddress, wallet => !!wallet);
     }
+
     private formatOutput(transactionFromNetwork: any, transactionId: string) {
         if (!transactionFromNetwork) {
             this.error(
-                `Transaction not found yet, the network can be slow. Check this url in a while: ${this.getTranscationUrl(
+                `Transaction not found yet, the network can be slow. Check this url in a while: ${this.getTransactionUrl(
                     transactionId,
                 )}`,
             );
@@ -209,7 +291,7 @@ export class SendCommand extends WriteCommand {
         };
     }
 
-    private getTranscationUrl(transactionId: string) {
+    private getTransactionUrl(transactionId: string) {
         return `${this.api.getExplorerUrl()}/transaction/${transactionId}`;
     }
 }
