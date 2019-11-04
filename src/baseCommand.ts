@@ -24,9 +24,9 @@ export abstract class BaseCommand extends Command {
         }),
     };
 
-    protected client: Client;
+    public client: Client;
+    public api: UNSCLIAPI;
     protected unsClient: UNSClient;
-    protected api;
     protected verbose: boolean;
 
     private formater;
@@ -114,43 +114,13 @@ export abstract class BaseCommand extends Command {
         LOGGER.logWithLevel("stop", message, ...args);
     }
 
-    protected debug = (...args: any[]): void => {
-        if (this.verbose || this._helpOverride()) {
-            LOGGER.logWithLevel("debug", "", ...args);
-        }
-    };
-
-    protected getAvailableFormats(): Formater[] {
-        return [OUTPUT_FORMAT.json];
-    }
-
-    protected getDefaultFormat(): Formater {
-        return OUTPUT_FORMAT.json;
-    }
-    protected abstract do(flags: Record<string, any>, args?: Record<string, any>): Promise<any>;
-    protected abstract getCommand(): typeof BaseCommand;
-
-    protected logAttribute(label: string, value: string) {
-        this.log(`\t${label}: ${value}`);
-    }
-
-    /**
-     * Checks that all heights passed in parameter are equals
-     * @param heights
-     */
-    protected checkDataConsistency(...heights: number[]) {
-        if (!heights.every(v => v === heights[0])) {
-            throw new Error("Unable to read right now. Please retry.");
-        }
-    }
-
-    protected actionStart(msg: string) {
+    public actionStart(msg: string) {
         if (this.verbose) {
             cli.action.start(msg);
         }
     }
 
-    protected actionStop() {
+    public actionStop() {
         if (this.verbose) {
             cli.action.stop();
         }
@@ -163,7 +133,7 @@ export abstract class BaseCommand extends Command {
      * @param numberOfRetry
      * @param expectedConfirmations
      */
-    protected async waitTransactionConfirmations(
+    public async waitTransactionConfirmations(
         blockTime: number,
         transactionId: string,
         numberOfRetry: number = 0,
@@ -191,6 +161,36 @@ export abstract class BaseCommand extends Command {
             throw e;
         } finally {
             this.actionStop();
+        }
+    }
+
+    protected debug = (...args: any[]): void => {
+        if (this.verbose || this._helpOverride()) {
+            LOGGER.logWithLevel("debug", "", ...args);
+        }
+    };
+
+    protected getAvailableFormats(): Formater[] {
+        return [OUTPUT_FORMAT.json];
+    }
+
+    protected getDefaultFormat(): Formater {
+        return OUTPUT_FORMAT.json;
+    }
+    protected abstract do(flags: Record<string, any>, args?: Record<string, any>): Promise<any>;
+    protected abstract getCommand(): typeof BaseCommand;
+
+    protected logAttribute(label: string, value: string) {
+        this.log(`\t${label}: ${value}`);
+    }
+
+    /**
+     * Checks that all heights passed in parameter are equals
+     * @param heights
+     */
+    protected checkDataConsistency(...heights: number[]) {
+        if (!heights.every(v => v === heights[0])) {
+            throw new Error("Unable to read right now. Please retry.");
         }
     }
 }

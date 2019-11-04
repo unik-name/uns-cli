@@ -14,7 +14,7 @@ export abstract class WriteCommand extends BaseCommand {
     /**
      * Return true if a second wallet passphrase is needed
      */
-    protected async isSecondPassphraseNeeded(passphrase: string): Promise<boolean> {
+    public async isSecondPassphraseNeeded(passphrase: string): Promise<boolean> {
         const keys: KeyPair = crypto.getKeys(passphrase);
         return this.applyWalletPredicate(keys.publicKey, wallet => wallet && !!wallet.secondPublicKey);
     }
@@ -24,7 +24,7 @@ export abstract class WriteCommand extends BaseCommand {
      * @param recipientId
      * @param predicate
      */
-    protected async applyWalletPredicate(recipientId: string, predicate: (wallet) => boolean) {
+    public async applyWalletPredicate(recipientId: string, predicate: (wallet) => boolean) {
         try {
             const wallet = await this.api.getWallet(recipientId);
             return predicate(wallet);
