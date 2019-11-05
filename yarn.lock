@@ -658,10 +658,10 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/crypto@^3.1.0-alpha.0":
-  version "3.1.0-beta"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-3.1.0-beta.tgz#841e52fbf2aff903b126ce904756de2027c42b26"
-  integrity sha512-Qe5nHpBdL5+EflfcnlUifirLLLyj1A17VLUPwBz38Mv7M4TsHQyMZWZUtobw9415EgqYQH4IME7eMLgsyTGTEg==
+"@uns/crypto@^3.1.0-beta.1":
+  version "3.1.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-3.1.0-beta.1.tgz#96ee6875d5db0c2a2dd8227f2a4b784eaba7e432"
+  integrity sha512-FLJYACV8Ahh86Yl55k+CaG34UR6WR6KEl1DWVsmD666PxU2W8hUuYmGAQquNeKJELzOw4CvvKSlqK6TahMnspg==
   dependencies:
     "@faustbrian/dato" "^0.2.0"
     ajv "^6.10.0"
