@@ -3,7 +3,7 @@ import { getPropertyValue, PropertyValue, ResponseWithChainMeta } from "@uns/ts-
 import delay from "delay";
 import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
-import { handleErrors, HttpNotFoundError } from "./errorHandler";
+import { handleErrors, handleFetchError } from "./errorHandler";
 import * as UTILS from "./utils";
 
 export class UNSCLIAPI {
@@ -116,13 +116,7 @@ export class UNSCLIAPI {
                     chainmeta: unikResponse.chainmeta,
                 };
             })
-            .catch(e => {
-                const error =
-                    e.statusCode === 404
-                        ? new HttpNotFoundError(`No UNIK token found with id ${unikid}.`)
-                        : new Error(`Error fetching UNIK token ${unikid}. Caused by ${e.message}`);
-                throw error;
-            });
+            .catch(handleFetchError("UNIK", unikid));
     }
 
     /**
@@ -135,13 +129,7 @@ export class UNSCLIAPI {
             .then(res => {
                 return JSON.parse(res);
             })
-            .catch(e => {
-                const error =
-                    e.statusCode === 404
-                        ? `No properties for UNIK token ${unikid} found.`
-                        : `Error fetching UNIK token ${unikid} properties. Caused by ${e.message}`;
-                throw new Error(error);
-            });
+            .catch(handleFetchError("UNIK properties", unikid));
     }
 
     public async getUnikProperty(
@@ -184,13 +172,7 @@ export class UNSCLIAPI {
                     chainmeta: walletResponse.chainmeta,
                 };
             })
-            .catch(e => {
-                const error =
-                    e.statusCode === 404
-                        ? new HttpNotFoundError(`No wallet found with id ${walletIdentifier}.`)
-                        : new Error(`Error fetching wallet ${walletIdentifier}. Caused by ${e.message}`);
-                throw error;
-            });
+            .catch(handleFetchError("wallet", walletIdentifier));
     }
 
     public async getWalletTokens(walletIdentifier: string, tokenName: string = "unik"): Promise<any> {
@@ -203,13 +185,7 @@ export class UNSCLIAPI {
                     chainmeta: tokenResponse.chainmeta,
                 };
             })
-            .catch(e => {
-                const error =
-                    e.statusCode === 404
-                        ? `No wallet found with id ${walletIdentifier} or token ${tokenName} unknown`
-                        : `Error fetching tokens ${walletIdentifier}/${tokenName}. Caused by ${e.message}`;
-                throw new Error(error);
-            });
+            .catch(handleFetchError("wallet tokens", walletIdentifier));
     }
 
     /**

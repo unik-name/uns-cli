@@ -183,23 +183,14 @@ export abstract class BaseCommand extends Command {
     }
 
     protected async withAction<T>(actionDescription: string, callback, ...args): Promise<T> {
-        let callBackResult: T;
-        let error;
         this.actionStart(actionDescription);
-
         try {
-            callBackResult = await callback(...args);
+            return await callback(...args);
         } catch (e) {
-            error = e;
             this.debug(e);
+            throw e;
         } finally {
             this.actionStop();
         }
-
-        if (error) {
-            throw error;
-        }
-
-        return callBackResult;
     }
 }
