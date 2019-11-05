@@ -658,7 +658,7 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/ts-sdk@1.2.0-alpha.1":
+"@uns/ts-sdk@^1.2.0-alpha.1":
   version "1.2.0-alpha.1"
   resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.2.0-alpha.1.tgz#5e51db033a737d5e5ec5841e8d5e3110cb87f01a"
   integrity sha512-Ykx3DJjlfneyU9QMbEmyyvXhAqFXfkmDFsog4uIwMFL+1wZ+0OGVBS6YmnVrkWPHedyuK6DWSJ05HFjkTUPHXg==
