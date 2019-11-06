@@ -1,5 +1,7 @@
 import { flags } from "@oclif/parser";
 
+const DEFAULT_COMMAND_FEES: number = 100000000;
+
 export const passphraseFlag = {
     passphrase: flags.string({
         description:
@@ -31,10 +33,10 @@ export const confirmationsFlag = {
     }),
 };
 
-export const feeFlag = (defaultFee: number = 100000000): { [_: string]: flags.IOptionFlag<number> } => {
+export const feeFlag = (defaultFee: number = DEFAULT_COMMAND_FEES): { [_: string]: flags.IOptionFlag<number> } => {
     return {
         fee: flags.integer({
-            description: `Specify a dynamic fee in satoUNS. Defaults to ${defaultFee} (100000000 satoUNS = 1 UNS).`,
+            description: `Specify a dynamic fee in satoUNS. Defaults to ${defaultFee} (100 000 000 satoUNS = 1 UNS).`,
             default: defaultFee,
         }),
     };

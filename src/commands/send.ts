@@ -89,7 +89,7 @@ export class SendCommand extends WriteCommand {
             await cmdHelper.checkAndConfirmWallet(false, unikNameSenderAddress, passphrases.first);
         }
 
-        const satoFees = cmdHelper.getFees(flags.sato, flags.fee);
+        const satoFees = cmdHelper.getSatoFees(flags.sato, flags.fee);
 
         const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - satoFees : satoAmount;
 
