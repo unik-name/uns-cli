@@ -158,7 +158,7 @@ export class SendCommandHelper {
         return resolvedAddress;
     }
 
-    public async checkAndConfirmWallet(checkWallet: boolean, address: string, passphrase?: string) {
+    public async checkAndConfirmWallet(checkWallet: boolean, address: string) {
         if (checkWallet) {
             this.cmd.actionStart("Check recipient existence");
             const exists = await this.checkWalletExistence(address);
@@ -166,13 +166,6 @@ export class SendCommandHelper {
             if (!exists) {
                 this.cmd.warn("The recipient address does not exist on chain yet");
                 return await cli.confirm(`Do really want to send tokens to this wallet?`);
-            }
-        }
-
-        if (passphrase) {
-            const wallet = await getWalletFromPassphrase(passphrase, this.cmd.api.network);
-            if (wallet.address !== address) {
-                throw new Error(`Wrong passphrase for wallet ${address}`);
             }
         }
         return true;

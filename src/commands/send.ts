@@ -3,7 +3,14 @@ import { ITransactionData } from "@uns/crypto";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import { awaitFlag, confirmationsFlag, passphraseFlag, secondPassphraseFlag, toSatoshi } from "../utils";
+import {
+    awaitFlag,
+    confirmationsFlag,
+    getWalletFromPassphrase,
+    passphraseFlag,
+    secondPassphraseFlag,
+    toSatoshi,
+} from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -65,10 +72,6 @@ export class SendCommand extends WriteCommand {
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
         const cmdHelper = new SendCommandHelper(this);
 
-        if (flags.to === flags.senderAccount) {
-            throw new Error("Recipient and Owner are the same");
-        }
-
         // Check and get amount
         const amount: number = cmdHelper.checkAndGetAmount(args.amount, flags.sato);
         const satoAmount = flags.sato ? amount : toSatoshi(amount);
@@ -83,10 +86,18 @@ export class SendCommand extends WriteCommand {
 
         const passphrases = await cmdHelper.askForPassphrases(flags);
 
+        const senderWallet = getWalletFromPassphrase(passphrases.first, this.api.network);
+        if (senderWallet.address === recipientAddress) {
+            throw new Error("Recipient and Owner are the same");
+        }
+
         if (flags.senderAccount) {
             // Check if senderAccount correspond to first passphrase
             const unikNameSenderAddress = await cmdHelper.resolveWalletAddress(flags.senderAccount, false);
-            await cmdHelper.checkAndConfirmWallet(false, unikNameSenderAddress, passphrases.first);
+            if (unikNameSenderAddress !== senderWallet.address) {
+                throw new Error(`Wrong passphrase for sender account ${flags.senderAccount}`);
+            }
+            await cmdHelper.checkAndConfirmWallet(false, unikNameSenderAddress);
         }
 
         const satoFees = cmdHelper.getSatoFees(flags.sato, flags.fee);
