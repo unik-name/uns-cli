@@ -117,7 +117,8 @@
         "collectCoverage": false,
         "watchman": false,
         "setupFilesAfterEnv": [
-            "jest-extended"
+            "jest-extended",
+            "<rootDir>/test/setupTests.ts"
         ]
     }
 }
