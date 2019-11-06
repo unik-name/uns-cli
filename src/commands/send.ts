@@ -27,7 +27,7 @@ export class SendCommand extends WriteCommand {
         }),
         check: flags.boolean({
             description:
-                "Allow sending tokens to an address that do not exists on chain yet. (--no-check to bypass recipient check)",
+                "Check if recipient address exists on chain before sending tokens. (--no-check to bypass recipient check)",
             default: true,
             allowNo: true,
         }),
