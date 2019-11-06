@@ -2,6 +2,7 @@ import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
 import {
+    checkConfirmations,
     checkUnikIdFormat,
     checkUnikPropertyFormat,
     confirmedFlag,
@@ -38,13 +39,8 @@ export class GetPropertyValueCommand extends ReadCommand {
         checkUnikPropertyFormat(flags.propertyKey);
 
         const property: any = await this.api.getUnikProperty(flags.unikid, flags.propertyKey, flags.chainmeta);
-        const propertyConfirmations = property.confirmations;
 
-        if (property.confirmations < flags.confirmed) {
-            throw new Error(
-                `Not enough confirmations (expected: ${flags.confirmed}, actual: ${propertyConfirmations})`,
-            );
-        }
+        checkConfirmations(property.confirmations, flags.confirmed);
 
         const propertyValue = property.data;
 
@@ -57,7 +53,7 @@ export class GetPropertyValueCommand extends ReadCommand {
                 unikid: flags.unikid,
                 property: flags.propertyKey,
                 value: propertyValue,
-                confirmations: propertyConfirmations,
+                confirmations: property.confirmations,
             },
             ...(flags.chainmeta ? this.showContext(property.chainmeta) : {}),
         };
