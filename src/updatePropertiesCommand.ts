@@ -12,7 +12,7 @@ import {
 import { WriteCommand } from "./writeCommand";
 
 export abstract class UpdateProperties extends WriteCommand {
-    protected static getUpdateCommandFlags(fees: number = 100000000) {
+    protected static getUpdateCommandFlags(fees?: number) {
         return {
             ...WriteCommand.getWriteCommandFlags(fees),
             ...unikidFlag("The UNIK token on which to update the properties."),

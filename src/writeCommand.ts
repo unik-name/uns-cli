@@ -4,7 +4,7 @@ import { HttpNotFoundError } from "./errorHandler";
 import { feeFlag } from "./utils";
 
 export abstract class WriteCommand extends BaseCommand {
-    protected static getWriteCommandFlags(fees: number = 100000000) {
+    protected static getWriteCommandFlags(fees?: number) {
         return {
             ...BaseCommand.baseFlags,
             ...feeFlag(fees),

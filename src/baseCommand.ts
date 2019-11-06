@@ -152,6 +152,10 @@ export abstract class BaseCommand extends Command {
         return transactionFromNetwork;
     }
 
+    public isFlagSet(flagName: string, flagChar?: string): boolean {
+        return this.argv.some(arg => arg === `--${flagName}` || (flagChar && arg === `-${flagChar}`));
+    }
+
     protected async withAction<T>(actionDescription: string, callback, ...args): Promise<T> {
         this.actionStart(actionDescription);
         try {

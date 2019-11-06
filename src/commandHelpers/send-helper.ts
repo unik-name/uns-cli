@@ -20,8 +20,11 @@ export class SendCommandHelper {
         this.cmd = cmd;
     }
 
-    public getFees(isSato: boolean, fee: number): number {
-        return isSato ? (fee === SendCommand.DEFAULT_FEES ? toSatoshi(fee) : fee) : toSatoshi(fee);
+    /**
+     * If fee flag is not set, default fee amount is used, this default amount is in UNS not in satoUNS
+     */
+    public getSatoFees(isFeesInSato: boolean, fee: number): number {
+        return isFeesInSato && this.cmd.isFlagSet("fee") ? fee : toSatoshi(fee);
     }
 
     public async askForPassphrases(flags: Record<string, any>): Promise<{ first: string; second: string }> {
