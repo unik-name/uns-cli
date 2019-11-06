@@ -89,7 +89,8 @@
         "prettify": "prettier \"./*.{json,md}\" \"./src/**/*.{ts,json}\"",
         "prettify:check": "yarn prettify --check",
         "prettify:fix": "yarn prettify --write",
-        "test": "jest --runInBand"
+        "test": "jest --runInBand",
+        "artefacts": "yarn build && oclif-dev pack"
     },
     "publishConfig": {
         "access": "public"
