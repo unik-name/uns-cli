@@ -11,6 +11,8 @@ import {
     toSatoshi,
 } from "../utils";
 
+const DID_DEFAULT_QUERY = "?*";
+
 export class SendCommandHelper {
     public cmd: SendCommand;
 
@@ -125,7 +127,10 @@ export class SendCommandHelper {
 
         if (id && id.startsWith("@")) {
             try {
-                const resolveResult = await didResolve(`${id}?*`, this.cmd.api.network.name);
+                const resolveResult = await didResolve(
+                    `${id}${id.endsWith(DID_DEFAULT_QUERY) ? "" : DID_DEFAULT_QUERY}`,
+                    this.cmd.api.network.name,
+                );
                 if (resolveResult.error) {
                     throw resolveResult.error;
                 }
