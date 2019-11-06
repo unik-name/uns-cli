@@ -29,7 +29,7 @@ export class SendCommand extends WriteCommand {
         ...passphraseFlag,
         ...secondPassphraseFlag,
         to: flags.string({
-            description: "The recipient public address OR the @unik-name of the recipient.",
+            description: "The recipient public address, public key OR the @unik-name of the recipient.",
             required: true,
         }),
         check: flags.boolean({
