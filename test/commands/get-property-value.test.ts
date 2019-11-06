@@ -17,18 +17,17 @@ describe("get-property-value command", () => {
     describe("Exit cases", () => {
         shouldExit.forEach(exitCase => applyExitCase(exitCase));
 
-        // Activate this test after ts-sdk v1.1.0-beta next release
-        // test.nock(NETWORKS.devnet.url, api =>
-        //     api.get(`/api/v2/uniks/${UNIK_ID}/properties/type`).reply(200, PROPERTY_RESULT_FOR_CONSISTENCY_FAIL),
-        // )
-        // .nock(NETWORKS.devnet.url, api => api.get(`/api/v2/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT))
-        // .nock(NETWORKS.devnet.url, api =>
-        //     api.get(`/api/v2/transactions/${TRANSACTION_ID}`).reply(200, TRANSACTION_RESULT),
-        // )
-        // .command(["get-property-value", "-n", "devnet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
-        // .exit(1)
-        // // tslint:disable-next-line:no-empty
-        // .it("Should exit with data consistency error", _ => {});
+        test.nock(NETWORKS.devnet.url, api =>
+            api.get(`/api/v2/uniks/${UNIK_ID}/properties/type`).reply(200, PROPERTY_RESULT_FOR_CONSISTENCY_FAIL),
+        )
+            .nock(NETWORKS.devnet.url, api => api.get(`/api/v2/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT))
+            .nock(NETWORKS.devnet.url, api =>
+                api.get(`/api/v2/transactions/${TRANSACTION_ID}`).reply(200, TRANSACTION_RESULT),
+            )
+            .command(["get-property-value", "-n", "devnet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
+            .exit(1)
+            // tslint:disable-next-line:no-empty
+            .it("Should exit with data consistency error", _ => {});
     });
 
     describe("Run cases", () => {
