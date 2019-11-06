@@ -169,3 +169,9 @@ export function fromSatoshi(value: number): number {
 export function toSatoshi(value: number): number {
     return value * 100000000;
 }
+
+export const checkConfirmations = (confirmations: number, expected: number) => {
+    if (confirmations < expected) {
+        throw new Error(`Not enough confirmations (expected: ${expected}, actual: ${confirmations})`);
+    }
+};
