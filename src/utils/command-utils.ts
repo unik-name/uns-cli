@@ -1,5 +1,4 @@
-import { flags } from "@oclif/parser";
-import { Client, crypto, ITransactionData, networks, DiscloseDemand, DiscloseDemandCertification } from "@uns/crypto";
+import { Client, crypto, DiscloseDemand, DiscloseDemandCertification, ITransactionData, networks } from "@uns/crypto";
 import cli from "cli-ux";
 import { NETWORKS } from "../config";
 
