@@ -61,12 +61,6 @@ export const meta = {
 };
 
 export const shouldExit = [
-    { description: "Should exit with code 2 if network flag is not passed", args: ["send"], exitCode: 2 },
-    {
-        description: "Should exit with code 2 if network is not known",
-        args: ["send", "--network", "customNetwork"],
-        exitCode: 2,
-    },
     {
         description: "Should exit with code 2 if amount is empty",
         args: ["send", "--network", "devnet", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],

@@ -9,21 +9,6 @@ export const transaction = {
 
 export const shouldExit = [
     {
-        description: "Should exit with code 2 if network flag is not passed",
-        args: ["disclose-explicit-values"],
-        exitCode: 2,
-    },
-    {
-        description: "Should exit with code 2 if network is not known",
-        args: [commandName, "--network", "customNetwork"],
-        exitCode: 2,
-    },
-    {
-        description: "Should exit with code 2 if network is not known",
-        args: [commandName, "--network", "customNetwork"],
-        exitCode: 2,
-    },
-    {
         description: "Should exit with code 2 if no explicit value passed",
         args: [commandName, "--network", "devnet", "--unikid", unikId],
         exitCode: 2,
