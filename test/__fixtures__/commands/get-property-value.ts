@@ -66,13 +66,6 @@ export const EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT = `{
 `;
 
 export const shouldExit = [
-    { description: "Should exit with code 2 if network flag is not passed", args: ["get-property-value"], exitCode: 2 },
-    {
-        description: "Should exit with code 2 if network is not known",
-        args: ["get-property-value", "--network", "customNetwork"],
-        exitCode: 2,
-    },
-
     {
         description: "Should exit with code 2 if output format is not allowed for that command",
         args: ["get-property-value", "-n", "devnet", "--unikid", UNIK_ID, "-k", "property", "-f", "table"],
