@@ -12,4 +12,4 @@ export const checkUnikPropertyFormat = (propertyKey: string) => {
     if (!valid) {
         throw new Error(`Property ${propertyKey} does not match expected format`);
     }
-}
+};
