@@ -1,4 +1,5 @@
-import { formatOutput } from "../../src/commands/get-wallet-address";
+import { GetWalletAddressCommandHelper } from "../../src/commandHelpers/get-wallet-address-helper";
+import { GetWalletAddressCommand } from "../../src/commands/get-wallet-address";
 import { NETWORKS } from "../../src/config";
 import {
     OUTPUT_CHAINMETA,
@@ -16,9 +17,8 @@ describe("get-property-value command", () => {
 
     describe("formatOutput", () => {
         it("format for json with chainmeta", () => {
-            const output = formatOutput(
+            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
                 "json",
-                true,
                 WALLET_ADDRESS,
                 WALLET_PUBKEY,
                 WALLET_CHAINMETA,
@@ -35,12 +35,11 @@ describe("get-property-value command", () => {
         });
 
         it("format for json without chainmeta", () => {
-            const output = formatOutput(
+            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
                 "json",
-                false,
                 WALLET_ADDRESS,
                 WALLET_PUBKEY,
-                WALLET_CHAINMETA,
+                undefined,
                 "devnet",
                 NETWORKS.devnet.url,
             );
@@ -51,9 +50,8 @@ describe("get-property-value command", () => {
         });
 
         it("format for yaml with chainmeta", () => {
-            const output = formatOutput(
+            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
                 "yaml",
-                true,
                 WALLET_ADDRESS,
                 WALLET_PUBKEY,
                 WALLET_CHAINMETA,
@@ -70,12 +68,11 @@ describe("get-property-value command", () => {
         });
 
         it("format for yaml without chainmeta", () => {
-            const output = formatOutput(
+            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
                 "yaml",
-                false,
                 WALLET_ADDRESS,
                 WALLET_PUBKEY,
-                WALLET_CHAINMETA,
+                undefined,
                 "devnet",
                 NETWORKS.devnet.url,
             );
@@ -86,9 +83,8 @@ describe("get-property-value command", () => {
         });
 
         it("format for raw", () => {
-            const output = formatOutput(
+            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
                 "raw",
-                true,
                 WALLET_ADDRESS,
                 WALLET_PUBKEY,
                 WALLET_CHAINMETA,

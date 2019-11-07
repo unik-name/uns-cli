@@ -1,14 +1,7 @@
 import { BaseCommand } from "../baseCommand";
+import { GetWalletAddressCommandHelper } from "../commandHelpers/get-wallet-address-helper";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import {
-    checkPassphraseFormat,
-    getChainContext,
-    getPassphraseFromUser,
-    getWalletFromPassphrase,
-    isPassphrase,
-    isTokenId,
-} from "../utils";
 
 export class GetWalletAddressCommand extends ReadCommand {
     public static description = "Create UNS wallet";
@@ -38,73 +31,21 @@ export class GetWalletAddressCommand extends ReadCommand {
     }
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<string | NestedCommandOutput> {
-        let address: string;
-        let publicKey: string;
-        let chainMeta: any;
-        if (isTokenId(args.id)) {
-            // Get token
-            const unik = await this.api.getUnikById(args.id);
-            address = unik.ownerId;
-            if (flags.format !== OUTPUT_FORMAT.raw.key) {
-                // Get Wallet
-                const wallet = await this.api.getWallet(address);
-                publicKey = wallet.publicKey;
-                chainMeta = wallet.chainmeta;
-            }
-        } else {
-            let passphrase;
-            if (args.id && !isPassphrase(args.id)) {
-                throw new Error("ID argument does not match expected parameter");
-            }
-            passphrase = args.id;
+        const cmdHelper = new GetWalletAddressCommandHelper(this);
 
-            // Get Passphrase
-            if (!passphrase) {
-                passphrase = await getPassphraseFromUser();
-            }
-            checkPassphraseFormat(passphrase);
-
-            const wallet = getWalletFromPassphrase(passphrase, this.api.network);
-            address = wallet.address;
-            publicKey = wallet.publicKey;
-        }
-
-        return formatOutput(
+        const { address, publicKey, chainMeta } = await cmdHelper.getWalletInformations(
+            args.id,
             flags.format,
             flags.chainmeta,
+        );
+
+        return cmdHelper.formatOutput(
+            flags.format,
             address,
             publicKey,
             chainMeta,
             this.api.network.name,
             this.api.getCurrentNode(),
         );
-    }
-}
-
-export function formatOutput(
-    format: string,
-    displayChainMeta: boolean,
-    address: string,
-    publicKey: string,
-    chainMeta: any,
-    networkName: string,
-    currentNode: string,
-) {
-    if (format === OUTPUT_FORMAT.raw.key) {
-        return address;
-    } else {
-        const data = {
-            address,
-            publicKey,
-        };
-
-        if (displayChainMeta && chainMeta) {
-            return {
-                data,
-                ...getChainContext(chainMeta, networkName, currentNode),
-            };
-        } else {
-            return data;
-        }
     }
 }

@@ -10,16 +10,11 @@ import {
     getWalletFromPassphrase,
     toSatoshi,
 } from "../utils";
+import { CommandHelper } from "./command-helper";
 
 const DID_DEFAULT_QUERY = "?*";
 
-export class SendCommandHelper {
-    public cmd: SendCommand;
-
-    constructor(cmd: SendCommand) {
-        this.cmd = cmd;
-    }
-
+export class SendCommandHelper extends CommandHelper<SendCommand> {
     /**
      * If fee flag is not set, default fee amount is used, this default amount is in UNS not in satoUNS
      */
