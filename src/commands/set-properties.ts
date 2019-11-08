@@ -11,14 +11,14 @@ export class SetPropertiesCommand extends UpdatePropertiesCommand {
 
     public static examples = [
         `$ uns set-properties --network ${getNetworksListListForDescription()} --unkid {unikId}
-        --properties "{key}:{value}" --format {json|yaml} --verbose`,
+        --properties "{key1}:{value1}" "{key2}:{value2}" --format {json|yaml} --verbose`,
     ];
 
     public static flags = {
         ...UpdatePropertiesCommand.getUpdateCommandFlags(),
         properties: flags.string({
-            description: `Array of properties to set: "key1:value1"
-                "key3:" Sets "value1" to "key1" and empty string to "key3"`,
+            description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2"`,
+
             required: true,
             multiple: true,
         }),
