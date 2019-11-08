@@ -1,13 +1,13 @@
 import { expect, test } from "@oclif/test";
 import { UNSConfig } from "@uns/ts-sdk";
-import { getRootFromUrl } from "../../src/utils";
 import { outputCases } from "../__fixtures__/commands/status";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(getRootFromUrl(UNSConfig.devnet.chain.url), api =>
-        api.get("/api/blocks/getSupply").reply(200, {
-            supply: 2119999400000000,
-            success: true,
+    test.nock(UNSConfig.devnet.chain.url, api =>
+        api.get("/blockchain").reply(200, {
+            data: {
+                supply: 2119999400000000,
+            },
         }),
     )
         .nock(UNSConfig.devnet.chain.url, api =>
