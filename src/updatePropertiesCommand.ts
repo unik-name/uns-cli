@@ -1,9 +1,7 @@
 import { CommandOutput } from "./formater";
 import {
-    awaitFlag,
     checkPassphraseFormat,
     checkUnikIdFormat,
-    confirmationsFlag,
     createNFTUpdateTransaction,
     getPassphraseFromUser,
     passphraseFlag,
@@ -16,8 +14,6 @@ export abstract class UpdateProperties extends WriteCommand {
         return {
             ...WriteCommand.getWriteCommandFlags(fees),
             ...unikidFlag("The UNIK token on which to update the properties."),
-            ...awaitFlag,
-            ...confirmationsFlag,
             ...passphraseFlag,
         };
     }
@@ -58,8 +54,8 @@ export abstract class UpdateProperties extends WriteCommand {
         const finalTransaction = await this.waitTransactionConfirmations(
             this.api.getBlockTime(),
             transactionStruct.id,
-            flags.await,
-            flags.confirmations,
+            flags["await-confirmation"],
+            1,
         );
         this.actionStop();
 

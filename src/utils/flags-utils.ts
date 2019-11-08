@@ -16,20 +16,11 @@ export const secondPassphraseFlag = {
     }),
 };
 
-export const awaitFlag = {
-    await: flags.integer({
-        description: `Number of blocks to wait to get confirmed for the success. Default to 3.
-          0 for immediate return.
-          Needs to be strictly greater than --confirmation flag`,
+export const awaitConfirmationFlag = {
+    "await-confirmation": flags.integer({
+        description: `Maximum number of blocks to wait to get one confirmation of the transaction. Default to 3.
+          0 for immediate return.`,
         default: 3,
-    }),
-};
-
-export const confirmationsFlag = {
-    confirmations: flags.integer({
-        description:
-            "Number of confirmations to wait to get confirmed for the success. Default to 1.\n\t Needs to be strictly lower than --await flag",
-        default: 1,
     }),
 };
 

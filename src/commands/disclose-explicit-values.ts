@@ -11,10 +11,8 @@ import { cli } from "cli-ux";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import {
-    awaitFlag,
     checkPassphraseFormat,
     checkUnikIdFormat,
-    confirmationsFlag,
     createDiscloseTransaction,
     explicitValueFlag,
     getPassphraseFromUser,
@@ -32,10 +30,8 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     ];
 
     public static flags = {
-        ...WriteCommand.flags,
+        ...WriteCommand.getWriteCommandFlags(),
         ...passphraseFlag,
-        ...awaitFlag,
-        ...confirmationsFlag,
         ...unikidFlag("The UNIK token on which to disclose values"),
         ...explicitValueFlag("Array of explicit value to disclose, separated with a space.", true),
     };
@@ -98,8 +94,8 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
 
         const transactionFromNetwork = await this.sendAndWaitConfirmations(
             transactionStruct,
-            flags.await,
-            flags.confirmations,
+            flags["await-confirmation"],
+            1,
         );
 
         return await this.formatResult(transactionFromNetwork, transactionStruct.id);

@@ -91,7 +91,7 @@ export class CreateUnikCommand extends WriteCommand {
         this.log(`Transaction in explorer: ${transactionUrl}`);
 
         /**
-         * Wait for the first transaction confirmation (2 blocktimes max)
+         * Wait for the first transaction confirmation
          */
         this.actionStart("Waiting for transaction confirmation");
         const transactionFromNetwork = await this.waitTransactionConfirmations(

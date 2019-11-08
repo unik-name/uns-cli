@@ -1,7 +1,7 @@
 import { crypto, KeyPair } from "@uns/crypto";
 import { BaseCommand } from "./baseCommand";
 import { HttpNotFoundError } from "./errorHandler";
-import { feeFlag } from "./utils";
+import { awaitConfirmationFlag, feeFlag } from "./utils";
 
 export abstract class WriteCommand extends BaseCommand {
     public static flags = WriteCommand.getWriteCommandFlags();
@@ -9,6 +9,7 @@ export abstract class WriteCommand extends BaseCommand {
         return {
             ...BaseCommand.baseFlags,
             ...feeFlag(fees),
+            ...awaitConfirmationFlag,
         };
     }
 
