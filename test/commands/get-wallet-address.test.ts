@@ -1,6 +1,7 @@
+import { UNSConfig } from "@uns/ts-sdk";
 import { GetWalletAddressCommandHelper } from "../../src/commandHelpers/get-wallet-address-helper";
 import { GetWalletAddressCommand } from "../../src/commands/get-wallet-address";
-import { NETWORKS } from "../../src/config";
+import { getRootFromUrl } from "../../src/utils";
 import {
     OUTPUT_CHAINMETA,
     shouldExit,
@@ -9,6 +10,8 @@ import {
     WALLET_PUBKEY,
 } from "../__fixtures__/commands/get-wallet-address";
 import { applyExitCase } from "../__fixtures__/commons";
+
+const currentNode = getRootFromUrl(UNSConfig.devnet.chain.url);
 
 describe("get-property-value command", () => {
     describe("Exit cases", () => {
@@ -23,7 +26,7 @@ describe("get-property-value command", () => {
                 WALLET_PUBKEY,
                 WALLET_CHAINMETA,
                 "devnet",
-                NETWORKS.devnet.url,
+                currentNode,
             );
             expect(output).toEqual({
                 data: {
@@ -41,7 +44,7 @@ describe("get-property-value command", () => {
                 WALLET_PUBKEY,
                 undefined,
                 "devnet",
-                NETWORKS.devnet.url,
+                currentNode,
             );
             expect(output).toEqual({
                 address: WALLET_ADDRESS,
@@ -56,7 +59,7 @@ describe("get-property-value command", () => {
                 WALLET_PUBKEY,
                 WALLET_CHAINMETA,
                 "devnet",
-                NETWORKS.devnet.url,
+                currentNode,
             );
             expect(output).toEqual({
                 data: {
@@ -74,7 +77,7 @@ describe("get-property-value command", () => {
                 WALLET_PUBKEY,
                 undefined,
                 "devnet",
-                NETWORKS.devnet.url,
+                currentNode,
             );
             expect(output).toEqual({
                 address: WALLET_ADDRESS,
@@ -89,7 +92,7 @@ describe("get-property-value command", () => {
                 WALLET_PUBKEY,
                 WALLET_CHAINMETA,
                 "devnet",
-                NETWORKS.devnet.url,
+                currentNode,
             );
             expect(output).toEqual(WALLET_ADDRESS);
         });
