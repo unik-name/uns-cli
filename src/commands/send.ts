@@ -3,14 +3,7 @@ import { ITransactionData } from "@uns/crypto";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import {
-    awaitFlag,
-    confirmationsFlag,
-    getWalletFromPassphrase,
-    passphraseFlag,
-    secondPassphraseFlag,
-    toSatoshi,
-} from "../utils";
+import { getWalletFromPassphrase, passphraseFlag, secondPassphraseFlag, toSatoshi } from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -44,8 +37,6 @@ export class SendCommand extends WriteCommand {
             description: "Specify that the fees must be deducted from the amount. By default the fees are paid on top.",
             default: false,
         }),
-        ...awaitFlag,
-        ...confirmationsFlag,
         sato: flags.boolean({
             description: "Specify that the provided amount is in sato-UNS, not in UNS",
             default: false,
