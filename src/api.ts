@@ -5,6 +5,7 @@ import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
 import { handleErrors, handleFetchError } from "./errorHandler";
 import * as UTILS from "./utils";
+import { getRootFromUrl } from "./utils";
 
 export class UNSCLIAPI {
     public network: any;
@@ -34,7 +35,7 @@ export class UNSCLIAPI {
         };
 
         return req
-            .post(`${this.network.url}/api/v2/transactions`, requestOptions)
+            .post(`${this.network.url}/transactions`, requestOptions)
             .then(resp => {
                 if (resp.errors) {
                     resp.errors = `Transaction not accepted. Caused by: ${JSON.stringify(handleErrors(resp.errors))}`;
@@ -54,7 +55,7 @@ export class UNSCLIAPI {
     public async getTransaction(transactionId: string, msdelay: number = 0): Promise<any> {
         await delay(msdelay);
         return req
-            .get(`${this.network.url}/api/v2/transactions/${transactionId}`)
+            .get(`${this.network.url}/transactions/${transactionId}`)
             .then(transactionResponse => {
                 const transactionResp = JSON.parse(transactionResponse);
                 return {
@@ -108,7 +109,7 @@ export class UNSCLIAPI {
      */
     public async getUnikById(unikid: string) {
         return req
-            .get(`${this.network.url}/api/v2/nfts/${unikid}`)
+            .get(`${this.network.url}/nfts/${unikid}`)
             .then(res => {
                 const unikResponse = JSON.parse(res);
                 return {
@@ -125,7 +126,7 @@ export class UNSCLIAPI {
      */
     public async getUnikProperties(unikid: string): Promise<any> {
         return req
-            .get(`${this.network.url}/api/v2/nfts/${unikid}/properties`)
+            .get(`${this.network.url}/nfts/${unikid}/properties`)
             .then(res => {
                 return JSON.parse(res);
             })
@@ -149,7 +150,7 @@ export class UNSCLIAPI {
      */
     public async getUniks() {
         return req
-            .get(`${this.network.url}/api/v2/nfts`)
+            .get(`${this.network.url}/nfts`)
             .then(resp => {
                 return JSON.parse(resp).meta.totalCount;
             })
@@ -164,7 +165,7 @@ export class UNSCLIAPI {
      */
     public async getWallet(walletIdentifier: string): Promise<any> {
         return req
-            .get(`${this.network.url}/api/v2/wallets/${walletIdentifier}`)
+            .get(`${this.network.url}/wallets/${walletIdentifier}`)
             .then(res => {
                 const walletResponse = JSON.parse(res);
                 return {
@@ -177,7 +178,7 @@ export class UNSCLIAPI {
 
     public async getWalletTokens(walletIdentifier: string, tokenName: string = "unik"): Promise<any> {
         return req
-            .get(`${this.network.url}/api/v2/wallets/${walletIdentifier}/${tokenName}s`)
+            .get(`${this.network.url}/wallets/${walletIdentifier}/${tokenName}s`)
             .then(res => {
                 const tokenResponse = JSON.parse(res);
                 return {
@@ -193,7 +194,7 @@ export class UNSCLIAPI {
      */
     public async getSupply() {
         return req
-            .get(`${this.network.url}/api/blocks/getSupply`)
+            .get(`${getRootFromUrl(this.network.url)}/api/blocks/getSupply`)
             .then(resp => {
                 return JSON.parse(resp).supply;
             })
@@ -207,7 +208,7 @@ export class UNSCLIAPI {
      */
     public async getCurrentHeight() {
         return req
-            .get(`${this.network.url}/api/v2/node/status`)
+            .get(`${this.network.url}/node/status`)
             .then(resp => {
                 return JSON.parse(resp).data.now;
             })
@@ -220,7 +221,7 @@ export class UNSCLIAPI {
      * Get current node URL
      */
     public getCurrentNode() {
-        return this.network.url;
+        return getRootFromUrl(this.network.url);
     }
 
     /**

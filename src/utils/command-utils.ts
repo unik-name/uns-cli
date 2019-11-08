@@ -1,7 +1,6 @@
 import { Client, crypto, DiscloseDemand, DiscloseDemandCertification, ITransactionData, networks } from "@uns/crypto";
-import { ChainMeta } from "@uns/ts-sdk";
+import { ChainMeta, UNSConfig } from "@uns/ts-sdk";
 import cli from "cli-ux";
-import { NETWORKS } from "../config";
 
 export const isDevMode = () => {
     return process.env.DEV_MODE === "true";
@@ -26,7 +25,11 @@ export const getNetworksListListForDescription = () => {
 };
 
 export const getNetwork = (network: string): any => {
-    return NETWORKS[network];
+    const unsConfig = UNSConfig[network];
+    return {
+        url: unsConfig.chain.url,
+        backend: unsConfig.service.url,
+    };
 };
 
 /**
@@ -189,4 +192,9 @@ export function getChainContext(chainmeta: ChainMeta, networkName: string, curre
             height: chainmeta.height,
         },
     };
+}
+
+export function getRootFromUrl(url: string) {
+    const reg = /((?:http)?s?(?:\:\/\/)?[^\/]+)/;
+    return url.match(reg)[0];
 }
