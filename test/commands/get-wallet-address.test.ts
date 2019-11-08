@@ -1,7 +1,7 @@
 import { UNSConfig } from "@uns/ts-sdk";
 import { GetWalletAddressCommandHelper } from "../../src/commandHelpers/get-wallet-address-helper";
 import { GetWalletAddressCommand } from "../../src/commands/get-wallet-address";
-import { getRootFromUrl } from "../../src/utils";
+import { getUrlOrigin } from "../../src/utils";
 import {
     OUTPUT_CHAINMETA,
     shouldExit,
@@ -11,7 +11,7 @@ import {
 } from "../__fixtures__/commands/get-wallet-address";
 import { applyExitCase } from "../__fixtures__/commons";
 
-const currentNode = getRootFromUrl(UNSConfig.devnet.chain.url);
+const currentNode = getUrlOrigin(UNSConfig.devnet.chain.url);
 
 describe("get-property-value command", () => {
     describe("Exit cases", () => {

@@ -1,7 +1,7 @@
-import { Command, flags as oFlags } from "@oclif/command";
+import { Command, flags } from "@oclif/command";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Client, configManager } from "@uns/crypto";
-import { UNSClient } from "@uns/ts-sdk";
+import { Network, UNSClient } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
@@ -10,17 +10,21 @@ import * as UTILS from "./utils";
 
 export abstract class BaseCommand extends Command {
     public static baseFlags = {
-        help: oFlags.help({ char: "h" }),
-        network: oFlags.string({
+        help: flags.help({ char: "h" }),
+        network: flags.string({
             char: "n",
             description: "Network used to create UNIK nft token",
             required: true,
             options: UTILS.getNetworksList(),
             env: "UNS_NETWORK",
         }),
-        verbose: oFlags.boolean({
+        verbose: flags.boolean({
             char: "v",
             description: "Detailed logs",
+        }),
+        node: flags.string({
+            description: "URL of custom node representing blockchain endpoint",
+            env: "UNS_NODE",
         }),
     };
 
@@ -61,17 +65,17 @@ export abstract class BaseCommand extends Command {
             throw new FlagInvalidOptionError(BaseCommand.baseFlags.network, flags.network);
         }
 
-        const networkName = flags.network === "local" ? "dalinet" : flags.network;
+        const networkName: Network = flags.network === "local" ? "dalinet" : flags.network;
 
         const networkPreset = configManager.getPreset(networkName);
 
         networkPreset.network.name = flags.network;
 
-        this.api = new UNSCLIAPI(networkPreset);
+        this.api = new UNSCLIAPI(networkPreset, flags.node);
 
         this.client = new Client(networkPreset);
 
-        this.unsClient = new UNSClient(networkName);
+        this.unsClient = new UNSClient(networkName, flags.node);
 
         if (UTILS.isDevMode()) {
             this.info("DEV MODE IS ACTIVATED");

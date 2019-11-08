@@ -5,15 +5,15 @@ import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
 import { handleErrors, handleFetchError } from "./errorHandler";
 import * as UTILS from "./utils";
-import { getRootFromUrl } from "./utils";
+import { getUrlOrigin } from "./utils";
 
 export class UNSCLIAPI {
     public network: any;
 
-    constructor(networkPreset) {
+    constructor(networkPreset: any, customNodeUrl?: string) {
         this.network = {
             ...networkPreset.network,
-            ...UTILS.getNetwork(networkPreset.network.name),
+            ...UTILS.getNetwork(networkPreset.network.name, customNodeUrl),
             ...this.getLastInfosFromMilestones(networkPreset.milestones),
         };
     }
@@ -194,9 +194,9 @@ export class UNSCLIAPI {
      */
     public async getSupply() {
         return req
-            .get(`${getRootFromUrl(this.network.url)}/api/blocks/getSupply`)
+            .get(`${this.network.url}/blockchain`)
             .then(resp => {
-                return JSON.parse(resp).supply;
+                return JSON.parse(resp).data.supply;
             })
             .catch(e => {
                 throw new Error(`Error fetching supply. Caused by ${e}`);
@@ -221,7 +221,7 @@ export class UNSCLIAPI {
      * Get current node URL
      */
     public getCurrentNode() {
-        return getRootFromUrl(this.network.url);
+        return getUrlOrigin(this.network.url);
     }
 
     /**
