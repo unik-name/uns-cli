@@ -1,4 +1,5 @@
 import test from "@oclif/test";
+import { SendCommand } from "../../src/commands/send";
 import { commandName, shouldExit } from "../__fixtures__/commands/baseCommand";
 import { applyExitCase } from "../__fixtures__/commons";
 
@@ -12,5 +13,43 @@ describe("BaseCommand", () => {
             .catch(err => expect(err.message.match(`Expected --network=${network} to be one of`)))
             // tslint:disable-next-line:no-empty
             .it("Should use UNS_NETWORK env var then throw error", _ => {});
+    });
+
+    describe("utilities", () => {
+        // Send command is just use here to simulate any command, BaseCommand is abstract, can't be instantiated
+        it("isFlagSet --fee=valeur", () => {
+            const fees = 100000;
+            const sendCommand = new SendCommand(["--sato", `--fee=${fees}`], undefined);
+            expect(sendCommand.isFlagSet("fee")).toBeTruthy();
+            expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
+        });
+
+        it("isFlagSet --fee valeur", () => {
+            const fees = 100000;
+            const sendCommand = new SendCommand(["--sato", "--fee", `${fees}`], undefined);
+            expect(sendCommand.isFlagSet("fee")).toBeTruthy();
+            expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
+        });
+
+        it("isFlagSet -f=valeur", () => {
+            const fees = 100000;
+            const sendCommand = new SendCommand(["--sato", `-f=${fees}`], undefined);
+            expect(sendCommand.isFlagSet("fee")).toBeFalsy();
+            expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
+        });
+
+        it("isFlagSet -f valeur", () => {
+            const fees = 100000;
+            const sendCommand = new SendCommand(["--sato", "-f", `${fees}`], undefined);
+            expect(sendCommand.isFlagSet("fee")).toBeFalsy();
+            expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
+        });
+
+        it("isFlagSet returns false if flag is absent", () => {
+            const fees = 100000;
+            const sendCommand = new SendCommand(["--sato"], undefined);
+            expect(sendCommand.isFlagSet("fee")).toBeFalsy();
+            expect(sendCommand.isFlagSet("fee", "f")).toBeFalsy();
+        });
     });
 });

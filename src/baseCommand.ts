@@ -157,7 +157,12 @@ export abstract class BaseCommand extends Command {
     }
 
     public isFlagSet(flagName: string, flagChar?: string): boolean {
-        return this.argv.some(arg => arg === `--${flagName}` || (flagChar && arg === `-${flagChar}`));
+        return this.argv.some(
+            arg =>
+                arg === `--${flagName}` ||
+                arg.startsWith(`--${flagName}=`) ||
+                (flagChar && (arg === `-${flagChar}` || arg.startsWith(`-${flagChar}=`))),
+        );
     }
 
     protected async withAction<T>(actionDescription: string, callback, ...args): Promise<T> {
