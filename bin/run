@@ -3,6 +3,10 @@
 
 // Rewrite argument --help to display format flag in help
 process.argv = process.argv.map(arg => arg === "--help" ? "-h" : arg);
+if(process.argv[2] == 'help') {
+    console.log("\x1b[31m›\x1b[0m   Error: command help not found");
+    process.exit(2);
+}
 
 require('@oclif/command').run()
 .then(require('@oclif/command/flush'))
