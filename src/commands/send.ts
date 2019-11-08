@@ -20,6 +20,7 @@ export class SendCommand extends WriteCommand {
 
     public static examples = [
         `$ uns send 1237.77 --to DNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 --network devnet --format json`,
+        `$ uns send 1237.77 --to "@bob"`,
     ];
 
     public static DEFAULT_FEES: number = 1; // 1UNS fees (100000000 if sato flag is activated)
@@ -29,7 +30,8 @@ export class SendCommand extends WriteCommand {
         ...passphraseFlag,
         ...secondPassphraseFlag,
         to: flags.string({
-            description: "The recipient public address, public key OR the @unik-name of the recipient.",
+            description:
+                "The recipient public address, public key OR the @unik-name of the recipient (warning: @unik-name must be surrounded with double quotes)",
             required: true,
         }),
         check: flags.boolean({
@@ -49,7 +51,8 @@ export class SendCommand extends WriteCommand {
             default: false,
         }),
         senderAccount: flags.string({
-            description: "The @unik-name OR the public address of the wallet of the sender.",
+            description:
+                "The @unik-name OR the public address of the wallet of the sender (warning: @unik-name must be surrounded with double quotes)",
         }),
     };
 
