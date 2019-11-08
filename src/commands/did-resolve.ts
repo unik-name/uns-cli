@@ -9,7 +9,7 @@ export class DidResolveCommand extends BaseCommand {
 
     public static examples = [
         `$ uns did-resolve --confirmed {number of confirmations}
-        --network ${getNetworksListListForDescription()} --format {json|yaml|table|raw} @bob?phone`,
+        --network ${getNetworksListListForDescription()} --format {json|yaml|table|raw} "@bob?phone"`,
     ];
 
     public static flags = {
@@ -20,8 +20,7 @@ export class DidResolveCommand extends BaseCommand {
     public static args = [
         {
             name: "did",
-            description:
-                "The identifier to resolve. Expected format : '@[unik:][type,1:]expliciteValue[?propertyKey|?*]'",
+            description: `The identifier to resolve. Expected format : "@[unik:][type,1:]expliciteValue[?propertyKey|?*]" (warning: DID must be surrounded with double quotes)`,
             required: true,
         },
     ];
