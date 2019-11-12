@@ -15,13 +15,6 @@ import { CommandHelper } from "./command-helper";
 const DID_DEFAULT_QUERY = "?*";
 
 export class SendCommandHelper extends CommandHelper<SendCommand> {
-    /**
-     * If fee flag is not set, default fee amount is used, this default amount is in UNS not in satoUNS
-     */
-    public getSatoFees(isFeesInSato: boolean, fee: number): number {
-        return isFeesInSato && this.cmd.isFlagSet("fee") ? fee : toSatoshi(fee);
-    }
-
     public async askForPassphrases(flags: Record<string, any>): Promise<{ first: string; second: string }> {
         /**
          * Get passphrase

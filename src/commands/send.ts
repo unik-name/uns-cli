@@ -16,10 +16,8 @@ export class SendCommand extends WriteCommand {
         `$ uns send 1237.77 --to "@bob"`,
     ];
 
-    public static DEFAULT_FEES: number = 1; // 1UNS fees (100000000 if sato flag is activated)
-
     public static flags = {
-        ...WriteCommand.getWriteCommandFlags(SendCommand.DEFAULT_FEES),
+        ...WriteCommand.getWriteCommandFlags(),
         ...passphraseFlag,
         ...secondPassphraseFlag,
         to: flags.string({
@@ -94,14 +92,12 @@ export class SendCommand extends WriteCommand {
             await cmdHelper.checkAndConfirmWallet(false, unikNameSenderAddress);
         }
 
-        const satoFees = cmdHelper.getSatoFees(flags.sato, flags.fee);
-
-        const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - satoFees : satoAmount;
+        const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - flags.fee : satoAmount;
 
         const transaction: ITransactionData = cmdHelper.createTransactionStruct(
             this,
             transactionSatoAmount,
-            satoFees,
+            flags.fee,
             recipientAddress,
             this.api.getVersion(),
             passphrases.first,
