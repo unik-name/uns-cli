@@ -68,7 +68,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         return sendTransactionStruct;
     }
 
-    public async sendAndWaitTransactionConfirmations(transaction: ITransactionData) {
+    public async sendAndWaitTransactionConfirmations(transaction: ITransactionData, nbRetry: number, nbConfirmations) {
         this.cmd.actionStart("Sending transaction");
         const sendResponse = await this.cmd.api.sendTransaction(transaction);
         this.cmd.actionStop();
@@ -80,8 +80,8 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         const transactionFromNetwork = await this.cmd.waitTransactionConfirmations(
             this.cmd.api.getBlockTime(),
             transaction.id,
-            1,
-            1,
+            nbRetry,
+            nbConfirmations,
         );
         this.cmd.actionStop();
         return transactionFromNetwork;
