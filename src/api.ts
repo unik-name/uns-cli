@@ -1,4 +1,4 @@
-import { ITransactionData } from "@uns/crypto";
+import { ITransactionData, Transaction } from "@uns/crypto";
 import { getPropertyValue, PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
@@ -23,6 +23,7 @@ export class UNSCLIAPI {
      * @param transaction
      */
     public async sendTransaction(transaction: ITransactionData): Promise<any> {
+        Transaction.validateTransactionData(transaction);
         const requestOptions = {
             body: {
                 transactions: [transaction],

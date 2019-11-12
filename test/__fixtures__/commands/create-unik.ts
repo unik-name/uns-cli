@@ -19,9 +19,9 @@ export const transaction = {
     version: 1,
     type: 11,
     network: 30,
-    fee: 100000000,
+    fee: "100000000",
     senderPublicKey: "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011",
-    amount: 0,
+    amount: "0",
     asset: {
         nft: {
             unik: {
