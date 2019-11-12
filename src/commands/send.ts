@@ -104,7 +104,11 @@ export class SendCommand extends WriteCommand {
             passphrases.second,
         );
 
-        const transactionFromNetwork = await cmdHelper.sendAndWaitTransactionConfirmations(transaction);
+        const transactionFromNetwork = await cmdHelper.sendAndWaitTransactionConfirmations(
+            transaction,
+            flags["await-confirmation"],
+            1,
+        );
 
         return cmdHelper.formatOutput(transactionFromNetwork, transaction.id);
     }
