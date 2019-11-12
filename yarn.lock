@@ -628,10 +628,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uns/crypto@^3.1.0-beta.1":
-  version "3.1.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-3.1.0-beta.1.tgz#96ee6875d5db0c2a2dd8227f2a4b784eaba7e432"
-  integrity sha512-FLJYACV8Ahh86Yl55k+CaG34UR6WR6KEl1DWVsmD666PxU2W8hUuYmGAQquNeKJELzOw4CvvKSlqK6TahMnspg==
+"@uns/crypto@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-3.1.1.tgz#b95fa4fc6951f609f3207ca392242472447ffac0"
+  integrity sha512-qnzSCGbNs6yJ+Mm894zy6PCKlYSxGPJrQE+meviOr+ZXqHzyff6o94dqH+SUz2gRpOkmTxeBv/g349zHJwEMbQ==
   dependencies:
     "@faustbrian/dato" "^0.2.0"
     ajv "^6.10.0"
@@ -658,12 +658,12 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/ts-sdk@^1.2.0-alpha.1":
-  version "1.2.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.2.0-alpha.1.tgz#5e51db033a737d5e5ec5841e8d5e3110cb87f01a"
-  integrity sha512-Ykx3DJjlfneyU9QMbEmyyvXhAqFXfkmDFsog4uIwMFL+1wZ+0OGVBS6YmnVrkWPHedyuK6DWSJ05HFjkTUPHXg==
+"@uns/ts-sdk@^1.2.0-alpha.3":
+  version "1.2.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-1.2.0-alpha.3.tgz#a1c74cfcab897c7d90ed27c91d4149b6899bc9a7"
+  integrity sha512-4Vc3xATB3fJlFcyGpUL9f0TrTxPWJxAlnmJXH8IsazBNCcMaqcFv/MYJWoT33huUByNFbHRa0UnaVg5+rELwcA==
   dependencies:
-    "@uns/crypto" "^3.1.0-beta.1"
+    "@uns/crypto" "^3.1.1"
     deepmerge "^4.0.0"
     is-url-superb "^3.0.0"
     ky "^0.13.0"
