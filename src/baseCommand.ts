@@ -42,7 +42,27 @@ export abstract class BaseCommand extends Command {
     }
 
     public async run() {
-        const { flags, args } = this.parse(this.getCommand());
+        let flags;
+        let args;
+
+        try {
+            const parserResult = this.parse(this.getCommand());
+            flags = parserResult.flags;
+            args = parserResult.args;
+        } catch (e) {
+            let errorMsg;
+
+            if (e.parse && !e.args) {
+                errorMsg = e.message;
+            } else {
+                errorMsg = `Command fail because of unexpected value for at least one parameter${
+                    e.args ? ` (${e.args.join(", ")})` : ""
+                }. Please check your parameters.`;
+            }
+
+            this.stop(errorMsg);
+            this.exit(2);
+        }
 
         // Set formater
         this.formater = OUTPUT_FORMAT[flags.format];
