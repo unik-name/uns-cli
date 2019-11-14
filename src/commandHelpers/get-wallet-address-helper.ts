@@ -1,3 +1,4 @@
+import { ChainMeta } from "@uns/ts-sdk";
 import { GetWalletAddressCommand } from "../commands/get-wallet-address";
 import { OUTPUT_FORMAT } from "../formater";
 import {
@@ -13,8 +14,8 @@ import { CommandHelper } from "./command-helper";
 export class GetWalletAddressCommandHelper extends CommandHelper<GetWalletAddressCommand> {
     public async getWalletInformations(id: string, format: string, displayChainmeta: boolean) {
         let address: string;
-        let publicKey: string;
-        let chainMeta: any;
+        let publicKey: string | undefined;
+        let chainMeta: ChainMeta | undefined;
         if (isTokenId(id)) {
             // Get token
             const unik = await this.cmd.api.getUnikById(id);
@@ -44,6 +45,7 @@ export class GetWalletAddressCommandHelper extends CommandHelper<GetWalletAddres
             address = wallet.address;
             publicKey = wallet.publicKey;
         }
+
         return {
             address,
             publicKey,
@@ -54,8 +56,8 @@ export class GetWalletAddressCommandHelper extends CommandHelper<GetWalletAddres
     public formatOutput(
         format: string,
         address: string,
-        publicKey: string,
-        chainMeta: any,
+        publicKey: string | undefined,
+        chainMeta: ChainMeta | undefined,
         networkName: string,
         currentNode: string,
     ) {

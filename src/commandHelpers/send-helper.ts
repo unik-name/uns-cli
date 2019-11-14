@@ -2,49 +2,12 @@ import { Address, crypto, ITransactionData } from "@uns/crypto";
 import { didResolve } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { SendCommand } from "../commands/send";
-import {
-    checkPassphraseFormat,
-    createTransferTransaction,
-    getPassphraseFromUser,
-    getSecondPassphraseFromUser,
-    getWalletFromPassphrase,
-    toSatoshi,
-} from "../utils";
+import { createTransferTransaction } from "../utils";
 import { CommandHelper } from "./command-helper";
 
 const DID_DEFAULT_QUERY = "?*";
 
 export class SendCommandHelper extends CommandHelper<SendCommand> {
-    public async askForPassphrases(flags: Record<string, any>): Promise<{ first: string; second: string }> {
-        /**
-         * Get passphrase
-         */
-        let passphrase: string = flags.passphrase;
-        if (!passphrase) {
-            passphrase = await getPassphraseFromUser();
-        }
-
-        checkPassphraseFormat(passphrase);
-
-        /**
-         * Get second passphrase
-         */
-        let secondPassphrase: string = flags.secondPassphrase;
-
-        if (!secondPassphrase && (await this.cmd.isSecondPassphraseNeeded(passphrase))) {
-            secondPassphrase = await getSecondPassphraseFromUser();
-        }
-
-        if (secondPassphrase) {
-            checkPassphraseFormat(secondPassphrase);
-        }
-
-        return {
-            first: passphrase,
-            second: secondPassphrase,
-        };
-    }
-
     public createTransactionStruct(
         cmd: SendCommand,
         satoAmount: number,
@@ -68,7 +31,15 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         return sendTransactionStruct;
     }
 
-    public async sendAndWaitTransactionConfirmations(transaction: ITransactionData, nbRetry: number, nbConfirmations) {
+    public async sendAndWaitTransactionConfirmations(
+        transaction: ITransactionData,
+        nbRetry: number,
+        nbConfirmations: number,
+    ) {
+        if (!transaction.id) {
+            throw new Error("Transaction id can't be undefined");
+        }
+
         this.cmd.actionStart("Sending transaction");
         const sendResponse = await this.cmd.api.sendTransaction(transaction);
         this.cmd.actionStop();

@@ -45,6 +45,10 @@ export abstract class UpdateProperties extends WriteCommand {
             passphrase,
         );
 
+        if (!transactionStruct.id) {
+            throw new Error("Transaction id can't be undefined");
+        }
+
         this.log("Binding new propert" + (Object.keys(properties).length > 1 ? "ies" : "y") + " to UNIK.");
         const sendResult = await this.api.sendTransaction(transactionStruct);
         if (sendResult.errors) {

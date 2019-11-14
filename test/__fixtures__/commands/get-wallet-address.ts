@@ -7,7 +7,7 @@ export const NOT_FOUND_UNIK_ID = "e1615becbd39ad96344919dffa7b972f293b0a3973b051
 export const WALLET_ADDRESS = "DTRnY3JjFpAmCX1nFtF8M4v8X7WdvPYRxa";
 export const WALLET_PUBKEY = "03898f61b18cbddb6a8698897b66f519a44c8473beef289c4ddbfd4169db71a842";
 export const WALLET_CHAINMETA = {
-    height: 415890,
+    height: "415890",
     timestamp: {
         epoch: 3453333,
         unix: 1572346663,

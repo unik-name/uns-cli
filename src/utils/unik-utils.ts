@@ -8,7 +8,7 @@ export const checkUnikIdFormat = (unikid: string) => {
 };
 
 export const checkUnikPropertyFormat = (propertyKey: string) => {
-    const valid = propertyKey && propertyKey.match(/[a-zA-Z0-9]+/)[0] === propertyKey;
+    const valid = propertyKey && propertyKey.match(/[a-zA-Z0-9]+/)?.[0] === propertyKey;
     if (!valid) {
         throw new Error(`Property ${propertyKey} does not match expected format`);
     }

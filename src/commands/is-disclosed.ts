@@ -1,3 +1,4 @@
+import { PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
@@ -32,26 +33,37 @@ export class IsDisclosedCommand extends ReadCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
-        checkUnikIdFormat(args.unikid);
-        let property;
+        const unikId = args?.unikId;
+        checkUnikIdFormat(unikId);
+        let property: ResponseWithChainMeta<PropertyValue> | undefined;
         let data;
         let chainmeta;
         try {
-            property = await this.api.getUnikProperty(args.unikid, "explicitValues", flags.chainmeta);
+            property = (await this.api.getUnikProperty(
+                unikId,
+                "explicitValues",
+                flags.chainmeta,
+            )) as ResponseWithChainMeta<PropertyValue>;
+
+            if (!property.confirmations) {
+                // Should never happen
+                throw new Error("Unable to get confirmations");
+            }
+
             checkConfirmations(property.confirmations, flags.confirmed);
 
             data = {
-                unikid: args.unikid,
+                unikid: unikId,
                 isDisclosed: true,
                 confirmations: property.confirmations,
             };
             chainmeta = property.chainmeta;
         } catch (error) {
             if (error.response.status === 404) {
-                const unik = await this.api.getUnikById(args.unikid);
+                const unik = await this.api.getUnikById(unikId);
 
                 data = {
-                    unikid: args.unikid,
+                    unikid: unikId,
                     isDisclosed: false,
                 };
                 chainmeta = unik.chainmeta;

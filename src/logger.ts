@@ -1,8 +1,13 @@
 import { color } from "@oclif/color";
-import Command from "@oclif/command";
 import util from "util";
+import { BaseCommand } from "./baseCommand";
 
-const LOGGER_COLOR_BY_LEVEL: any = {
+interface LoggerLevelOutput {
+    color: string;
+    output: "stderr" | "stdout";
+}
+
+const LOGGER_COLOR_BY_LEVEL: { [_: string]: LoggerLevelOutput } = {
     stop: {
         color: "#ff0000",
         output: "stderr",
@@ -22,7 +27,6 @@ const LOGGER_COLOR_BY_LEVEL: any = {
 };
 
 export const logWithLevel = (level: string, message: string, ...args: any[]): void => {
-    message = typeof message === "string" ? message : util.inspect(message);
     const loggerConfig = LOGGER_COLOR_BY_LEVEL[level];
     const log = color.hex(loggerConfig.color)(`» :${level}: ${util.format(message, ...args)};\n`);
     process[loggerConfig.output].write(log);
@@ -46,11 +50,20 @@ export const bindConsole = (): void => {
     };
 };
 
-export const disableLogs = (command: Command): void => {
-    const disableFunction = (...args) => {
+export const disableLogs = (command: BaseCommand): void => {
+    const disableFunction = () => {
         /*doNothing*/
     };
-    ["debug", "log", "info"].forEach(level => (console[level] = disableFunction));
-    ["log", "info"].forEach(level => (command[level] = disableFunction));
+
+    console = {
+        ...console,
+        debug: disableFunction,
+        log: disableFunction,
+        info: disableFunction,
+    };
+
+    command.log = disableFunction;
+    command.info = disableFunction;
+
     // Do not override console.error, command.error, command.warn and command.stop
 };

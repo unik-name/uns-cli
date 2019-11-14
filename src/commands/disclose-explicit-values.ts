@@ -10,16 +10,7 @@ import {
 import { cli } from "cli-ux";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import {
-    checkPassphraseFormat,
-    checkUnikIdFormat,
-    createDiscloseTransaction,
-    explicitValueFlag,
-    getPassphraseFromUser,
-    getSecondPassphraseFromUser,
-    passphraseFlag,
-    unikidFlag,
-} from "../utils";
+import { checkUnikIdFormat, createDiscloseTransaction, explicitValueFlag, passphraseFlag, unikidFlag } from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 export class DiscloseExplicitValuesCommand extends WriteCommand {
@@ -35,10 +26,6 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         ...unikidFlag("The UNIK token on which to disclose values"),
         ...explicitValueFlag("Array of explicit value to disclose, separated with a space.", true),
     };
-
-    private passphrase: string;
-    private secondPassphrase: string;
-    private unikType: DIDType;
 
     public async formatResult(transactionFromNetwork: any, transactionId: string) {
         /**
@@ -78,7 +65,7 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     protected async do(flags: Record<string, any>): Promise<any> {
         await this.checkUnik(flags.unikid);
 
-        await this.getInformationsFromUser(flags);
+        const passphrases = await this.askForPassphrases(flags);
 
         const confirmation = await cli.confirm(
             "Disclosing a @unik-name to the network can't be cancelled nor revoked. Your ID will be disclosed forever. Do you confirm the disclose demand? [y/n]",
@@ -88,9 +75,20 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
             return "Command aborted by user";
         }
 
-        await this.checkExplicitValues(flags.unikid, flags.explicitValue);
+        const unikType = await this.getUnikType(flags.unikid);
 
-        const transactionStruct: ITransactionData = await this.createTransactionStruct(flags);
+        await this.checkExplicitValues(flags.unikid, unikType, flags.explicitValue);
+
+        const transactionStruct: ITransactionData = await this.createTransactionStruct(
+            flags,
+            unikType,
+            passphrases.first,
+            passphrases.second,
+        );
+
+        if (!transactionStruct.id) {
+            throw new Error("Transaction id can't be undefined");
+        }
 
         const transactionFromNetwork = await this.sendAndWaitConfirmations(
             transactionStruct,
@@ -154,48 +152,33 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         return transactionFromNetwork;
     }
 
-    private async getInformationsFromUser(flags: Record<string, any>) {
-        /**
-         * Get passphrase
-         */
-        this.passphrase = flags.passphrase;
-        if (!this.passphrase) {
-            this.passphrase = await getPassphraseFromUser();
+    private async getUnikType(unikId: string): Promise<DIDType> {
+        // get unik type
+        const unikType: string | undefined = (await this.unsClient.unik.property(unikId, "type")).data;
+        if (!unikType) {
+            throw new Error(`Unable to get UNIK type (id: ${unikId})`);
+        }
+        const type: number = Number.parseInt(unikType);
+
+        const didType = DIDHelpers.fromCode(type);
+
+        if (!didType) {
+            throw new Error("Unknown UNIK type");
         }
 
-        // Check passphrase format
-        checkPassphraseFormat(this.passphrase);
-
-        /**
-         * Get second passphrase
-         */
-        this.secondPassphrase = flags.secondPassphrase;
-
-        if (!this.secondPassphrase && (await this.isSecondPassphraseNeeded(this.passphrase))) {
-            this.secondPassphrase = await getSecondPassphraseFromUser();
-        }
-
-        if (this.secondPassphrase) {
-            // Check second passphrase format
-            checkPassphraseFormat(this.secondPassphrase);
-        }
+        return didType;
     }
 
-    private async checkExplicitValues(unikId: string, listOfExplicitValues: string[]) {
-        // get unik type
-        const type: number = Number.parseInt((await this.unsClient.unik.property(unikId, "type")).data);
-
-        this.unikType = DIDHelpers.fromCode(type);
-
+    private async checkExplicitValues(unikId: string, unikType: DIDType, listOfExplicitValues: string[]) {
         // Check explicit values
         for (const explicit of listOfExplicitValues) {
-            const fingerPrintResult = await this.unsClient.fingerprint.compute(explicit, this.unikType);
+            const fingerPrintResult = await this.unsClient.fingerprint.compute(explicit, unikType);
 
             if (fingerPrintResult.error) {
                 this.debug(`disclose-explicit-values - ${fingerPrintResult.error.message}`);
                 throw new Error("At least one expliciteValue does not match expected format");
             }
-            if (fingerPrintResult.data.fingerprint !== unikId) {
+            if (fingerPrintResult?.data?.fingerprint !== unikId) {
                 throw new Error("At least one expliciteValue is not valid for this unikid");
             }
         }
@@ -203,21 +186,30 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         this.info("ExpliciteValues valid for this unikid");
     }
 
-    private async createTransactionStruct(flags: Record<string, any>): Promise<any | string> {
+    private async createTransactionStruct(
+        flags: Record<string, any>,
+        unikType: DIDType,
+        passphrase: string,
+        secondPassphrase: string,
+    ): Promise<any | string> {
         // Create Disclose Demand
         const discloseDemand: DiscloseDemand = buildDiscloseDemand(
             flags.unikid,
             flags.explicitValue,
-            DIDHelpers.fromLabel(this.unikType),
-            this.passphrase,
+            DIDHelpers.fromLabel(unikType),
+            passphrase,
         );
 
-        const discloseDemandCertification: Response<
-            DiscloseDemandCertification
-        > = await this.unsClient.discloseDemandCertification.get(discloseDemand);
+        const discloseDemandCertification: Response<DiscloseDemandCertification> = await this.unsClient.discloseDemandCertification.get(
+            discloseDemand,
+        );
 
         if (discloseDemandCertification.error) {
             throw new Error(discloseDemandCertification.error.message);
+        }
+
+        if (!discloseDemandCertification.data) {
+            throw new Error("Error creating disclose demand certification");
         }
 
         /**
@@ -227,8 +219,8 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
             discloseDemand,
             discloseDemandCertification.data,
             flags.fee,
-            this.passphrase,
-            this.secondPassphrase,
+            passphrase,
+            secondPassphrase,
         );
     }
 

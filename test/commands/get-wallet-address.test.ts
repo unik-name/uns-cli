@@ -9,7 +9,7 @@ import {
     WALLET_CHAINMETA,
     WALLET_PUBKEY,
 } from "../__fixtures__/commands/get-wallet-address";
-import { applyExitCase } from "../__fixtures__/commons";
+import { applyExitCase, EMPTY_COMMAND_CONFIG } from "../__fixtures__/commons";
 
 const currentNode = getUrlOrigin(UNSConfig.devnet.chain.url);
 
@@ -20,14 +20,9 @@ describe("get-property-value command", () => {
 
     describe("formatOutput", () => {
         it("format for json with chainmeta", () => {
-            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
-                "json",
-                WALLET_ADDRESS,
-                WALLET_PUBKEY,
-                WALLET_CHAINMETA,
-                "devnet",
-                currentNode,
-            );
+            const output = new GetWalletAddressCommandHelper(
+                new GetWalletAddressCommand([], EMPTY_COMMAND_CONFIG),
+            ).formatOutput("json", WALLET_ADDRESS, WALLET_PUBKEY, WALLET_CHAINMETA, "devnet", currentNode);
             expect(output).toEqual({
                 data: {
                     address: WALLET_ADDRESS,
@@ -38,14 +33,9 @@ describe("get-property-value command", () => {
         });
 
         it("format for json without chainmeta", () => {
-            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
-                "json",
-                WALLET_ADDRESS,
-                WALLET_PUBKEY,
-                undefined,
-                "devnet",
-                currentNode,
-            );
+            const output = new GetWalletAddressCommandHelper(
+                new GetWalletAddressCommand([], EMPTY_COMMAND_CONFIG),
+            ).formatOutput("json", WALLET_ADDRESS, WALLET_PUBKEY, undefined, "devnet", currentNode);
             expect(output).toEqual({
                 address: WALLET_ADDRESS,
                 publicKey: WALLET_PUBKEY,
@@ -53,14 +43,9 @@ describe("get-property-value command", () => {
         });
 
         it("format for yaml with chainmeta", () => {
-            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
-                "yaml",
-                WALLET_ADDRESS,
-                WALLET_PUBKEY,
-                WALLET_CHAINMETA,
-                "devnet",
-                currentNode,
-            );
+            const output = new GetWalletAddressCommandHelper(
+                new GetWalletAddressCommand([], EMPTY_COMMAND_CONFIG),
+            ).formatOutput("yaml", WALLET_ADDRESS, WALLET_PUBKEY, WALLET_CHAINMETA, "devnet", currentNode);
             expect(output).toEqual({
                 data: {
                     address: WALLET_ADDRESS,
@@ -71,14 +56,9 @@ describe("get-property-value command", () => {
         });
 
         it("format for yaml without chainmeta", () => {
-            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
-                "yaml",
-                WALLET_ADDRESS,
-                WALLET_PUBKEY,
-                undefined,
-                "devnet",
-                currentNode,
-            );
+            const output = new GetWalletAddressCommandHelper(
+                new GetWalletAddressCommand([], EMPTY_COMMAND_CONFIG),
+            ).formatOutput("yaml", WALLET_ADDRESS, WALLET_PUBKEY, undefined, "devnet", currentNode);
             expect(output).toEqual({
                 address: WALLET_ADDRESS,
                 publicKey: WALLET_PUBKEY,
@@ -86,14 +66,9 @@ describe("get-property-value command", () => {
         });
 
         it("format for raw", () => {
-            const output = new GetWalletAddressCommandHelper(new GetWalletAddressCommand([], undefined)).formatOutput(
-                "raw",
-                WALLET_ADDRESS,
-                WALLET_PUBKEY,
-                WALLET_CHAINMETA,
-                "devnet",
-                currentNode,
-            );
+            const output = new GetWalletAddressCommandHelper(
+                new GetWalletAddressCommand([], EMPTY_COMMAND_CONFIG),
+            ).formatOutput("raw", WALLET_ADDRESS, WALLET_PUBKEY, WALLET_CHAINMETA, "devnet", currentNode);
             expect(output).toEqual(WALLET_ADDRESS);
         });
     });

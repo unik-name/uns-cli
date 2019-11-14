@@ -1,21 +1,23 @@
-import { ITransactionData, Transaction } from "@uns/crypto";
-import { getPropertyValue, PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
+import { ITransactionData, Transaction as Trx } from "@uns/crypto";
+import { ChainMeta, getPropertyValue, PropertyValue, ResponseWithChainMeta, Unik, Wallet } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
 import { FINGERPRINT_API } from "./config";
 import { handleErrors, handleFetchError } from "./errorHandler";
+import { Token, Transaction, WithChainmeta } from "./types";
 import * as UTILS from "./utils";
 import { getUrlOrigin } from "./utils";
 
 export class UNSCLIAPI {
     public network: any;
 
-    constructor(networkPreset: any, customNodeUrl?: string) {
+    public init(networkPreset: any, customNodeUrl?: string): UNSCLIAPI {
         this.network = {
             ...networkPreset.network,
             ...UTILS.getNetwork(networkPreset.network.name, customNodeUrl),
             ...this.getLastInfosFromMilestones(networkPreset.milestones),
         };
+        return this;
     }
 
     /**
@@ -23,7 +25,7 @@ export class UNSCLIAPI {
      * @param transaction
      */
     public async sendTransaction(transaction: ITransactionData): Promise<any> {
-        Transaction.validateTransactionData(transaction);
+        Trx.validateTransactionData(transaction);
         const requestOptions = {
             body: {
                 transactions: [transaction],
@@ -53,7 +55,7 @@ export class UNSCLIAPI {
      * @param transactionId
      * @param msdelay
      */
-    public async getTransaction(transactionId: string, msdelay: number = 0): Promise<any> {
+    public async getTransaction(transactionId: string, msdelay: number = 0): Promise<WithChainmeta<Transaction>> {
         await delay(msdelay);
         return req
             .get(`${this.network.url}/transactions/${transactionId}`)
@@ -108,7 +110,7 @@ export class UNSCLIAPI {
      * Get Wallet by address.
      * @param unikid
      */
-    public async getUnikById(unikid: string) {
+    public async getUnikById(unikid: string): Promise<WithChainmeta<Unik>> {
         return req
             .get(`${this.network.url}/nfts/${unikid}`)
             .then(res => {
@@ -125,7 +127,7 @@ export class UNSCLIAPI {
      *
      * @param unikid Get UNIK token properties
      */
-    public async getUnikProperties(unikid: string): Promise<any> {
+    public async getUnikProperties(unikid: string): Promise<WithChainmeta<{ data: Array<{ [_: string]: string }> }>> {
         return req
             .get(`${this.network.url}/nfts/${unikid}/properties`)
             .then(res => {
@@ -164,7 +166,7 @@ export class UNSCLIAPI {
      * Get Wallet by address or public key.
      * @param walletIdentifier
      */
-    public async getWallet(walletIdentifier: string): Promise<any> {
+    public async getWallet(walletIdentifier: string): Promise<WithChainmeta<Wallet>> {
         return req
             .get(`${this.network.url}/wallets/${walletIdentifier}`)
             .then(res => {
@@ -177,7 +179,10 @@ export class UNSCLIAPI {
             .catch(handleFetchError("wallet", walletIdentifier));
     }
 
-    public async getWalletTokens(walletIdentifier: string, tokenName: string = "unik"): Promise<any> {
+    public async getWalletTokens(
+        walletIdentifier: string,
+        tokenName: string = "unik",
+    ): Promise<{ data: Token[]; chainmeta: ChainMeta }> {
         return req
             .get(`${this.network.url}/wallets/${walletIdentifier}/${tokenName}s`)
             .then(res => {

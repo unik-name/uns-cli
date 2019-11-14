@@ -1,3 +1,4 @@
+import Config from "@oclif/config";
 import { test } from "@oclif/test";
 
 export const applyExitCase = (exitCase: any) => {
@@ -17,3 +18,5 @@ export const getMeta = (blockHeight: number) => {
         },
     };
 };
+
+export const EMPTY_COMMAND_CONFIG: Config.IConfig = {} as Config.IConfig;

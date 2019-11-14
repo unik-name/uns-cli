@@ -1,11 +1,13 @@
 import { Command, flags } from "@oclif/command";
+import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Client, configManager } from "@uns/crypto";
-import { Network, UNSClient } from "@uns/ts-sdk";
+import { ChainMeta, Network, UNSClient } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
 import * as LOGGER from "./logger";
+import { Transaction } from "./types";
 import * as UTILS from "./utils";
 
 export abstract class BaseCommand extends Command {
@@ -31,9 +33,17 @@ export abstract class BaseCommand extends Command {
     public client: Client;
     public api: UNSCLIAPI;
     protected unsClient: UNSClient;
-    protected verbose: boolean;
 
-    private formater;
+    protected verbose: boolean = false;
+
+    private formater: Formater | undefined;
+
+    constructor(argv: any[], config: Config.IConfig) {
+        super(argv, config);
+        this.unsClient = new UNSClient();
+        this.client = new Client();
+        this.api = new UNSCLIAPI();
+    }
 
     public async init() {
         // Add dynamic format flag
@@ -50,6 +60,12 @@ export abstract class BaseCommand extends Command {
             flags = parserResult.flags;
             args = parserResult.args;
         } catch (e) {
+            if (e?.oclif?.exit === 0) {
+                // In case of --help flag, this.exit throws exception during flags parse
+                // Just exit normally after help display
+                this.exit(0);
+            }
+
             let errorMsg;
 
             if (e.parse && !e.args) {
@@ -91,11 +107,14 @@ export abstract class BaseCommand extends Command {
 
         networkPreset.network.name = flags.network;
 
-        this.api = new UNSCLIAPI(networkPreset, flags.node);
+        this.api.init(networkPreset, flags.node);
 
-        this.client = new Client(networkPreset);
+        this.client.setConfig(networkPreset);
 
-        this.unsClient = new UNSClient(networkName, flags.node);
+        this.unsClient.init({
+            network: networkName,
+            customNode: flags.node,
+        });
 
         if (UTILS.isDevMode()) {
             this.info("DEV MODE IS ACTIVATED");
@@ -162,7 +181,7 @@ export abstract class BaseCommand extends Command {
         transactionId: string,
         numberOfRetry: number = 0,
         expectedConfirmations: number = 0,
-    ) {
+    ): Promise<Transaction & { chainmeta: ChainMeta; confirmations: number }> {
         const transactionFromNetwork = await this.api.getTransaction(transactionId, blockTime * 1000);
         const confirmations = transactionFromNetwork ? transactionFromNetwork.confirmations : 0;
         if (confirmations < expectedConfirmations && numberOfRetry > 0) {
@@ -185,7 +204,11 @@ export abstract class BaseCommand extends Command {
         );
     }
 
-    protected async withAction<T>(actionDescription: string, callback, ...args): Promise<T> {
+    protected async withAction<T>(
+        actionDescription: string,
+        callback: (...args: any[]) => any,
+        ...args: any[]
+    ): Promise<T> {
         this.actionStart(actionDescription);
         try {
             return await callback(...args);
@@ -210,7 +233,7 @@ export abstract class BaseCommand extends Command {
     protected getDefaultFormat(): Formater {
         return OUTPUT_FORMAT.json;
     }
-    protected abstract do(flags: Record<string, any>, args?: Record<string, any>): Promise<any>;
+    protected abstract do(flags?: Record<string, any>, args?: Record<string, any>): Promise<any>;
     protected abstract getCommand(): typeof BaseCommand;
 
     protected logAttribute(label: string, value: string) {
@@ -221,7 +244,7 @@ export abstract class BaseCommand extends Command {
      * Checks that all heights passed in parameter are equals
      * @param heights
      */
-    protected checkDataConsistency(...heights: number[]) {
+    protected checkDataConsistency(...heights: string[]) {
         if (!heights.every(v => v === heights[0])) {
             throw new Error("Unable to read right now. Please retry.");
         }
