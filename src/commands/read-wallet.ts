@@ -1,4 +1,6 @@
 import { flags } from "@oclif/command";
+import { ChainMeta } from "@uns/ts-sdk";
+import { Token } from "src/types";
 import { BaseCommand } from "../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
@@ -33,9 +35,9 @@ export class ReadWalletCommand extends ReadCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<NestedCommandOutput> {
-        const walletId = args.walletId;
+        const walletId = args?.walletId;
         const wallet: any = await this.api.getWallet(walletId);
-        const tokens: any = await this.api.getWalletTokens(walletId);
+        const tokens: { data: Token[]; chainmeta: ChainMeta } = await this.api.getWalletTokens(walletId);
 
         this.checkDataConsistency(wallet.chainmeta.height, tokens.chainmeta.height);
 

@@ -1,4 +1,3 @@
-import { crypto } from "@uns/crypto";
 import { generateMnemonic } from "bip39";
 import { createHash, randomBytes } from "crypto";
 import * as MoreEntropy from "promised-entropy";
@@ -26,7 +25,7 @@ export class CreateWalletCommand extends BaseCommand {
         return CreateWalletCommand;
     }
 
-    protected async do(flags: Record<string, any>): Promise<CommandOutput> {
+    protected async do(): Promise<CommandOutput> {
         const passphrase = await this.randomMnemonicSeed(128);
         const wallet = getWalletFromPassphrase(passphrase, this.api.network);
 
@@ -44,6 +43,6 @@ export class CreateWalletCommand extends BaseCommand {
             .update(seed)
             .digest()
             .slice(0, bytes);
-        return generateMnemonic(nbBits, rgn => entropy);
+        return generateMnemonic(nbBits, _ => entropy);
     }
 }

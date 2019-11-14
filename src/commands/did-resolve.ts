@@ -36,12 +36,12 @@ export class DidResolveCommand extends BaseCommand {
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
         const didResolveNetwork = flags.network === "local" ? "testnet" : flags.network;
 
-        let resolved: DidResolution<any>;
+        let resolved: DidResolution<any> | undefined;
 
         try {
-            resolved = await didResolve(args.did, didResolveNetwork);
+            resolved = await didResolve(args?.did, didResolveNetwork);
         } catch (error) {
-            if (error.response.status === 404) {
+            if (error.response?.status === 404) {
                 this.stop("DID does not exist");
             } else {
                 this.stop("An error occurred. Please see details below:\n", error);

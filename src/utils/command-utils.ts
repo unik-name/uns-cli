@@ -1,5 +1,5 @@
 import { Client, crypto, DiscloseDemand, DiscloseDemandCertification, ITransactionData, networks } from "@uns/crypto";
-import { ChainMeta, UNSConfig } from "@uns/ts-sdk";
+import { ChainMeta, Network, UNSConfig } from "@uns/ts-sdk";
 import cli from "cli-ux";
 import * as urlModule from "url";
 
@@ -9,7 +9,7 @@ export const isDevMode = () => {
 
 const getDisableNetworkList = (): string[] => {
     const networkList = ["unitnet", "mainnet", "testnet"];
-    if (!this.isDevMode()) {
+    if (!isDevMode()) {
         networkList.push("dalinet");
     }
     return networkList;
@@ -21,11 +21,11 @@ export const getNetworksList = (): string[] => {
     return [...Object.keys(networks).filter(network => !DISABLED_NETWORK_LIST.includes(network)), "local"];
 };
 
-export const getNetworksListListForDescription = () => {
-    return `[${this.getNetworksList().join("|")}]`;
+export const getNetworksListListForDescription = (): string => {
+    return `[${getNetworksList().join("|")}]`;
 };
 
-export const getNetwork = (network: string, customNodeUrl?: string): any => {
+export const getNetwork = (network: Network, customNodeUrl?: string): any => {
     const unsConfig = UNSConfig[network];
     const url = customNodeUrl ? urlModule.resolve(customNodeUrl, "/api/v2") : unsConfig.chain.url;
     return {

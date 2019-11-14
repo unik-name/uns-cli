@@ -41,11 +41,14 @@ export class GetPropertiesCommand extends BaseCommand {
         }
 
         if (flags.format === OUTPUT_FORMAT.raw.key) {
-            return properties.data.reduce((accumulator, currentValue) => Object.assign(accumulator, currentValue));
+            return properties.data.reduce(
+                (accumulator: { [_: string]: string }, currentValue: { [_: string]: string }) =>
+                    Object.assign(accumulator, currentValue),
+            );
         }
 
         if (flags.format === OUTPUT_FORMAT.table.key) {
-            return properties.data.map(prop => {
+            return properties.data.map((prop: { [_: string]: string }) => {
                 return {
                     unikid: unik.id,
                     key: Object.keys(prop)[0],

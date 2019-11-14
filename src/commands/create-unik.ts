@@ -76,6 +76,11 @@ export class CreateUnikCommand extends WriteCommand {
             this.api.getVersion(),
         );
         this.actionStop();
+
+        if (!transaction.id) {
+            throw new Error("Transaction id can't be undefined");
+        }
+
         this.log(`Transaction id: ${transaction.id}`);
 
         /**

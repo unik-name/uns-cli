@@ -1,4 +1,3 @@
-import { flags } from "@oclif/parser";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { UpdateProperties } from "../updatePropertiesCommand";
@@ -28,8 +27,9 @@ export class UnsetProperties extends UpdateProperties {
     protected getProperties(flags: Record<string, any>): { [_: string]: string } {
         const properties: { [_: string]: string } = {};
 
-        flags.propertyKey.forEach(prop => {
-            properties[prop] = null;
+        flags.propertyKey.forEach((prop: string) => {
+            // @ts-ignore
+            properties[prop] = null; // Needs to be null!!
         });
         return properties;
     }

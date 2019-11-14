@@ -1,6 +1,6 @@
 import { DiscloseExplicitValuesCommand } from "../../src/commands/disclose-explicit-values";
 import { shouldExit, transaction } from "../__fixtures__/commands/disclose-explicit-values";
-import { applyExitCase } from "../__fixtures__/commons";
+import { applyExitCase, EMPTY_COMMAND_CONFIG } from "../__fixtures__/commons";
 
 describe("disclose-explicit-values command", () => {
     describe("Exit cases", () => {
@@ -11,7 +11,7 @@ describe("disclose-explicit-values command", () => {
         let command: DiscloseExplicitValuesCommand;
 
         beforeEach(() => {
-            command = new DiscloseExplicitValuesCommand([], undefined);
+            command = new DiscloseExplicitValuesCommand([], EMPTY_COMMAND_CONFIG);
         });
 
         describe("formatResult", () => {

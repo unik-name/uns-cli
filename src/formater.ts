@@ -5,7 +5,7 @@ import YAML from "yaml";
 import { EOL } from "os";
 
 export interface CommandOutput {
-    [_: string]: string | number;
+    [_: string]: string | number | undefined;
 }
 
 export interface NestedCommandOutput {
@@ -14,7 +14,7 @@ export interface NestedCommandOutput {
 
 export interface Formater {
     key: string;
-    action: (obj: CommandOutput | CommandOutput[]) => string;
+    action: (obj: any) => string;
 }
 
 const json: Formater = {
@@ -45,15 +45,15 @@ const yaml: Formater = {
     },
 };
 
-export const OUTPUT_FORMAT = { json, raw, table, yaml };
+export const OUTPUT_FORMAT: { [_: string]: Formater } = { json, raw, table, yaml };
 
 export const getFormatsList = () => {
     return Object.keys(OUTPUT_FORMAT);
 };
 
-export const getFormatFlag = (defaultFormat, options) => {
+export const getFormatFlag = (defaultFormat: Formater, options: Formater[]) => {
     if (options.length > 0) {
-        const keys = options.map(opt => opt.key);
+        const keys: string[] = options.map((opt: Formater) => opt.key);
         const flag: Partial<flags.IOptionFlag<string>> = {
             char: "f",
             options: keys,

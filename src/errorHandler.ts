@@ -1,4 +1,4 @@
-const errorMapper = {
+const errorMapper: { [_: string]: string } = {
     "Cold wallet is not allowed to send until receiving transaction is confirmed.":
         "Wallet balance is too low to process transaction.",
     // Add here error message transformations
@@ -51,7 +51,7 @@ export class HttpNotFoundError extends Error {
     }
 }
 
-export function handleFetchError(resourceName: string, id: string): (e: any) => void {
+export function handleFetchError(resourceName: string, id: string) {
     return (e: any) => {
         const error =
             e.statusCode === 404

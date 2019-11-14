@@ -1,7 +1,7 @@
 import test from "@oclif/test";
 import { SendCommand } from "../../src/commands/send";
 import { commandName, shouldExit } from "../__fixtures__/commands/baseCommand";
-import { applyExitCase } from "../__fixtures__/commons";
+import { applyExitCase, EMPTY_COMMAND_CONFIG } from "../__fixtures__/commons";
 
 describe("BaseCommand", () => {
     describe("Exit cases", () => {
@@ -19,35 +19,34 @@ describe("BaseCommand", () => {
         // Send command is just use here to simulate any command, BaseCommand is abstract, can't be instantiated
         it("isFlagSet --fee=valeur", () => {
             const fees = 100000;
-            const sendCommand = new SendCommand(["--sato", `--fee=${fees}`], undefined);
+            const sendCommand = new SendCommand(["--sato", `--fee=${fees}`], EMPTY_COMMAND_CONFIG);
             expect(sendCommand.isFlagSet("fee")).toBeTruthy();
             expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
         });
 
         it("isFlagSet --fee valeur", () => {
             const fees = 100000;
-            const sendCommand = new SendCommand(["--sato", "--fee", `${fees}`], undefined);
+            const sendCommand = new SendCommand(["--sato", "--fee", `${fees}`], EMPTY_COMMAND_CONFIG);
             expect(sendCommand.isFlagSet("fee")).toBeTruthy();
             expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
         });
 
         it("isFlagSet -f=valeur", () => {
             const fees = 100000;
-            const sendCommand = new SendCommand(["--sato", `-f=${fees}`], undefined);
+            const sendCommand = new SendCommand(["--sato", `-f=${fees}`], EMPTY_COMMAND_CONFIG);
             expect(sendCommand.isFlagSet("fee")).toBeFalsy();
             expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
         });
 
         it("isFlagSet -f valeur", () => {
             const fees = 100000;
-            const sendCommand = new SendCommand(["--sato", "-f", `${fees}`], undefined);
+            const sendCommand = new SendCommand(["--sato", "-f", `${fees}`], EMPTY_COMMAND_CONFIG);
             expect(sendCommand.isFlagSet("fee")).toBeFalsy();
             expect(sendCommand.isFlagSet("fee", "f")).toBeTruthy();
         });
 
         it("isFlagSet returns false if flag is absent", () => {
-            const fees = 100000;
-            const sendCommand = new SendCommand(["--sato"], undefined);
+            const sendCommand = new SendCommand(["--sato"], EMPTY_COMMAND_CONFIG);
             expect(sendCommand.isFlagSet("fee")).toBeFalsy();
             expect(sendCommand.isFlagSet("fee", "f")).toBeFalsy();
         });

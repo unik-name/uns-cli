@@ -65,7 +65,7 @@ export class SendCommand extends WriteCommand {
         const cmdHelper = new SendCommandHelper(this);
 
         // Check and get amount
-        const amount: number = cmdHelper.checkAndGetAmount(args.amount, flags.sato);
+        const amount: number = cmdHelper.checkAndGetAmount(args?.amount, flags.sato);
         const satoAmount = flags.sato ? amount : toSatoshi(amount);
 
         const recipientAddress = await cmdHelper.resolveWalletAddress(flags.to);
@@ -76,7 +76,7 @@ export class SendCommand extends WriteCommand {
             return "Command aborted by user";
         }
 
-        const passphrases = await cmdHelper.askForPassphrases(flags);
+        const passphrases = await this.askForPassphrases(flags);
 
         const senderWallet = getWalletFromPassphrase(passphrases.first, this.api.network);
         if (senderWallet.address === recipientAddress) {
@@ -103,6 +103,10 @@ export class SendCommand extends WriteCommand {
             passphrases.first,
             passphrases.second,
         );
+
+        if (!transaction.id) {
+            throw new Error("Transaction id can't be undefined");
+        }
 
         const transactionFromNetwork = await cmdHelper.sendAndWaitTransactionConfirmations(
             transaction,
