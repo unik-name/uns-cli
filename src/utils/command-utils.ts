@@ -172,7 +172,7 @@ export function fromSatoshi(value: number): number {
 }
 
 export function toSatoshi(value: number): number {
-    return value * 100000000;
+    return Math.floor(value * 100000000);
 }
 
 export const checkConfirmations = (confirmations: number, expected: number) => {
