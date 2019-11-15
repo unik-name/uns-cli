@@ -4,12 +4,7 @@ import { BaseCommand } from "../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { getTypeValue, getUnikTypesList } from "../types";
-import {
-    createNFTMintTransaction,
-    getNetworksListListForDescription,
-    getPassphraseFromUser,
-    passphraseFlag,
-} from "../utils";
+import { createNFTMintTransaction, getNetworksListListForDescription, passphraseFlag } from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 export class CreateUnikCommand extends WriteCommand {
@@ -47,13 +42,7 @@ export class CreateUnikCommand extends WriteCommand {
             );
         }
 
-        /**
-         * Get passphrase
-         */
-        let passphrase = flags.passphrase;
-        if (!passphrase) {
-            passphrase = await getPassphraseFromUser();
-        }
+        const passphrases = await this.askForPassphrases(flags);
 
         /**
          * Compute Fingerprint
@@ -66,7 +55,7 @@ export class CreateUnikCommand extends WriteCommand {
         /**
          * Read emitter's wallet nonce
          */
-        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
 
         /**
          * Transaction creation
@@ -78,7 +67,8 @@ export class CreateUnikCommand extends WriteCommand {
             flags.fee,
             // this.networkHash,
             nonce,
-            passphrase,
+            passphrases.first,
+            passphrases.second,
         );
         this.actionStop();
 

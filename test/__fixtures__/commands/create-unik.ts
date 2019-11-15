@@ -51,6 +51,13 @@ export const transaction = {
     },
 };
 
+export const wallet: Wallet = {
+    address: "D59pZ7fH6vtk23mADnbpqyhfMiJzpdixws",
+    publicKey: "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011",
+    balance: 999974660000000,
+    isDelegate: false,
+};
+
 export const meta = {
     height: "33",
     timestamp: {
