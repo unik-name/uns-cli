@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
 import { BaseCommand } from "../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../config";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { Formater, OUTPUT_FORMAT } from "../formater";
 import { getTypeValue, getUnikTypesList } from "../types";
 import { createNFTMintTransaction, getNetworksListListForDescription, passphraseFlag } from "../utils";
 import { WriteCommand } from "../writeCommand";
@@ -35,7 +35,7 @@ export class CreateUnikCommand extends WriteCommand {
         return CreateUnikCommand;
     }
 
-    protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
+    protected async do(flags: Record<string, any>): Promise<any> {
         if (flags.explicitValue.length > EXPLICIT_VALUE_MAX_LENGTH) {
             throw new Error(
                 `Error computing  UNIK id. Too long explicitValue ([${flags.explicitValue.length}] max length: 100)`,
@@ -90,6 +90,20 @@ export class CreateUnikCommand extends WriteCommand {
         const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transaction.id}`;
         this.log(`Transaction in explorer: ${transactionUrl}`);
 
+        const awaitConfirmation: number = flags["await-confirmation"];
+        if (awaitConfirmation === 0) {
+            this.info(`Transaction accepted by the network: ${transaction.id}`);
+            this.stop(
+                "Transaction not confirmed yet, still in the pool. Track status of the transaction in the chain explorer.",
+            );
+            return {
+                data: {
+                    id: tokenId,
+                    transaction: transaction.id,
+                },
+            };
+        }
+
         /**
          * Wait for the first transaction confirmation
          */
@@ -97,7 +111,7 @@ export class CreateUnikCommand extends WriteCommand {
         const transactionFromNetwork = await this.waitTransactionConfirmations(
             this.api.getBlockTime(),
             transaction.id,
-            1,
+            flags["await-confirmation"],
             1,
         );
         this.actionStop();
