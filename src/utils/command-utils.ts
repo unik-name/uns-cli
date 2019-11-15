@@ -55,17 +55,21 @@ export const createNFTMintTransaction = (
     // networkHash: number,
     nonce: string,
     passphrase: string,
+    secondPassPhrase: string,
 ): Interfaces.ITransactionData => {
     Transactions.TransactionRegistry.registerTransactionType(NftTransactions.NftMintTransaction);
-    return (
-        new Builders.NftMintBuilder(NFT_NAME, tokenId)
-            .properties({ type: tokenType })
-            .fee(`${fees}`)
-            // .network(networkHash)
-            .nonce(nonce)
-            .sign(passphrase)
-            .getStruct()
-    );
+    const builder = new Builders.NftMintBuilder(NFT_NAME, tokenId)
+        .properties({ type: tokenType })
+        .fee(`${fees}`)
+        // .network(networkHash)
+        .nonce(nonce)
+        .sign(passphrase);
+
+    if (secondPassPhrase) {
+        builder.secondSign(secondPassPhrase);
+    }
+
+    return builder.getStruct();
 };
 
 /**

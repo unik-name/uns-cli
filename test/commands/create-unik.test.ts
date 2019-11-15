@@ -36,7 +36,12 @@ const applyTestCase = (testCase: any) => {
                 })
                 .reply(200, {}),
         )
-
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get("/wallets/020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011").reply(200, {
+                data: WALLET,
+                ...WALLET_CHAINMETA,
+            }),
+        )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get(`/transactions/${TRANSACTION_ID}`).reply(200, {
                 data: {
