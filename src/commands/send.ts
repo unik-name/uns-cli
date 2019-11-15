@@ -68,6 +68,13 @@ export class SendCommand extends WriteCommand {
         const amount: number = cmdHelper.checkAndGetAmount(args?.amount, flags.sato);
         const satoAmount = flags.sato ? amount : toSatoshi(amount);
 
+        const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - flags.fee : satoAmount;
+
+        if (transactionSatoAmount <= 0) {
+            this.stop("Insufficient transferred amount to pay transaction fees.");
+            return undefined;
+        }
+
         const recipientAddress = await cmdHelper.resolveWalletAddress(flags.to);
 
         // Check recipient wallet existence if needed
@@ -93,8 +100,6 @@ export class SendCommand extends WriteCommand {
         }
 
         const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
-
-        const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - flags.fee : satoAmount;
 
         const transaction: Interfaces.ITransactionData = cmdHelper.createTransactionStruct(
             this,
