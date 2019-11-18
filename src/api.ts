@@ -148,20 +148,6 @@ export class UNSCLIAPI {
     }
 
     /**
-     * Get count of UNIKs
-     */
-    public async getUniks() {
-        return req
-            .get(`${this.network.url}/nfts`)
-            .then(resp => {
-                return JSON.parse(resp).meta.totalCount;
-            })
-            .catch(e => {
-                throw new Error(`Error fetching UNIKs.. Caused by ${e}`);
-            });
-    }
-
-    /**
      * Get Wallet by address or public key.
      * @param walletIdentifier
      */
