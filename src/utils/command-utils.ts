@@ -210,6 +210,21 @@ export function getChainContext(chainmeta: ChainMeta, networkName: string, curre
 }
 
 export function getUrlOrigin(urlString: string) {
-    const url = new URL(urlString);
-    return url.origin;
+    const fullUrl = new urlModule.URL(urlString);
+    return fullUrl.origin;
+}
+
+type OneOfAllNetworks = 'devnet' | 'dalinet' | 'mainnet' | 'unitnet' | 'testnet';
+
+export function getNetworkNameByNetHash(nethash: string): string {
+    const selectedNetworks: string[] = Object.keys(Networks).filter((network: string) => {
+        const netw: OneOfAllNetworks = network as OneOfAllNetworks;
+        return Networks[netw].network.nethash === nethash;
+    });
+
+    if (selectedNetworks.length < 1) {
+        throw new Error(`No network found with nethash '${nethash}'`);
+    }
+
+    return selectedNetworks[0];
 }
