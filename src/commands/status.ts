@@ -1,4 +1,4 @@
-import { BlockchainState, NodeConfiguration, NodeStatus } from "@uns/ts-sdk";
+import { BlockchainState, NodeConfiguration, NodeStatus, Response } from "@uns/ts-sdk";
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
 import { fromSatoshi, getNetworkNameByNetHash, getNetworksListListForDescription } from "../utils";
@@ -23,26 +23,22 @@ export class StatusCommand extends BaseCommand {
     protected async do(flags: Record<string, any>): Promise<CommandOutput> {
         const blockchainStatus: BlockchainState | undefined = (await this.unsClient.blockchain.get()).data;
 
-        if (!blockchainStatus) {
-            throw new Error("Error fetching blockchain current state");
-        }
+        // Parallel requests + destructurating alltogether
+        const [numberOfUniks, { data: nodeStatus }, { data: nodeConf }]: [
+            number,
+            Response<NodeStatus>,
+            Response<NodeConfiguration>,
+        ] = await Promise.all([
+            this.unsClient.unik.totalCount(),
+            this.unsClient.node.status(),
+            this.unsClient.node.configuration(),
+        ]);
 
-        const numberOfUniks: number = await this.unsClient.unik.totalCount();
-
-        const nodeStatus: NodeStatus | undefined = (await this.unsClient.node.status()).data;
-
-        if (!nodeStatus) {
-            throw new Error("Error fetching blockchain node status");
+        if (!nodeConf || !blockchainStatus || !nodeStatus) {
+            throw new Error(`Error fetching blockchain configuration ${nodeConf}, ${blockchainStatus}, ${nodeStatus}`);
         }
 
         const height: number = nodeStatus.now;
-
-        const nodeConf: NodeConfiguration | undefined = (await this.unsClient.node.configuration()).data;
-
-        if (!nodeConf) {
-            throw new Error("Error fetching blockchain node configuration");
-        }
-
         const blockUrl = `${nodeConf.explorer}/block/${height}`;
 
         const networkName = getNetworkNameByNetHash(nodeConf.nethash);
