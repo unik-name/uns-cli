@@ -1,4 +1,4 @@
-import { Address, crypto, ITransactionData } from "@uns/crypto";
+import { Identities, Interfaces } from "@uns/ark-crypto";
 import { didResolve } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { SendCommand } from "../commands/send";
@@ -16,10 +16,9 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         networkVersion: number,
         passphrase: string,
         secondPassphrase?: string,
-    ): ITransactionData {
+    ): Interfaces.ITransactionData {
         cmd.actionStart("Creating transaction");
         const sendTransactionStruct = createTransferTransaction(
-            cmd.client,
             satoAmount,
             satoFees,
             to,
@@ -32,7 +31,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
     }
 
     public async sendAndWaitTransactionConfirmations(
-        transaction: ITransactionData,
+        transaction: Interfaces.ITransactionData,
         nbRetry: number,
         nbConfirmations: number,
     ) {
@@ -104,9 +103,9 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
                 throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not match expected format`);
             }
         } else {
-            if (!crypto.validateAddress(id, this.cmd.api.getVersion())) {
+            if (!Identities.Address.validate(id, this.cmd.api.getVersion())) {
                 try {
-                    resolvedAddress = Address.fromPublicKey(id);
+                    resolvedAddress = Identities.Address.fromPublicKey(id);
                 } catch (_) {
                     throw new Error(`${isRecipient ? "Recipient" : "Sender"} address does not match expected format`);
                 }

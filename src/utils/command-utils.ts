@@ -1,7 +1,11 @@
-import { Client, crypto, DiscloseDemand, DiscloseDemandCertification, ITransactionData, networks } from "@uns/crypto";
-import { ChainMeta, Network, UNSConfig } from "@uns/ts-sdk";
+import { Identities, Interfaces, Networks, Transactions } from "@uns/ark-crypto";
+import { NftBuilders } from "@uns/core-nft-crypto";
+import { IDiscloseDemand, IDiscloseDemandCertification, UNSDiscloseExplicitBuilder } from "@uns/crypto";
+import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
 import * as urlModule from "url";
+
+const NFT_NAME = "unik";
 
 export const isDevMode = () => {
     return process.env.DEV_MODE === "true";
@@ -18,15 +22,14 @@ const getDisableNetworkList = (): string[] => {
 const DISABLED_NETWORK_LIST = getDisableNetworkList();
 
 export const getNetworksList = (): string[] => {
-    return [...Object.keys(networks).filter(network => !DISABLED_NETWORK_LIST.includes(network)), "local"];
+    return [...Object.keys(Networks).filter(network => !DISABLED_NETWORK_LIST.includes(network)), "local"];
 };
 
 export const getNetworksListListForDescription = (): string => {
     return `[${getNetworksList().join("|")}]`;
 };
 
-export const getNetwork = (network: Network, customNodeUrl?: string): any => {
-    const unsConfig = UNSConfig[network];
+export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
     const url = customNodeUrl ? urlModule.resolve(customNodeUrl, "/api/v2") : unsConfig.chain.url;
     return {
         url,
@@ -42,18 +45,15 @@ export const getNetwork = (network: Network, customNodeUrl?: string): any => {
  * @param networkVerion
  */
 export const createNFTMintTransaction = (
-    client: Client,
     tokenId: string,
     tokenType: string,
-    fee: number,
+    fees: number,
     passphrase: string,
     networkVerion: number,
-): ITransactionData => {
-    return client
-        .getBuilder()
-        .nftMint(tokenId)
+): Interfaces.ITransactionData => {
+    return new NftBuilders.NftMintBuilder(NFT_NAME, tokenId)
         .properties({ type: tokenType })
-        .fee(fee)
+        .fee(`${fees}`)
         .network(networkVerion)
         .sign(passphrase)
         .getStruct();
@@ -69,18 +69,15 @@ export const createNFTMintTransaction = (
  * @param passphrase
  */
 export const createNFTUpdateTransaction = (
-    client: Client,
     tokenId: string,
     properties: { [_: string]: string },
     fees: number,
     networkVerion: number,
     passphrase: string,
-): ITransactionData => {
-    return client
-        .getBuilder()
-        .nftUpdate(tokenId)
+): Interfaces.ITransactionData => {
+    return new NftBuilders.NftUpdateBuilder(NFT_NAME, tokenId)
         .properties(properties)
-        .fee(fees)
+        .fee(`${fees}`)
         .network(networkVerion)
         .sign(passphrase)
         .getStruct();
@@ -97,7 +94,6 @@ export const createNFTUpdateTransaction = (
  * @param secondPassPhrase
  */
 export function createTransferTransaction(
-    client: Client,
     amount: number,
     fees: number,
     recipientId: string,
@@ -105,11 +101,9 @@ export function createTransferTransaction(
     passphrase: string,
     secondPassPhrase?: string,
 ) {
-    const builder = client
-        .getBuilder()
-        .transfer()
-        .amount(amount)
-        .fee(fees)
+    const builder = Transactions.BuilderFactory.transfer()
+        .amount(`${amount}`)
+        .fee(`${fees}`)
         .network(networkVersion)
         .recipientId(recipientId)
         .sign(passphrase);
@@ -122,18 +116,15 @@ export function createTransferTransaction(
 }
 
 export function createDiscloseTransaction(
-    client: Client,
-    discloseDemand: DiscloseDemand,
-    discloseDemandCertification: DiscloseDemandCertification,
+    discloseDemand: IDiscloseDemand,
+    discloseDemandCertification: IDiscloseDemandCertification,
     fees: number,
     networkVerion: number,
     passphrase: string,
     secondPassphrase?: string,
-): ITransactionData {
-    const builder = client
-        .getBuilder()
-        .unsDiscloseExplicit()
-        .fee(fees)
+): Interfaces.ITransactionData {
+    const builder = new UNSDiscloseExplicitBuilder()
+        .fee(`${fees}`)
         .network(networkVerion)
         .discloseDemand(discloseDemand, discloseDemandCertification)
         .sign(passphrase);
@@ -174,12 +165,13 @@ export const checkConfirmations = (confirmations: number, expected: number) => {
 };
 
 export function getWalletFromPassphrase(passphrase: string, network: any) {
-    const keys = crypto.getKeys(passphrase);
-    const address = crypto.getAddress(keys.publicKey, network.version);
+    const pubKey = Identities.PublicKey.fromPassphrase(passphrase);
+    const privKey = Identities.PrivateKey.fromPassphrase(passphrase);
+    const address = Identities.Address.fromPassphrase(passphrase);
     return {
         address,
-        publicKey: keys.publicKey,
-        privateKey: keys.privateKey,
+        publicKey: pubKey,
+        privateKey: privKey,
         passphrase,
         network: network.name,
     };

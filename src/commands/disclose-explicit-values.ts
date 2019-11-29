@@ -1,10 +1,10 @@
-import { ITransactionData } from "@uns/crypto";
+import { Interfaces } from "@uns/ark-crypto";
 import {
     buildDiscloseDemand,
     DIDHelpers,
     DIDType,
-    DiscloseDemand,
-    DiscloseDemandCertification,
+    IDiscloseDemand,
+    IDiscloseDemandCertification,
     Response,
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
@@ -79,7 +79,7 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
 
         await this.checkExplicitValues(flags.unikid, unikType, flags.explicitValue);
 
-        const transactionStruct: ITransactionData = await this.createTransactionStruct(
+        const transactionStruct: Interfaces.ITransactionData = await this.createTransactionStruct(
             flags,
             unikType,
             passphrases.first,
@@ -111,7 +111,7 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     }
 
     private async sendAndWaitConfirmations(
-        transactionStruct: ITransactionData,
+        transactionStruct: Interfaces.ITransactionData,
         awaitDuring: number,
         confirmations: number,
     ) {
@@ -193,14 +193,14 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         secondPassphrase: string,
     ): Promise<any | string> {
         // Create Disclose Demand
-        const discloseDemand: DiscloseDemand = buildDiscloseDemand(
+        const discloseDemand: IDiscloseDemand = buildDiscloseDemand(
             flags.unikid,
             flags.explicitValue,
             DIDHelpers.fromLabel(unikType),
             passphrase,
         );
 
-        const discloseDemandCertification: Response<DiscloseDemandCertification> = await this.unsClient.discloseDemandCertification.get(
+        const discloseDemandCertification: Response<IDiscloseDemandCertification> = await this.unsClient.discloseDemandCertification.get(
             discloseDemand,
         );
 
@@ -225,16 +225,15 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     }
 
     private async createTransaction(
-        discloseDemand: DiscloseDemand,
-        discloseDemandCertification: DiscloseDemandCertification,
+        discloseDemand: IDiscloseDemand,
+        discloseDemandCertification: IDiscloseDemandCertification,
         fees: number,
         passphrase: string,
         secondPassphrase?: string,
-    ): Promise<ITransactionData> {
-        return await this.withAction<ITransactionData>(
+    ): Promise<Interfaces.ITransactionData> {
+        return await this.withAction<Interfaces.ITransactionData>(
             "Creating transaction",
             createDiscloseTransaction,
-            this.client,
             discloseDemand,
             discloseDemandCertification,
             fees,

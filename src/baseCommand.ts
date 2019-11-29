@@ -1,7 +1,7 @@
 import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
-import { Client, configManager } from "@uns/crypto";
+import { Managers, Types } from "@uns/ark-crypto";
 import { ChainMeta, Network, UNSClient } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
@@ -30,7 +30,6 @@ export abstract class BaseCommand extends Command {
         }),
     };
 
-    public client: Client;
     public api: UNSCLIAPI;
     protected unsClient: UNSClient;
 
@@ -41,7 +40,6 @@ export abstract class BaseCommand extends Command {
     constructor(argv: any[], config: Config.IConfig) {
         super(argv, config);
         this.unsClient = new UNSClient();
-        this.client = new Client();
         this.api = new UNSCLIAPI();
     }
 
@@ -100,21 +98,16 @@ export abstract class BaseCommand extends Command {
         if (!UTILS.getNetworksList().includes(flags.network)) {
             throw new FlagInvalidOptionError(BaseCommand.baseFlags.network, flags.network);
         }
+        const networkName: Types.NetworkName = flags.network === "local" ? Network.dalinet : flags.network;
 
-        const networkName: Network = flags.network === "local" ? "dalinet" : flags.network;
-
-        const networkPreset = configManager.getPreset(networkName);
-
-        networkPreset.network.name = flags.network;
-
-        this.api.init(networkPreset, flags.node);
-
-        this.client.setConfig(networkPreset);
+        Managers.configManager.setFromPreset(networkName);
 
         this.unsClient.init({
-            network: networkName,
+            network: networkName as Network,
             customNode: flags.node,
         });
+
+        this.api.init(Managers.configManager.getPreset(networkName), this.unsClient.currentEndpointsConfig, flags.node);
 
         if (UTILS.isDevMode()) {
             this.info("DEV MODE IS ACTIVATED");

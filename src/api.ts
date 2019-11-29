@@ -1,4 +1,4 @@
-import { ITransactionData, Transaction as Trx } from "@uns/crypto";
+import { Interfaces } from "@uns/ark-crypto";
 import { ChainMeta, getPropertyValue, PropertyValue, ResponseWithChainMeta, Unik, Wallet } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
@@ -11,10 +11,10 @@ import { getUrlOrigin } from "./utils";
 export class UNSCLIAPI {
     public network: any;
 
-    public init(networkPreset: any, customNodeUrl?: string): UNSCLIAPI {
+    public init(networkPreset: any, unsConfig: any, customNodeUrl?: string): UNSCLIAPI {
         this.network = {
             ...networkPreset.network,
-            ...UTILS.getNetwork(networkPreset.network.name, customNodeUrl),
+            ...UTILS.getNetwork(unsConfig, customNodeUrl),
             ...this.getLastInfosFromMilestones(networkPreset.milestones),
         };
         return this;
@@ -24,8 +24,7 @@ export class UNSCLIAPI {
      * Broadcast transaction
      * @param transaction
      */
-    public async sendTransaction(transaction: ITransactionData): Promise<any> {
-        Trx.validateTransactionData(transaction);
+    public async sendTransaction(transaction: Interfaces.ITransactionData): Promise<any> {
         const requestOptions = {
             body: {
                 transactions: [transaction],

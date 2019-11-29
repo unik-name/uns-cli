@@ -37,7 +37,6 @@ export abstract class UpdateProperties extends WriteCommand {
 
         // Update transaction
         const transactionStruct = createNFTUpdateTransaction(
-            this.client,
             flags.unikid,
             properties,
             flags.fee,

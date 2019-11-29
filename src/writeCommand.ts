@@ -1,4 +1,4 @@
-import { crypto, KeyPair } from "@uns/crypto";
+import { Identities } from "@uns/ark-crypto";
 import { ChainMeta, Wallet } from "@uns/ts-sdk";
 import { BaseCommand } from "./baseCommand";
 import { HttpNotFoundError } from "./errorHandler";
@@ -24,8 +24,8 @@ export abstract class WriteCommand extends BaseCommand {
      * Return true if a second wallet passphrase is needed
      */
     public async isSecondPassphraseNeeded(passphrase: string): Promise<boolean> {
-        const keys: KeyPair = crypto.getKeys(passphrase);
-        return this.applyWalletPredicate(keys.publicKey, wallet => wallet && !!wallet.secondPublicKey);
+        const pubkey: string = Identities.PublicKey.fromPassphrase(passphrase);
+        return this.applyWalletPredicate(pubkey, wallet => wallet && !!wallet.secondPublicKey);
     }
 
     /**

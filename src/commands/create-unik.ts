@@ -1,5 +1,5 @@
 import { flags } from "@oclif/command";
-import { ITransactionData } from "@uns/crypto";
+import { Interfaces } from "@uns/ark-crypto";
 import { BaseCommand } from "../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
@@ -67,8 +67,7 @@ export class CreateUnikCommand extends WriteCommand {
          * Transaction creation
          */
         this.actionStart("Creating transaction");
-        const transaction: ITransactionData = createNFTMintTransaction(
-            this.client,
+        const transaction: Interfaces.ITransactionData = createNFTMintTransaction(
             tokenId,
             getTypeValue(flags.type),
             flags.fee,
