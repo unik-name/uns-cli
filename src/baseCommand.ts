@@ -101,6 +101,7 @@ export abstract class BaseCommand extends Command {
         const networkName: Types.NetworkName = flags.network === "local" ? Network.dalinet : flags.network;
 
         Managers.configManager.setFromPreset(networkName);
+        Managers.configManager.setHeight(2);
 
         this.unsClient.init({
             network: networkName as Network,
