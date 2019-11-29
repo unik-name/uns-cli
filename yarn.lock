@@ -702,59 +702,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uns/ark-crypto@^4.0.0-dev":
-  version "4.0.0-dev.201911281229"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201911281229.tgz#8859c9c8412d9363b00668bd9825909fc5d5e5b2"
-  integrity sha512-WZRSN8QiLOzXdfGQukq9GwvaY3HpjxpOHS+8AlVZ64ULGy2C4Jor6k8biAWa6M72KkFn4VULQ4KWqR72yqFQEQ==
-  dependencies:
-    "@arkecosystem/utils" "0.8.3"
-    ajv "^6.10.2"
-    ajv-keywords "^3.4.1"
-    bcrypto "^4.1.0"
-    bip32 "^2.0.3"
-    bip39 "^3.0.2"
-    browserify-aes "^1.2.0"
-    bstring "^0.3.9"
-    buffer-xor "^2.0.2"
-    bytebuffer "^5.0.1"
-    dayjs "^1.8.15"
-    deepmerge "^4.0.0"
-    fast-memoize "^2.5.1"
-    ipaddr.js "^1.9.0"
-    lodash.get "^4.4.2"
-    lodash.set "^4.3.2"
-    lodash.sumby "^4.6.0"
-    long "~3"
-    tiny-glob "^0.2.6"
-    wif "^2.0.6"
-
-"@uns/ark-crypto@^4.0.0-dev.201911281737":
-  version "4.0.0-dev.201911281737"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201911281737.tgz#e6c1f67bf70d1dc83b468293a8edf5580db9dff1"
-  integrity sha512-ROlUOIfYCudvTUzsO7A21f18V40wuXBfxP514CdJxzECQAe8/0p/P1kweAGH4Qyeq5aYMDcAXVGb+6WT1jx+AQ==
-  dependencies:
-    "@arkecosystem/utils" "0.8.3"
-    ajv "^6.10.2"
-    ajv-keywords "^3.4.1"
-    bcrypto "^4.1.0"
-    bip32 "^2.0.3"
-    bip39 "^3.0.2"
-    browserify-aes "^1.2.0"
-    bstring "^0.3.9"
-    buffer-xor "^2.0.2"
-    bytebuffer "^5.0.1"
-    dayjs "^1.8.15"
-    deepmerge "^4.0.0"
-    fast-memoize "^2.5.1"
-    ipaddr.js "^1.9.0"
-    lodash.get "^4.4.2"
-    lodash.set "^4.3.2"
-    lodash.sumby "^4.6.0"
-    long "~3"
-    tiny-glob "^0.2.6"
-    wif "^2.0.6"
-
-"@uns/ark-crypto@^4.0.0-dev.201911281815":
+"@uns/ark-crypto@^4.0.0-dev", "@uns/ark-crypto@^4.0.0-dev.201911281815":
   version "4.0.0-dev.201911281815"
   resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201911281815.tgz#037c632f685a0d7381a56f510ce7374747d67255"
   integrity sha512-gJOMUnWlVCGDymSwqWBK1KuN0ho3NKuT4P9fsYg3W8YKOKCw4/ddaiE9nQ4+PmT7SAhjX+VKVf1S9+JPHsITQg==
@@ -781,19 +729,19 @@
     wif "^2.0.6"
 
 "@uns/core-nft-crypto@^4.0.0-dev.201911281241":
-  version "4.0.0-dev.201911281241"
-  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-4.0.0-dev.201911281241.tgz#e00a0aa050da454cd99237ae2ce50dae906df652"
-  integrity sha512-obiuhiYPzHb2KobEoRem7vXz+NQcv7SZ9U1pgOkq4gowPvrzJnRvqnuyeqUWt+h/0E+6J1xUUE7Iq7su5PLv0w==
+  version "4.0.0-dev.201911291546"
+  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-4.0.0-dev.201911291546.tgz#89179357c431f1e707c0ac70bc51bcb1384e9e13"
+  integrity sha512-3WPtZ3H0gvvS2nKmw03Ud/nZEII1LSQzWeLAjLT65GClwn6osP4sIW5R70ugNTnPWHht8BFmXLzMCoRysiwGAg==
   dependencies:
     "@arkecosystem/core-interfaces" "^2.6.0-next.4"
     "@uns/ark-crypto" "^4.0.0-dev"
 
 "@uns/crypto@^4.0.0-dev.201911281750":
-  version "4.0.0-dev.201911281750"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-4.0.0-dev.201911281750.tgz#3a773a1b3a2e79ebf7aa91f6a8aa8006a6659ea0"
-  integrity sha512-fpkn8wGIFK729rccG6RO0l6ltnaYc8/sENwpFOqifiL+Sslo7XoRQ1pLlEmSaJNh9Ud9GXCoWPh+RvCXauajGg==
+  version "4.0.0-dev.201911291544"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-4.0.0-dev.201911291544.tgz#aee06e1043ce7fe704346503589b7d16b565bbf5"
+  integrity sha512-v9/xlMOZUw4hwnDXEXGvLDTChaEYz4PCShG0oTyz5gSH5TwzkGndGvXCi86fcrFEH4Gyrx3vTm0tRu8QkTOrEg==
   dependencies:
-    "@uns/ark-crypto" "^4.0.0-dev.201911281737"
+    "@uns/ark-crypto" "^4.0.0-dev"
 
 "@uns/ts-sdk@^2.0.0-alpha.8":
   version "2.0.0-alpha.8"
@@ -1835,9 +1783,9 @@ deep-is@~0.1.3:
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
 
 deepmerge@^4.0.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.1.1.tgz#ee0866e4019fe62c1276b9062d4c4803d9aea14c"
-  integrity sha512-+qO5WbNBKBaZez95TffdUDnGIo4+r5kmsX8aOb7PDHvXsTbghAmleuxjs6ytNaf5Eg4FGBXDS5vqO61TRi6BMg==
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
+  integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
 
 define-properties@^1.1.2, define-properties@^1.1.3:
   version "1.1.3"
@@ -1950,9 +1898,9 @@ elegant-spinner@^1.0.1:
   integrity sha1-2wQ1IcldfjA/2PNFvtwzSc+wcp4=
 
 elliptic@^6.4.0:
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.1.tgz#c380f5f909bf1b9b4428d028cd18d3b0efd6b52b"
-  integrity sha512-xvJINNLbTeWQjrl6X+7eQCrIy/YPv5XCpKW6kB5mKvtnGILoLDcySuwomfdzt0BMdLNVnuRNTuzKNHj0bva1Cg==
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.2.tgz#05c5678d7173c049d8ca433552224a495d0e3762"
+  integrity sha512-f4x70okzZbIQl/NSRLkI/+tteV/9WqL98zx+SQ69KbXxmVrmjwsNUPn/gYJJ0sHvEak24cZgHIPegRePAtA/xw==
   dependencies:
     bn.js "^4.4.0"
     brorand "^1.0.1"

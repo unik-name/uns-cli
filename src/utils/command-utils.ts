@@ -1,5 +1,5 @@
 import { Identities, Interfaces, Networks, Transactions } from "@uns/ark-crypto";
-import { NftBuilders } from "@uns/core-nft-crypto";
+import { Builders } from "@uns/core-nft-crypto";
 import { IDiscloseDemand, IDiscloseDemandCertification, UNSDiscloseExplicitBuilder } from "@uns/crypto";
 import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
@@ -51,7 +51,7 @@ export const createNFTMintTransaction = (
     passphrase: string,
     networkVerion: number,
 ): Interfaces.ITransactionData => {
-    return new NftBuilders.NftMintBuilder(NFT_NAME, tokenId)
+    return new Builders.NftMintBuilder(NFT_NAME, tokenId)
         .properties({ type: tokenType })
         .fee(`${fees}`)
         .network(networkVerion)
@@ -75,7 +75,7 @@ export const createNFTUpdateTransaction = (
     networkVerion: number,
     passphrase: string,
 ): Interfaces.ITransactionData => {
-    return new NftBuilders.NftUpdateBuilder(NFT_NAME, tokenId)
+    return new Builders.NftUpdateBuilder(NFT_NAME, tokenId)
         .properties(properties)
         .fee(`${fees}`)
         .network(networkVerion)
