@@ -1,16 +1,16 @@
 import { expect, test } from "@oclif/test";
-import { UNSConfig } from "@uns/ts-sdk";
 import { outputCases } from "../__fixtures__/commands/status";
+import { UNS_CLIENT_FOR_TESTS } from "../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(UNSConfig.devnet.chain.url, api =>
+    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
         api.get("/blockchain").reply(200, {
             data: {
                 supply: 2119999400000000,
             },
         }),
     )
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get("/nfts").reply(200, {
                 meta: {
                     totalCount: 1,
@@ -23,7 +23,7 @@ const applyTestCase = (testCase: any) => {
                 ],
             }),
         )
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get("/node/status").reply(200, {
                 data: {
                     synced: true,

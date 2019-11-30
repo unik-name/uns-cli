@@ -1,5 +1,9 @@
 import Config from "@oclif/config";
 import { test } from "@oclif/test";
+import { Network, UNSClient } from "@uns/ts-sdk";
+
+export const UNS_CLIENT_FOR_TESTS = new UNSClient();
+UNS_CLIENT_FOR_TESTS.init({ network: Network.devnet });
 
 export const applyExitCase = (exitCase: any) => {
     test.command(exitCase.args)

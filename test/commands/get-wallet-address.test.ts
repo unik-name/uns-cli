@@ -1,4 +1,3 @@
-import { UNSConfig } from "@uns/ts-sdk";
 import { GetWalletAddressCommandHelper } from "../../src/commandHelpers/get-wallet-address-helper";
 import { GetWalletAddressCommand } from "../../src/commands/get-wallet-address";
 import { getUrlOrigin } from "../../src/utils";
@@ -9,9 +8,9 @@ import {
     WALLET_CHAINMETA,
     WALLET_PUBKEY,
 } from "../__fixtures__/commands/get-wallet-address";
-import { applyExitCase, EMPTY_COMMAND_CONFIG } from "../__fixtures__/commons";
+import { applyExitCase, EMPTY_COMMAND_CONFIG, UNS_CLIENT_FOR_TESTS } from "../__fixtures__/commons";
 
-const currentNode = getUrlOrigin(UNSConfig.devnet.chain.url);
+const currentNode = getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url);
 
 describe("get-property-value command", () => {
     describe("Exit cases", () => {

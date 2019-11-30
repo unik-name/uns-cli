@@ -1,6 +1,5 @@
 import { expect, test } from "@oclif/test";
 import { Crypto, Transactions } from "@uns/ark-crypto";
-import { UNSConfig } from "@uns/ts-sdk";
 import {
     meta,
     outputCases,
@@ -10,17 +9,17 @@ import {
     TRANSACTION_TIMESTAMP,
     UNIK_ID,
 } from "../__fixtures__/commands/create-unik";
-import { applyExitCase } from "../__fixtures__/commons";
+import { applyExitCase, UNS_CLIENT_FOR_TESTS } from "../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(UNSConfig.devnet.service.url, api =>
+    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
         api.post("/unik-name-fingerprint", { explicitValue: "bob", type: "individual" }).reply(200, {
             data: {
                 fingerprint: UNIK_ID,
             },
         }),
     )
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api
                 .post("/transactions", {
                     transactions: [transaction],
@@ -28,7 +27,7 @@ const applyTestCase = (testCase: any) => {
                 .reply(200, {}),
         )
 
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get(`/transactions/${TRANSACTION_ID}`).reply(200, {
                 data: {
                     id: TRANSACTION_ID,

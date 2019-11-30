@@ -1,5 +1,5 @@
-import { UNSConfig } from "@uns/ts-sdk";
 import { getUrlOrigin } from "../../../src/utils";
+import { UNS_CLIENT_FOR_TESTS } from "../commons";
 
 const commandName = "get-wallet-address";
 
@@ -17,7 +17,7 @@ export const WALLET_CHAINMETA = {
 
 export const OUTPUT_CHAINMETA = {
     network: "devnet",
-    node: getUrlOrigin(UNSConfig.devnet.chain.url),
+    node: getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url),
     date: WALLET_CHAINMETA.timestamp.human,
     height: WALLET_CHAINMETA.height,
 };
