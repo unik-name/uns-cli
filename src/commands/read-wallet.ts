@@ -1,6 +1,6 @@
 import { flags } from "@oclif/command";
 import { ChainMeta } from "@uns/ts-sdk";
-import { Token } from "src/types";
+import { Token } from "types";
 import { BaseCommand } from "../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
