@@ -64,6 +64,11 @@ export class CreateUnikCommand extends WriteCommand {
         this.log(`unikid: ${tokenId}`);
 
         /**
+         * Read emitter's wallet nonce
+         */
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+
+        /**
          * Transaction creation
          */
         this.actionStart("Creating transaction");
@@ -71,8 +76,9 @@ export class CreateUnikCommand extends WriteCommand {
             tokenId,
             getTypeValue(flags.type),
             flags.fee,
+            // this.networkHash,
+            nonce,
             passphrase,
-            this.api.getVersion(),
         );
         this.actionStop();
 

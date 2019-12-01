@@ -1,7 +1,7 @@
 import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
-import { Managers, Types } from "@uns/ark-crypto";
+import { Managers, Types, Utils } from "@uns/ark-crypto";
 import { ChainMeta, Network, UNSClient } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
@@ -9,6 +9,7 @@ import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
 import * as LOGGER from "./logger";
 import { Transaction } from "./types";
 import * as UTILS from "./utils";
+import { getWalletFromPassphrase } from "./utils";
 
 export abstract class BaseCommand extends Command {
     public static baseFlags = {
@@ -36,6 +37,8 @@ export abstract class BaseCommand extends Command {
     protected verbose: boolean = false;
 
     private formater: Formater | undefined;
+
+    private maybeNetworkHash: number | undefined;
 
     constructor(argv: any[], config: Config.IConfig) {
         super(argv, config);
@@ -92,23 +95,7 @@ export abstract class BaseCommand extends Command {
          * Configuration
          */
 
-        // This happen when providing network through env var
-        // see Oclif PR: https://github.com/oclif/parser/pull/64
-        // will be removed if PR is accepted
-        if (!UTILS.getNetworksList().includes(flags.network)) {
-            throw new FlagInvalidOptionError(BaseCommand.baseFlags.network, flags.network);
-        }
-        const networkName: Types.NetworkName = flags.network === "local" ? Network.dalinet : flags.network;
-
-        Managers.configManager.setFromPreset(networkName);
-        Managers.configManager.setHeight(2);
-
-        this.unsClient.init({
-            network: networkName as Network,
-            customNode: flags.node,
-        });
-
-        this.api.init(Managers.configManager.getPreset(networkName), this.unsClient.currentEndpointsConfig, flags.node);
+        await this.setupNetwork(flags);
 
         if (UTILS.isDevMode()) {
             this.info("DEV MODE IS ACTIVATED");
@@ -242,5 +229,46 @@ export abstract class BaseCommand extends Command {
         if (!heights.every(v => v === heights[0])) {
             throw new Error("Unable to read right now. Please retry.");
         }
+    }
+
+    protected get networkHash(): number | undefined {
+        return this.maybeNetworkHash;
+    }
+
+    protected async getNextWalletNonceFromPassphrase(passphrase: string): Promise<string> {
+        const wallet = getWalletFromPassphrase(passphrase, this.api.network);
+        return Utils.BigNumber.make(await this.api.getNonce(wallet.address))
+            .plus(1)
+            .toString();
+    }
+
+    private async setupNetwork(flags: { [x: string]: any }) {
+        // This happen when providing network through env var
+        // see Oclif PR: https://github.com/oclif/parser/pull/64
+        // will be removed if PR is accepted
+        if (!UTILS.getNetworksList().includes(flags.network)) {
+            throw new FlagInvalidOptionError(BaseCommand.baseFlags.network, flags.network);
+        }
+
+        // UNS SDK
+        const networkName: Types.NetworkName = flags.network === "local" ? Network.dalinet : flags.network;
+        this.unsClient.init({
+            network: networkName as Network,
+            customNode: flags.node,
+        });
+
+        // UNS and Ark Crypto
+        Managers.configManager.setFromPreset(networkName);
+        this.api.init(Managers.configManager.getPreset(networkName), this.unsClient.currentEndpointsConfig, flags.node);
+
+        const [configurationCrypto, height, configuration] = await Promise.all([
+            this.api.getConfigurationForCrypto(),
+            this.api.getCurrentHeight(),
+            this.api.getConfiguration(),
+        ]);
+
+        Managers.configManager.setConfig(configurationCrypto);
+        Managers.configManager.setHeight(height);
+        this.maybeNetworkHash = configuration.constants.pubKeyHash;
     }
 }

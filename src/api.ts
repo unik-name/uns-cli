@@ -1,4 +1,4 @@
-import { Interfaces } from "@uns/ark-crypto";
+import { Interfaces, Utils } from "@uns/ark-crypto";
 import { ChainMeta, getPropertyValue, PropertyValue, ResponseWithChainMeta, Unik, Wallet } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
@@ -220,6 +220,38 @@ export class UNSCLIAPI {
             .catch(e => {
                 throw new Error(`Error fetching status.. Caused by ${e}`);
             });
+    }
+
+    public async getConfiguration() {
+        return req
+            .get(`${this.network.url}/node/configuration`)
+            .then(resp => {
+                return JSON.parse(resp).data;
+            })
+            .catch(e => {
+                throw new Error(`Error fetching configuration.. Caused by ${e}`);
+            });
+    }
+
+    public async getConfigurationForCrypto() {
+        return req
+            .get(`${this.network.url}/node/configuration/crypto`)
+            .then(resp => {
+                return JSON.parse(resp).data;
+            })
+            .catch(e => {
+                throw new Error(`Error fetching configuration for crypto.. Caused by ${e}`);
+            });
+    }
+
+    public async getNonce(walletIdentifier: string): Promise<string> {
+        try {
+            const data: any = this.getWallet(walletIdentifier);
+            // TODO: add nonce to Wallet type
+            return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : "1";
+        } catch (ex) {
+            return "1";
+        }
     }
 
     /**

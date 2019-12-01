@@ -92,6 +92,8 @@ export class SendCommand extends WriteCommand {
             await cmdHelper.checkAndConfirmWallet(false, unikNameSenderAddress);
         }
 
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
+
         const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - flags.fee : satoAmount;
 
         const transaction: Interfaces.ITransactionData = cmdHelper.createTransactionStruct(
@@ -99,7 +101,8 @@ export class SendCommand extends WriteCommand {
             transactionSatoAmount,
             flags.fee,
             recipientAddress,
-            this.api.getVersion(),
+            // this.networkHash,
+            nonce,
             passphrases.first,
             passphrases.second,
         );

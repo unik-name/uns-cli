@@ -13,7 +13,8 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         satoAmount: number,
         satoFees: number,
         to: string,
-        networkVersion: number,
+        // networkHash: number,
+        nonce: string,
         passphrase: string,
         secondPassphrase?: string,
     ): Interfaces.ITransactionData {
@@ -22,7 +23,8 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
             satoAmount,
             satoFees,
             to,
-            networkVersion,
+            // networkHash,
+            nonce,
             passphrase,
             secondPassphrase,
         );

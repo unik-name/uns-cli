@@ -1,5 +1,5 @@
 import { Identities, Interfaces, Networks, Transactions } from "@uns/ark-crypto";
-import { Builders } from "@uns/core-nft-crypto";
+import { Builders, Transactions as NftTransactions } from "@uns/core-nft-crypto";
 import { IDiscloseDemand, IDiscloseDemandCertification, UNSDiscloseExplicitBuilder } from "@uns/crypto";
 import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
@@ -42,21 +42,25 @@ export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
  * @param client
  * @param tokenId
  * @param passphrase
- * @param networkVerion
  */
 export const createNFTMintTransaction = (
     tokenId: string,
     tokenType: string,
     fees: number,
+    // networkHash: number,
+    nonce: string,
     passphrase: string,
-    networkVerion: number,
 ): Interfaces.ITransactionData => {
-    return new Builders.NftMintBuilder(NFT_NAME, tokenId)
-        .properties({ type: tokenType })
-        .fee(`${fees}`)
-        .network(networkVerion)
-        .sign(passphrase)
-        .getStruct();
+    Transactions.TransactionRegistry.registerTransactionType(NftTransactions.NftMintTransaction);
+    return (
+        new Builders.NftMintBuilder(NFT_NAME, tokenId)
+            .properties({ type: tokenType })
+            .fee(`${fees}`)
+            // .network(networkHash)
+            .nonce(nonce)
+            .sign(passphrase)
+            .getStruct()
+    );
 };
 
 /**
@@ -65,22 +69,26 @@ export const createNFTMintTransaction = (
  * @param tokenId
  * @param properties
  * @param fees
- * @param networkVerion
  * @param passphrase
  */
 export const createNFTUpdateTransaction = (
     tokenId: string,
     properties: { [_: string]: string },
     fees: number,
-    networkVerion: number,
+    // networkHash: number,
+    nonce: string,
     passphrase: string,
 ): Interfaces.ITransactionData => {
-    return new Builders.NftUpdateBuilder(NFT_NAME, tokenId)
-        .properties(properties)
-        .fee(`${fees}`)
-        .network(networkVerion)
-        .sign(passphrase)
-        .getStruct();
+    Transactions.TransactionRegistry.registerTransactionType(NftTransactions.NftUpdateTransaction);
+    return (
+        new Builders.NftUpdateBuilder(NFT_NAME, tokenId)
+            .properties(properties)
+            .fee(`${fees}`)
+            // .network(networkHash)
+            .nonce(nonce)
+            .sign(passphrase)
+            .getStruct()
+    );
 };
 
 /**
@@ -89,7 +97,6 @@ export const createNFTUpdateTransaction = (
  * @param amount
  * @param fees
  * @param recipientId
- * @param networkVersion
  * @param passphrase
  * @param secondPassPhrase
  */
@@ -97,14 +104,16 @@ export function createTransferTransaction(
     amount: number,
     fees: number,
     recipientId: string,
-    networkVersion: number,
+    // networkHash: number,
+    nonce: string,
     passphrase: string,
     secondPassPhrase?: string,
 ) {
     const builder = Transactions.BuilderFactory.transfer()
         .amount(`${amount}`)
         .fee(`${fees}`)
-        .network(networkVersion)
+        // .network(networkHash)
+        .nonce(nonce)
         .recipientId(recipientId)
         .sign(passphrase);
 
@@ -119,13 +128,15 @@ export function createDiscloseTransaction(
     discloseDemand: IDiscloseDemand,
     discloseDemandCertification: IDiscloseDemandCertification,
     fees: number,
-    networkVerion: number,
+    // networkHash: number,
+    nonce: string,
     passphrase: string,
     secondPassphrase?: string,
 ): Interfaces.ITransactionData {
     const builder = new UNSDiscloseExplicitBuilder()
         .fee(`${fees}`)
-        .network(networkVerion)
+        // .network(networkHash)
+        .nonce(nonce)
         .discloseDemand(discloseDemand, discloseDemandCertification)
         .sign(passphrase);
 

@@ -33,6 +33,11 @@ export abstract class UpdateProperties extends WriteCommand {
         // Check passphrase format
         checkPassphraseFormat(passphrase);
 
+        /**
+         * Read emitter's wallet nonce
+         */
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+
         const properties = this.getProperties(flags);
 
         // Update transaction
@@ -40,7 +45,8 @@ export abstract class UpdateProperties extends WriteCommand {
             flags.unikid,
             properties,
             flags.fee,
-            this.api.getVersion(),
+            // this.networkHash,
+            nonce,
             passphrase,
         );
 
