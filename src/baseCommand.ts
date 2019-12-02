@@ -185,6 +185,9 @@ export abstract class BaseCommand extends Command {
         );
     }
 
+    /**
+     * @deprecated, use [[#withAction2]]
+     */
     protected async withAction<T>(
         actionDescription: string,
         callback: (...args: any[]) => any,
@@ -193,6 +196,18 @@ export abstract class BaseCommand extends Command {
         this.actionStart(actionDescription);
         try {
             return await callback(...args);
+        } catch (e) {
+            this.debug(e);
+            throw e;
+        } finally {
+            this.actionStop();
+        }
+    }
+
+    protected async withAction2<T>(actionDescription: string, callback: () => any): Promise<T> {
+        this.actionStart(actionDescription);
+        try {
+            return await callback();
         } catch (e) {
             this.debug(e);
             throw e;

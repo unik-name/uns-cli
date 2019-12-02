@@ -213,12 +213,18 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         }
 
         /**
+         * Read emitter's wallet nonce
+         */
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+
+        /**
          * Transaction creation
          */
         return await this.createTransaction(
             discloseDemand,
             discloseDemandCertification.data,
             flags.fee,
+            nonce,
             passphrase,
             secondPassphrase,
         );
@@ -228,18 +234,20 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
         discloseDemand: IDiscloseDemand,
         discloseDemandCertification: IDiscloseDemandCertification,
         fees: number,
+        nonce: string,
         passphrase: string,
         secondPassphrase?: string,
     ): Promise<Interfaces.ITransactionData> {
-        return await this.withAction<Interfaces.ITransactionData>(
-            "Creating transaction",
-            createDiscloseTransaction,
-            discloseDemand,
-            discloseDemandCertification,
-            fees,
-            this.api.getVersion(),
-            passphrase,
-            secondPassphrase,
-        );
+        const todo = () => {
+            return createDiscloseTransaction(
+                discloseDemand,
+                discloseDemandCertification,
+                fees,
+                nonce,
+                passphrase,
+                secondPassphrase,
+            );
+        };
+        return await this.withAction2<Interfaces.ITransactionData>("Creating transaction", todo);
     }
 }

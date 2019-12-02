@@ -1,6 +1,11 @@
 import { Identities, Interfaces, Networks, Transactions } from "@uns/ark-crypto";
 import { Builders, Transactions as NftTransactions } from "@uns/core-nft-crypto";
-import { IDiscloseDemand, IDiscloseDemandCertification, UNSDiscloseExplicitBuilder } from "@uns/crypto";
+import {
+    DiscloseExplicitTransaction,
+    IDiscloseDemand,
+    IDiscloseDemandCertification,
+    UNSDiscloseExplicitBuilder,
+} from "@uns/crypto";
 import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
 import * as urlModule from "url";
@@ -133,6 +138,7 @@ export function createDiscloseTransaction(
     passphrase: string,
     secondPassphrase?: string,
 ): Interfaces.ITransactionData {
+    Transactions.TransactionRegistry.registerTransactionType(DiscloseExplicitTransaction);
     const builder = new UNSDiscloseExplicitBuilder()
         .fee(`${fees}`)
         // .network(networkHash)
