@@ -1,9 +1,9 @@
 import { flags } from "@oclif/command";
 import { ChainMeta, Wallet } from "@uns/ts-sdk";
-import { Token, WithChainmeta } from "../types";
 import { BaseCommand } from "../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
+import { Token, WithChainmeta } from "../types";
 import { fromSatoshi, getChainContext, getNetworksListListForDescription } from "../utils";
 
 export class ReadWalletCommand extends ReadCommand {

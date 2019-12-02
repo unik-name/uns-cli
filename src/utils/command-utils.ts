@@ -214,7 +214,7 @@ export function getUrlOrigin(urlString: string) {
     return fullUrl.origin;
 }
 
-type OneOfAllNetworks = 'devnet' | 'dalinet' | 'mainnet' | 'unitnet' | 'testnet';
+type OneOfAllNetworks = "devnet" | "dalinet" | "mainnet" | "unitnet" | "testnet";
 
 export function getNetworkNameByNetHash(nethash: string): string {
     const selectedNetworks: string[] = Object.keys(Networks).filter((network: string) => {
