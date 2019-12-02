@@ -246,7 +246,7 @@ export class UNSCLIAPI {
 
     public async getNonce(walletIdentifier: string): Promise<string> {
         try {
-            const data: any = this.getWallet(walletIdentifier);
+            const data: any = await this.getWallet(walletIdentifier);
             // TODO: add nonce to Wallet type
             return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : "1";
         } catch (ex) {
