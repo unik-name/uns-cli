@@ -1,6 +1,6 @@
 import { expect, test } from "@oclif/test";
-import { crypto, slots } from "@uns/crypto";
-import { UNSConfig } from "@uns/ts-sdk";
+import { Crypto, Transactions } from "@uns/ark-crypto";
+import { Transactions as NftTransactions } from "@uns/core-nft-crypto";
 import {
     meta,
     outputCases,
@@ -9,18 +9,27 @@ import {
     TRANSACTION_ID,
     TRANSACTION_TIMESTAMP,
     UNIK_ID,
+    WALLET,
+    WALLET_CHAINMETA,
+    WALLET_ID,
 } from "../__fixtures__/commands/create-unik";
-import { applyExitCase } from "../__fixtures__/commons";
+import {
+    applyExitCase,
+    NODE_CONFIGURATION,
+    NODE_CONFIGURATION_CRYPTO,
+    NODE_STATUS,
+    UNS_CLIENT_FOR_TESTS,
+} from "../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(UNSConfig.devnet.service.url, api =>
+    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
         api.post("/unik-name-fingerprint", { explicitValue: "bob", type: "individual" }).reply(200, {
             data: {
                 fingerprint: UNIK_ID,
             },
         }),
     )
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api
                 .post("/transactions", {
                     transactions: [transaction],
@@ -28,7 +37,7 @@ const applyTestCase = (testCase: any) => {
                 .reply(200, {}),
         )
 
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get(`/transactions/${TRANSACTION_ID}`).reply(200, {
                 data: {
                     id: TRANSACTION_ID,
@@ -36,6 +45,21 @@ const applyTestCase = (testCase: any) => {
                 },
                 chainmeta: meta,
             }),
+        )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/wallets/${WALLET_ID}`).reply(200, {
+                data: WALLET,
+                ...WALLET_CHAINMETA,
+            }),
+        )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
+        )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
+        )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/node/status`).reply(200, NODE_STATUS),
         )
         .stdout()
         .command(testCase.args)
@@ -45,18 +69,25 @@ const applyTestCase = (testCase: any) => {
 };
 
 describe("creat-unik command", () => {
+    beforeEach(() => {
+        process.env.DEV_MODE = "true";
+    });
+
     describe("Exit cases", () => {
         shouldExit.forEach(exitCase => applyExitCase(exitCase));
     });
 
     describe("Run cases", () => {
         // Mock function that create transaction timestamp
-        jest.spyOn(slots, "getTime").mockImplementation(() => TRANSACTION_TIMESTAMP);
+        jest.spyOn(Crypto.Slots, "getTime").mockImplementation(() => TRANSACTION_TIMESTAMP);
 
         // Mock function that create transaction id
-        jest.spyOn(crypto, "getId").mockImplementation(() => TRANSACTION_ID);
+        jest.spyOn(Transactions.Utils, "getId").mockImplementation(() => TRANSACTION_ID);
 
         jest.setTimeout(10000);
+        afterEach(() => {
+            Transactions.TransactionRegistry.deregisterTransactionType(NftTransactions.NftMintTransaction);
+        });
         outputCases.forEach(testCase => applyTestCase(testCase));
     });
 });

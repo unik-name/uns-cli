@@ -1,16 +1,21 @@
 import { expect, test } from "@oclif/test";
-import { UNSConfig } from "@uns/ts-sdk";
 import { outputCases } from "../__fixtures__/commands/status";
+import {
+    NODE_CONFIGURATION,
+    NODE_CONFIGURATION_CRYPTO,
+    NODE_STATUS,
+    UNS_CLIENT_FOR_TESTS,
+} from "../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(UNSConfig.devnet.chain.url, api =>
+    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
         api.get("/blockchain").reply(200, {
             data: {
                 supply: 2119999400000000,
             },
         }),
     )
-        .nock(UNSConfig.devnet.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get("/nfts").reply(200, {
                 meta: {
                     totalCount: 1,
@@ -23,14 +28,17 @@ const applyTestCase = (testCase: any) => {
                 ],
             }),
         )
-        .nock(UNSConfig.devnet.chain.url, api =>
-            api.get("/node/status").reply(200, {
-                data: {
-                    synced: true,
-                    now: 100015,
-                    blocksCount: 0,
-                },
-            }),
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
+        )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
+        )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api
+                .get(`/node/status`)
+                .twice()
+                .reply(200, NODE_STATUS),
         )
         .env({ UNS_NETWORK: testCase.UNS_NETWORK })
         .stdout()
@@ -41,5 +49,8 @@ const applyTestCase = (testCase: any) => {
 };
 
 describe("status command", () => {
+    beforeEach(() => {
+        process.env.DEV_MODE = "true";
+    });
     outputCases.forEach(testCase => applyTestCase(testCase));
 });

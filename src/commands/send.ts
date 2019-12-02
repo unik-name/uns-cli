@@ -1,5 +1,5 @@
 import { flags } from "@oclif/command";
-import { ITransactionData } from "@uns/crypto";
+import { Interfaces } from "@uns/ark-crypto";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
@@ -92,14 +92,17 @@ export class SendCommand extends WriteCommand {
             await cmdHelper.checkAndConfirmWallet(false, unikNameSenderAddress);
         }
 
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
+
         const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - flags.fee : satoAmount;
 
-        const transaction: ITransactionData = cmdHelper.createTransactionStruct(
+        const transaction: Interfaces.ITransactionData = cmdHelper.createTransactionStruct(
             this,
             transactionSatoAmount,
             flags.fee,
             recipientAddress,
-            this.api.getVersion(),
+            // this.networkHash,
+            nonce,
             passphrases.first,
             passphrases.second,
         );

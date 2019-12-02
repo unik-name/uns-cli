@@ -57,8 +57,8 @@ export const EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT = `{
     "confirmations": 20
   },
   "chainmeta": {
-    "network": "devnet",
-    "node": "https://forger1.devnet.uns.network",
+    "network": "dalinet",
+    "node": "https://forger1.dalinet.uns.network",
     "date": "2019-09-26T09:05:24.000Z",
     "height": "33"
   }
@@ -68,17 +68,43 @@ export const EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT = `{
 export const shouldExit = [
     {
         description: "Should exit with code 2 if output format is not allowed for that command",
-        args: ["get-property-value", "-n", "devnet", "--unikid", UNIK_ID, "-k", "property", "-f", "table", "--verbose"],
+        args: [
+            "get-property-value",
+            "-n",
+            "dalinet",
+            "--unikid",
+            UNIK_ID,
+            "-k",
+            "property",
+            "-f",
+            "table",
+            "--verbose",
+        ],
         exitCode: 2,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if unikid doesn't match",
-        args: ["get-property-value", "-n", "devnet", "--unikid", "123", "-k", "type"],
+        args: ["get-property-value", "-n", "dalinet", "--unikid", "123", "-k", "type"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if property doesn't match",
-        args: ["get-property-value", "-n", "devnet", "--unikid", UNIK_ID, "-k", "pr@perty"],
+        args: ["get-property-value", "-n", "dalinet", "--unikid", UNIK_ID, "-k", "pr@perty"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
 ];

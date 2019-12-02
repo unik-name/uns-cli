@@ -1,4 +1,4 @@
-import { ITransactionData, Transaction as Trx } from "@uns/crypto";
+import { Interfaces, Utils } from "@uns/ark-crypto";
 import { ChainMeta, getPropertyValue, PropertyValue, ResponseWithChainMeta, Unik, Wallet } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
@@ -11,10 +11,10 @@ import { getUrlOrigin } from "./utils";
 export class UNSCLIAPI {
     public network: any;
 
-    public init(networkPreset: any, customNodeUrl?: string): UNSCLIAPI {
+    public init(networkPreset: any, unsConfig: any, customNodeUrl?: string): UNSCLIAPI {
         this.network = {
             ...networkPreset.network,
-            ...UTILS.getNetwork(networkPreset.network.name, customNodeUrl),
+            ...UTILS.getNetwork(unsConfig, customNodeUrl),
             ...this.getLastInfosFromMilestones(networkPreset.milestones),
         };
         return this;
@@ -24,8 +24,7 @@ export class UNSCLIAPI {
      * Broadcast transaction
      * @param transaction
      */
-    public async sendTransaction(transaction: ITransactionData): Promise<any> {
-        Trx.validateTransactionData(transaction);
+    public async sendTransaction(transaction: Interfaces.ITransactionData): Promise<any> {
         const requestOptions = {
             body: {
                 transactions: [transaction],
@@ -221,6 +220,38 @@ export class UNSCLIAPI {
             .catch(e => {
                 throw new Error(`Error fetching status.. Caused by ${e}`);
             });
+    }
+
+    public async getConfiguration() {
+        return req
+            .get(`${this.network.url}/node/configuration`)
+            .then(resp => {
+                return JSON.parse(resp).data;
+            })
+            .catch(e => {
+                throw new Error(`Error fetching configuration.. Caused by ${e}`);
+            });
+    }
+
+    public async getConfigurationForCrypto() {
+        return req
+            .get(`${this.network.url}/node/configuration/crypto`)
+            .then(resp => {
+                return JSON.parse(resp).data;
+            })
+            .catch(e => {
+                throw new Error(`Error fetching configuration for crypto.. Caused by ${e}`);
+            });
+    }
+
+    public async getNonce(walletIdentifier: string): Promise<string> {
+        try {
+            const data: any = await this.getWallet(walletIdentifier);
+            // TODO: add nonce to Wallet type
+            return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : "1";
+        } catch (ex) {
+            return "1";
+        }
     }
 
     /**

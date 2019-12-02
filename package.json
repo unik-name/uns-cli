@@ -5,7 +5,7 @@
     "author": "Space Elephant",
     "contributors": [
         "Fabien Tréguer <fabien@spacelephant.org>",
-        "Pierre Seznec <piere.seznec@spacelephant.org>"
+        "Pierre Seznec <pierre.seznec@spacelephant.org>"
     ],
     "bin": {
         "uns": "./bin/run"
@@ -15,11 +15,13 @@
         "@oclif/command": "^1.5.11",
         "@oclif/plugin-help": "^2.1.6",
         "@oclif/plugin-warn-if-update-available": "^1.7.0",
-        "@uns/ts-sdk": "^2.0.0-alpha.0",
+        "@uns/ts-sdk": "^2.0.0-alpha.8",
         "cli-ux": "^5.3.1",
         "delay": "^4.1.0",
         "flat": "^4.1.0",
         "papaparse": "^5.0.2",
+        "patch-package": "^6.2.0",
+        "postinstall-postinstall": "^2.0.0",
         "promised-entropy": "^0.1.0",
         "request": "^2.88.0",
         "request-promise": "^4.2.4",
@@ -71,6 +73,7 @@
         ]
     },
     "scripts": {
+        "postinstall": "patch-package",
         "uns": "./bin/run",
         "prepublishOnly": "yarn build && yarn uglify",
         "prepack": "oclif-dev manifest && npm shrinkwrap",

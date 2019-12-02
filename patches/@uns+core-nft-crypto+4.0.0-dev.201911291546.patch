@@ -1,0 +1,166 @@
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.d.ts b/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.d.ts
+index 38d8dc7..5e93561 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.d.ts
+@@ -1,4 +1,4 @@
+-import { Utils } from "@arkecosystem/crypto";
++import { Utils } from "@uns/ark-crypto";
+ import { NftTransactionType } from "../enums";
+ import { NftUpdateBuilder } from "./nft-update";
+ export declare class NftMintBuilder extends NftUpdateBuilder {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.js b/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.js
+index d692a35..14f4e4f 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.js
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft-mint.js
+@@ -1,6 +1,6 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const enums_1 = require("../enums");
+ const nft_update_1 = require("./nft-update");
+ class NftMintBuilder extends nft_update_1.NftUpdateBuilder {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.d.ts b/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.d.ts
+index a190f4c..d0d873c 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.d.ts
+@@ -1,4 +1,4 @@
+-import { Utils } from "@arkecosystem/crypto";
++import { Utils } from "@uns/ark-crypto";
+ import { NftTransactionType } from "../enums";
+ import { NftBuilder } from "./nft";
+ export declare class NftTransferBuilder extends NftBuilder<NftTransferBuilder> {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.js b/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.js
+index 1851a23..23a850c 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.js
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft-transfer.js
+@@ -1,6 +1,6 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const enums_1 = require("../enums");
+ const nft_1 = require("./nft");
+ class NftTransferBuilder extends nft_1.NftBuilder {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.d.ts b/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.d.ts
+index 8d67679..e457af0 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.d.ts
+@@ -1,4 +1,4 @@
+-import { Utils } from "@arkecosystem/crypto";
++import { Utils } from "@uns/ark-crypto";
+ import { NftTransactionType } from "../enums";
+ import { AbstractNftUpdateBuilder } from "./abstract-nft-update";
+ export declare class NftUpdateBuilder extends AbstractNftUpdateBuilder<NftUpdateBuilder> {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.js b/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.js
+index f636442..9309ecd 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.js
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft-update.js
+@@ -1,6 +1,6 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const enums_1 = require("../enums");
+ const abstract_nft_update_1 = require("./abstract-nft-update");
+ class NftUpdateBuilder extends abstract_nft_update_1.AbstractNftUpdateBuilder {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft.d.ts b/node_modules/@uns/core-nft-crypto/dist/builders/nft.d.ts
+index 74f8f50..94490a6 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft.d.ts
+@@ -1,4 +1,4 @@
+-import { Interfaces, Transactions, Utils } from "@arkecosystem/crypto";
++import { Interfaces, Transactions, Utils } from "@uns/ark-crypto";
+ import { NftTransactionType } from "../enums";
+ export declare abstract class NftBuilder<T extends NftBuilder<T>> extends Transactions.TransactionBuilder<NftBuilder<T>> {
+     protected nftName: string;
+diff --git a/node_modules/@uns/core-nft-crypto/dist/builders/nft.js b/node_modules/@uns/core-nft-crypto/dist/builders/nft.js
+index 31440e5..0dd103c 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/builders/nft.js
++++ b/node_modules/@uns/core-nft-crypto/dist/builders/nft.js
+@@ -1,6 +1,6 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const enums_1 = require("../enums");
+ class NftBuilder extends crypto_1.Transactions.TransactionBuilder {
+     constructor(nftName, tokenId) {
+diff --git a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.d.ts b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.d.ts
+index 0adfda8..b865637 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.d.ts
+@@ -1,4 +1,4 @@
+-import { Transactions, Utils } from "@arkecosystem/crypto";
++import { Transactions, Utils } from "@uns/ark-crypto";
+ import { NftUpdateTransaction } from "./nft-update";
+ export declare class NftMintTransaction extends NftUpdateTransaction {
+     static typeGroup: number;
+diff --git a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.js b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.js
+index 001faf1..ed30108 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.js
++++ b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-mint.js
+@@ -1,6 +1,6 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const enums_1 = require("../enums");
+ const nft_update_1 = require("./nft-update");
+ const utils_1 = require("./utils");
+diff --git a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.d.ts b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.d.ts
+index 2a233dd..6ac3c95 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.d.ts
+@@ -1,4 +1,4 @@
+-import { Transactions, Utils } from "@arkecosystem/crypto";
++import { Transactions, Utils } from "@uns/ark-crypto";
+ import ByteBuffer from "bytebuffer";
+ export declare class NftTransferTransaction extends Transactions.Transaction {
+     static typeGroup: number;
+diff --git a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.js b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.js
+index 8c41648..ceb6788 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.js
++++ b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-transfer.js
+@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const bs58check_1 = __importDefault(require("bs58check"));
+ const bytebuffer_1 = __importDefault(require("bytebuffer"));
+ const enums_1 = require("../enums");
+diff --git a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.d.ts b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.d.ts
+index edaed09..a715765 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.d.ts
+@@ -1,4 +1,4 @@
+-import { Transactions, Utils } from "@arkecosystem/crypto";
++import { Transactions, Utils } from "@uns/ark-crypto";
+ import ByteBuffer from "bytebuffer";
+ export declare class NftUpdateTransaction extends Transactions.Transaction {
+     static typeGroup: number;
+diff --git a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.js b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.js
+index 1940bc3..c0d9bff 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.js
++++ b/node_modules/@uns/core-nft-crypto/dist/transactions/nft-update.js
+@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+     return (mod && mod.__esModule) ? mod : { "default": mod };
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const crypto_1 = require("@arkecosystem/crypto");
++const crypto_1 = require("@uns/ark-crypto");
+ const bytebuffer_1 = __importDefault(require("bytebuffer"));
+ const enums_1 = require("../enums");
+ const utils_1 = require("../utils");
+diff --git a/node_modules/@uns/core-nft-crypto/dist/utils.d.ts b/node_modules/@uns/core-nft-crypto/dist/utils.d.ts
+index 3eb5451..de54b31 100644
+--- a/node_modules/@uns/core-nft-crypto/dist/utils.d.ts
++++ b/node_modules/@uns/core-nft-crypto/dist/utils.d.ts
+@@ -1,4 +1,4 @@
+-import { Interfaces } from "@arkecosystem/crypto";
++import { Interfaces } from "@uns/ark-crypto";
+ import { Interfaces as NftInterfaces } from "./";
+ export declare const getNftName: (asset: Interfaces.ITransactionAsset) => string;
+ export declare const getCurrentNftAsset: (asset: Interfaces.ITransactionAsset) => NftInterfaces.INftAsset;

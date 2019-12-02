@@ -33,15 +33,20 @@ export abstract class UpdateProperties extends WriteCommand {
         // Check passphrase format
         checkPassphraseFormat(passphrase);
 
+        /**
+         * Read emitter's wallet nonce
+         */
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+
         const properties = this.getProperties(flags);
 
         // Update transaction
         const transactionStruct = createNFTUpdateTransaction(
-            this.client,
             flags.unikid,
             properties,
             flags.fee,
-            this.api.getVersion(),
+            // this.networkHash,
+            nonce,
             passphrase,
         );
 
