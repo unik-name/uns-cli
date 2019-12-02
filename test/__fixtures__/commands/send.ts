@@ -63,52 +63,102 @@ export const meta = {
 export const shouldExit = [
     {
         description: "Should exit with code 2 if amount is empty",
-        args: ["send", "--network", "devnet", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
+        args: ["send", "--network", "dalinet", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 2,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: false,
+        },
     },
     {
         description: "Should exit with code 2 if to flag is empty",
-        args: ["send", "--network", "devnet", "10", "--to"],
+        args: ["send", "--network", "dalinet", "10", "--to"],
         exitCode: 2,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: false,
+        },
     },
     {
         description: "Should exit with code 2 if to flag is absent",
-        args: ["send", "--network", "devnet", "10"],
+        args: ["send", "--network", "dalinet", "10"],
         exitCode: 2,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if amount is not a number",
-        args: ["send", "--network", "devnet", "abc", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
+        args: ["send", "--network", "dalinet", "abc", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if amount is not positive",
-        args: ["send", "--network", "devnet", "-10", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
+        args: ["send", "--network", "dalinet", "-10", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if amount has more than 8 digits after floating point",
-        args: ["send", "--network", "devnet", "10.123456789999", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
+        args: ["send", "--network", "dalinet", "10.123456789999", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if amount has more than one floating point",
-        args: ["send", "--network", "devnet", "10.000.00", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
+        args: ["send", "--network", "dalinet", "10.000.00", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 if amount contains thousands separator",
-        args: ["send", "--network", "devnet", "10,000.00", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
+        args: ["send", "--network", "dalinet", "10,000.00", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 recipient address is not a valid UNS address",
-        args: ["send", "--network", "devnet", "10", "--to", "DDwxZwjZQJUjeu7P"],
+        args: ["send", "--network", "dalinet", "10", "--to", "DDwxZwjZQJUjeu7P"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
     {
         description: "Should exit with code 1 recipient is not a valid @unik-name",
-        args: ["send", "--network", "devnet", "10", "--to", "@?*"],
+        args: ["send", "--network", "dalinet", "10", "--to", "@?*"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: true,
+        },
     },
 ];

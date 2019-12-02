@@ -16,7 +16,7 @@ export const WALLET_CHAINMETA = {
 };
 
 export const OUTPUT_CHAINMETA = {
-    network: "devnet",
+    network: "dalinet",
     node: getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url),
     date: WALLET_CHAINMETA.timestamp.human,
     height: WALLET_CHAINMETA.height,
@@ -25,17 +25,32 @@ export const OUTPUT_CHAINMETA = {
 export const shouldExit = [
     {
         description: "Should exit with code 2 if output format is not allowed for that command",
-        args: [commandName, "-n", "devnet", "-f", "table"],
+        args: [commandName, "-n", "dalinet", "-f", "table"],
         exitCode: 2,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: false,
+        },
     },
     {
         description: "Should exit with code 1 if UNIK from unikid is not found",
-        args: [commandName, "-n", "devnet", NOT_FOUND_UNIK_ID],
+        args: [commandName, "-n", "dalinet", NOT_FOUND_UNIK_ID],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: false,
+        },
     },
     {
         description: "Should exit with code 1 if ID argument doesn't correspond to valid passphrase",
-        args: [commandName, "-n", "devnet", "abc"],
+        args: [commandName, "-n", "dalinet", "abc"],
         exitCode: 1,
+        mocks: {
+            nodeConfiguration: true,
+            nodeConfigurationCrypto: true,
+            status: false,
+        },
     },
 ];
