@@ -702,10 +702,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uns/ark-crypto@^4.0.0-dev", "@uns/ark-crypto@^4.0.0-dev.201911281815":
-  version "4.0.0-dev.201911281815"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201911281815.tgz#037c632f685a0d7381a56f510ce7374747d67255"
-  integrity sha512-gJOMUnWlVCGDymSwqWBK1KuN0ho3NKuT4P9fsYg3W8YKOKCw4/ddaiE9nQ4+PmT7SAhjX+VKVf1S9+JPHsITQg==
+"@uns/ark-crypto@^4.0.0-dev.201911281815", "@uns/ark-crypto@^4.0.0-dev.201912031210", "@uns/ark-crypto@^4.0.0-dev.201912031602":
+  version "4.0.0-dev.201912031602"
+  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201912031602.tgz#2b98389cc50d4986a2d6e8116310ce8c5b66a00c"
+  integrity sha512-naq3JTRippfvq/cUVrJGsRwchyBS4ilTQoy9Nu/quWStJjfLjRNCG92ki+1f5F8XU0G1Moix7uqLh5RsipYd8Q==
   dependencies:
     "@arkecosystem/utils" "0.8.3"
     ajv "^6.10.2"
@@ -729,19 +729,19 @@
     wif "^2.0.6"
 
 "@uns/core-nft-crypto@^4.0.0-dev.201911281241":
-  version "4.0.0-dev.201911291546"
-  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-4.0.0-dev.201911291546.tgz#89179357c431f1e707c0ac70bc51bcb1384e9e13"
-  integrity sha512-3WPtZ3H0gvvS2nKmw03Ud/nZEII1LSQzWeLAjLT65GClwn6osP4sIW5R70ugNTnPWHht8BFmXLzMCoRysiwGAg==
+  version "4.0.0-dev.201912031213"
+  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-4.0.0-dev.201912031213.tgz#3f4e3895f62e0e17d28de7681449dfd7ccdbde32"
+  integrity sha512-A1qmK6ROybQxISX+46A0xyKUBjtdEx+ihIyLaRWHkuBs8WaopLIZNjaFuQ4S7lDM4N0iTb7tyYDtp+5gjUsoOQ==
   dependencies:
     "@arkecosystem/core-interfaces" "^2.6.0-next.4"
-    "@uns/ark-crypto" "^4.0.0-dev"
+    "@uns/ark-crypto" "^4.0.0-dev.201912031210"
 
 "@uns/crypto@^4.0.0-dev.201911281750":
-  version "4.0.0-dev.201911291544"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-4.0.0-dev.201911291544.tgz#aee06e1043ce7fe704346503589b7d16b565bbf5"
-  integrity sha512-v9/xlMOZUw4hwnDXEXGvLDTChaEYz4PCShG0oTyz5gSH5TwzkGndGvXCi86fcrFEH4Gyrx3vTm0tRu8QkTOrEg==
+  version "4.0.0-dev.201912031605"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-4.0.0-dev.201912031605.tgz#0d5c986caa915d1cdd5983cb18b04f053e6e7bc9"
+  integrity sha512-7aMU6qjoei6SANzFvpr/cV9SzTuLgH9V7IZMenGqgiKlFEnrDUqDsmaYssW/w8V/Siikw5H5048+hhpfUCkYlQ==
   dependencies:
-    "@uns/ark-crypto" "^4.0.0-dev"
+    "@uns/ark-crypto" "^4.0.0-dev.201912031602"
 
 "@uns/ts-sdk@^2.0.0-alpha.8":
   version "2.0.0-alpha.8"
@@ -4902,11 +4902,6 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
-
-postinstall-postinstall@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/postinstall-postinstall/-/postinstall-postinstall-2.0.0.tgz#7ba6711b4420575c4f561638836a81faad47f43f"
-  integrity sha512-3f6qWexsHiT4WKtZc5DRb0FPLilHtARi5KpY4fqban/DJNn8/YhZH8U7dVKVz51WbOxEnR31gV+qYQhvEdHtdQ==
 
 prelude-ls@~1.1.2:
   version "1.1.2"

@@ -21,7 +21,6 @@
         "flat": "^4.1.0",
         "papaparse": "^5.0.2",
         "patch-package": "^6.2.0",
-        "postinstall-postinstall": "^2.0.0",
         "promised-entropy": "^0.1.0",
         "request": "^2.88.0",
         "request-promise": "^4.2.4",
@@ -73,7 +72,6 @@
         ]
     },
     "scripts": {
-        "postinstall": "patch-package",
         "uns": "./bin/run",
         "prepublishOnly": "yarn build && yarn uglify",
         "prepack": "oclif-dev manifest && npm shrinkwrap",
