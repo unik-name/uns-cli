@@ -1,4 +1,4 @@
-import { Interfaces, Utils } from "@uns/ark-crypto";
+import { Interfaces, Transactions, Utils } from "@uns/ark-crypto";
 import { ChainMeta, getPropertyValue, PropertyValue, ResponseWithChainMeta, Unik, Wallet } from "@uns/ts-sdk";
 import delay from "delay";
 import * as req from "request-promise";
@@ -25,6 +25,11 @@ export class UNSCLIAPI {
      * @param transaction
      */
     public async sendTransaction(transaction: Interfaces.ITransactionData): Promise<any> {
+        const { error } = Transactions.Verifier.verifySchema(transaction);
+        if (error) {
+            throw new Error(error);
+        }
+
         const requestOptions = {
             body: {
                 transactions: [transaction],
