@@ -5,7 +5,9 @@
     "author": "Space Elephant",
     "contributors": [
         "Fabien Tréguer <fabien@spacelephant.org>",
-        "Pierre Seznec <pierre.seznec@spacelephant.org>"
+        "Pierre Seznec <pierre.seznec@spacelephant.org>",
+        "Damien Lecan <damien.lecan@spacelephant.org>",
+        "Guillaume Nicolas <guillaume.nicolas@spacelephant.org>"
     ],
     "bin": {
         "uns": "./bin/run"
