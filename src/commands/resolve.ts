@@ -4,11 +4,11 @@ import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { confirmedFlag, getNetworksListListForDescription } from "../utils";
 
-export class DidResolveCommand extends BaseCommand {
+export class ResolveCommand extends BaseCommand {
     public static description = "Resolve a decentralized identifier.";
 
     public static examples = [
-        `$ uns did-resolve --confirmed {number of confirmations}
+        `$ uns resolve --confirmed {number of confirmations}
         --network ${getNetworksListListForDescription()} --format {json|yaml|table|raw} "@bob?phone"`,
     ];
 
@@ -30,7 +30,7 @@ export class DidResolveCommand extends BaseCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return DidResolveCommand;
+        return ResolveCommand;
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
