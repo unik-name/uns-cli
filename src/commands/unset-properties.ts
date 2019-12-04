@@ -1,9 +1,11 @@
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { UpdateProperties } from "../updatePropertiesCommand";
-import { getNetworksListListForDescription, propertyKeyFlag } from "../utils";
+import { getNetworksListListForDescription, isDevMode, propertyKeyFlag } from "../utils";
 
 export class UnsetProperties extends UpdateProperties {
+    public static hidden = !isDevMode();
+
     public static description = "Unset properties of UNIK token.";
 
     public static examples = [

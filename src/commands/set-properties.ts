@@ -2,11 +2,13 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { UpdateProperties as UpdatePropertiesCommand } from "../updatePropertiesCommand";
-import { getNetworksListListForDescription } from "../utils";
+import { getNetworksListListForDescription, isDevMode } from "../utils";
 
 const KEY_VALUE_SEPARATOR = ":";
 
 export class SetPropertiesCommand extends UpdatePropertiesCommand {
+    public static hidden = !isDevMode();
+
     public static description = "Set (add or update) properties of UNIK token.";
 
     public static examples = [
