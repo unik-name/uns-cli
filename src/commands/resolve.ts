@@ -2,9 +2,10 @@ import { DidResolution, didResolve } from "@uns/ts-sdk";
 import flatten from "flat";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import { confirmedFlag, getNetworksListListForDescription } from "../utils";
+import { ReadCommand } from "../readCommand";
+import { confirmedFlag, getChainContext, getNetworksListListForDescription } from "../utils";
 
-export class ResolveCommand extends BaseCommand {
+export class ResolveCommand extends ReadCommand {
     public static description = "Resolve a decentralized identifier.";
 
     public static examples = [
@@ -13,7 +14,7 @@ export class ResolveCommand extends BaseCommand {
     ];
 
     public static flags = {
-        ...BaseCommand.baseFlags,
+        ...ReadCommand.flags,
         ...confirmedFlag,
     };
 
@@ -56,15 +57,25 @@ export class ResolveCommand extends BaseCommand {
                 if (resolved.confirmations && resolved.confirmations < flags.confirmed) {
                     this.warn("DID has not reach the requested confirmation level.");
                 } else {
-                    delete resolved.chainmeta;
-                    delete resolved.confirmations;
+                    const resolvedResult: any = {
+                        data: resolved.data,
+                    };
 
-                    if (flags.format === OUTPUT_FORMAT.raw.key && resolved.data instanceof Object) {
-                        const flattenResult = flatten(resolved.data);
+                    if (flags.chainmeta && resolved.chainmeta) {
+                        const metas = getChainContext(
+                            resolved.chainmeta,
+                            this.api.network.name,
+                            this.api.getCurrentNode(),
+                        );
+                        resolvedResult.chainmeta = metas.chainmeta;
+                    }
+
+                    if (flags.format === OUTPUT_FORMAT.raw.key && resolvedResult.data instanceof Object) {
+                        const flattenResult = flatten(resolvedResult.data);
                         this.log("", flattenResult);
                         return flattenResult;
                     }
-                    return resolved;
+                    return resolvedResult;
                 }
             }
         }
