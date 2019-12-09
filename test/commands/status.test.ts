@@ -9,14 +9,14 @@ import {
 
 const applyTestCase = (testCase: any) => {
     test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-        api.get("/blockchain/").reply(200, {
+        api.get("/blockchain").reply(200, {
             data: {
                 supply: 2119999400000000,
             },
         }),
     )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get("/uniks/?limit=1").reply(200, {
+            api.get("/uniks?limit=1").reply(200, {
                 meta: {
                     totalCount: 1,
                 },
@@ -32,7 +32,10 @@ const applyTestCase = (testCase: any) => {
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get(`/node/configuration`).twice().reply(200, NODE_CONFIGURATION),
+            api
+                .get(`/node/configuration`)
+                .twice()
+                .reply(200, NODE_CONFIGURATION),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api
