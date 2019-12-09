@@ -1,4 +1,12 @@
-import { BlockchainState, NodeConfiguration, NodeStatus, Response } from "@uns/ts-sdk";
+import {
+    BlockchainState,
+    getNftsStatuses,
+    INftStatus,
+    NodeConfiguration,
+    NodeStatus,
+    Response,
+    ResponseWithChainMeta,
+} from "@uns/ts-sdk";
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
 import { fromSatoshi, getNetworkNameByNetHash, getNetworksListListForDescription } from "../utils";
@@ -13,7 +21,7 @@ export class StatusCommand extends BaseCommand {
     };
 
     protected getAvailableFormats(): Formater[] {
-        return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml, OUTPUT_FORMAT.table];
+        return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
     }
 
     protected getCommand(): typeof BaseCommand {
@@ -24,12 +32,12 @@ export class StatusCommand extends BaseCommand {
         const blockchainStatus: BlockchainState | undefined = (await this.unsClient.blockchain.get()).data;
 
         // Parallel requests + destructurating alltogether
-        const [numberOfUniks, { data: nodeStatus }, { data: nodeConf }]: [
-            number,
+        const [nftStatus, { data: nodeStatus }, { data: nodeConf }]: [
+            ResponseWithChainMeta<INftStatus[]>,
             Response<NodeStatus>,
             Response<NodeConfiguration>,
         ] = await Promise.all([
-            this.unsClient.unik.totalCount(),
+            getNftsStatuses(this.api.network.name),
             this.unsClient.node.status(),
             this.unsClient.node.configuration(),
         ]);
@@ -52,7 +60,7 @@ export class StatusCommand extends BaseCommand {
             network: networkName,
             totalTokenSupply: fromSatoshi(blockchainStatus.supply),
             tokenSymbol: nodeConf.symbol,
-            numberOfUniks,
+            NFTs: nftStatus?.data,
             activeDelegates: nodeConf.constants.activeDelegates,
             lastBlockUrl: blockUrl,
         };
