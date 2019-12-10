@@ -93,7 +93,7 @@ export class CreateUnikCommand extends WriteCommand {
         const awaitConfirmation: number = flags["await-confirmation"];
         if (awaitConfirmation === 0) {
             this.info(`Transaction accepted by the network: ${transaction.id}`);
-            this.stop(
+            this.warn(
                 "Transaction not confirmed yet, still in the pool. Track status of the transaction in the chain explorer.",
             );
             return {
