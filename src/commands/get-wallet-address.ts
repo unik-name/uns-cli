@@ -7,7 +7,7 @@ export class GetWalletAddressCommand extends ReadCommand {
     public static description = "Create UNS wallet";
 
     public static examples = [
-        `$ uns get-wallet-address 5380aed31fde9cf6a07379bd450f5cc99c5da96a50bfe6db5ab7f117db3d2b53 --network devnet --format yaml --verbose`,
+        `$ uns get-wallet-address 5380aed31fde9cf6a07379bd450f5cc99c5da96a50bfe6db5ab7f117db3d2b53 --network sandbox --format yaml --verbose`,
     ];
 
     public static flags = {

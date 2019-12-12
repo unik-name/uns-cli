@@ -703,9 +703,9 @@
     "@types/yargs-parser" "*"
 
 "@uns/ark-crypto@^4.0.0-dev.201911281815", "@uns/ark-crypto@^4.0.0-dev.201912031210", "@uns/ark-crypto@^4.0.0-dev.201912031602":
-  version "4.0.0-dev.201912031602"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201912031602.tgz#2b98389cc50d4986a2d6e8116310ce8c5b66a00c"
-  integrity sha512-naq3JTRippfvq/cUVrJGsRwchyBS4ilTQoy9Nu/quWStJjfLjRNCG92ki+1f5F8XU0G1Moix7uqLh5RsipYd8Q==
+  version "4.0.0-dev.201912121109"
+  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.0.0-dev.201912121109.tgz#3c910ed1bb5024f5b2d03af12ced3e7c5958e6a8"
+  integrity sha512-FJIbmNB4hhfjiT7i3iFTrG1bEMjFRUXi2ulNdUtkz0yWTqlUoH/YZ3b0BEBhGSfm5DiX3lilkBQAQ2SqPqKJTQ==
   dependencies:
     "@arkecosystem/utils" "0.8.3"
     ajv "^6.10.2"
@@ -743,7 +743,7 @@
   dependencies:
     "@uns/ark-crypto" "^4.0.0-dev.201912031602"
 
-"@uns/ts-sdk@^2.0.0-dev":
+"@uns/ts-sdk@^2.0.0-dev.201912120952":
   version "2.0.0-dev.201912120952"
   resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.0.0-dev.201912120952.tgz#21d81b1dab9cc4b8503fbd9983075c208a410669"
   integrity sha512-3VPfACqxbJQbvq4XKK0c/QBsZdYnrJLej1hCrnvVm6kzXHGt0c6O+ZSyXzUFQufpYC7JETOcX2fxCLVpatDPHA==
@@ -1123,14 +1123,14 @@ bcrypt-pbkdf@^1.0.0:
     tweetnacl "^0.14.3"
 
 bcrypto@^4.1.0:
-  version "4.2.9"
-  resolved "https://registry.yarnpkg.com/bcrypto/-/bcrypto-4.2.9.tgz#d57794196c1c230d20bb12319387f733452a6a53"
-  integrity sha512-upd5xGkB3REZwOOM2wGgUrc29HFQcm+mbXYLN8fKI2GcnWiCXmDU7f0wzr/ye2o1t0smhX3ddSzAqXIYEXehIw==
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/bcrypto/-/bcrypto-4.3.0.tgz#e4fe1a237f5550d9dec7e5b7e13bda07080f0140"
+  integrity sha512-pxW9QssTb+lCkxbVGFIQQV4sFCR2ODenAL/joYhlgCqL/Jst1ftM4AQiOpPeE+AaEtxOwuN2viUx5+Q/DX6fEQ==
   dependencies:
     bsert "~0.0.10"
     bufio "~1.0.6"
     loady "~0.0.1"
-    nan "^2.13.2"
+    nan "^2.14.0"
 
 bindings@^1.3.0:
   version "1.5.0"
@@ -4308,7 +4308,7 @@ mute-stream@0.0.7:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
   integrity sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=
 
-nan@^2.12.1, nan@^2.13.1, nan@^2.13.2:
+nan@^2.12.1, nan@^2.13.1, nan@^2.13.2, nan@^2.14.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
@@ -5873,9 +5873,9 @@ tiny-secp256k1@^1.1.0:
     nan "^2.13.2"
 
 tlds@^1.203.0:
-  version "1.203.1"
-  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.203.1.tgz#4dc9b02f53de3315bc98b80665e13de3edfc1dfc"
-  integrity sha512-7MUlYyGJ6rSitEZ3r1Q1QNV8uSIzapS8SmmhSusBuIc7uIxPPwsKllEP0GRp1NS6Ik6F+fRZvnjDWm3ecv2hDw==
+  version "1.207.0"
+  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.207.0.tgz#459264e644cf63ddc0965fece3898913286b1afd"
+  integrity sha512-k7d7Q1LqjtAvhtEOs3yN14EabsNO8ZCoY6RESSJDB9lst3bTx3as/m1UuAeCKzYxiyhR1qq72ZPhpSf+qlqiwg==
 
 tmp@^0.0.33:
   version "0.0.33"

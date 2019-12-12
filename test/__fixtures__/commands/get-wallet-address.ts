@@ -4,7 +4,7 @@ import { UNS_CLIENT_FOR_TESTS } from "../commons";
 const commandName = "get-wallet-address";
 
 export const NOT_FOUND_UNIK_ID = "e1615becbd39ad96344919dffa7b972f293b0a3973b05145fd6d0a1a20cac169";
-export const WALLET_ADDRESS = "DTRnY3JjFpAmCX1nFtF8M4v8X7WdvPYRxa";
+export const WALLET_ADDRESS = "STRnY3JjFpAmCX1nFtF8M4v8X7WdvPYRxa";
 export const WALLET_PUBKEY = "03898f61b18cbddb6a8698897b66f519a44c8473beef289c4ddbfd4169db71a842";
 export const WALLET_CHAINMETA = {
     height: "415890",

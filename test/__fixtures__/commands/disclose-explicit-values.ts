@@ -10,12 +10,12 @@ export const transaction = {
 export const shouldExit = [
     {
         description: "Should exit with code 2 if no explicit value passed",
-        args: [commandName, "--network", "devnet", "--unikid", unikId],
+        args: [commandName, "--network", "sandbox", "--unikid", unikId],
         exitCode: 2,
     },
     {
         description: "Should exit with code 2 if no unikid value passed",
-        args: [commandName, "--network", "devnet", "-e", "unikname"],
+        args: [commandName, "--network", "sandbox", "-e", "unikname"],
         exitCode: 2,
     },
 ];
