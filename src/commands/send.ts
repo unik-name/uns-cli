@@ -12,7 +12,7 @@ export class SendCommand extends WriteCommand {
     public static description = "Send owned UNS protocol tokens to another wallet.";
 
     public static examples = [
-        `$ uns send 1237.77 --to DNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 --network devnet --format json`,
+        `$ uns send 1237.77 --to SNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 --network sandbox --format json`,
         `$ uns send 1237.77 --to "@bob"`,
     ];
 

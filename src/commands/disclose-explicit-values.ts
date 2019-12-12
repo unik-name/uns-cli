@@ -17,7 +17,7 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
 
     public static examples = [
-        `$ uns disclose-explicit-values --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob b0b --network devnet`,
+        `$ uns disclose-explicit-values --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob b0b --network sandbox`,
     ];
 
     public static flags = {

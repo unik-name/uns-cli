@@ -7,7 +7,7 @@
 //   "network": "devnet"
 // }
 export const SIMPLE_SIGN_TRANSACTION_ID: string = "393aeab4c96a8892ecd63e32bbc117f4404a2cb5f7cdfdc8c1757271eb614a2b";
-export const SIMPLE_SIGN_WALLET_ID = "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA";
+export const SIMPLE_SIGN_WALLET_ID = "SDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA";
 export const SIMPLE_SIGN_TRANSACTION_TIMESTAMP: number = 1234493;
 
 // {
@@ -20,7 +20,7 @@ export const SIMPLE_SIGN_TRANSACTION_TIMESTAMP: number = 1234493;
 //   "network": "devnet"
 // }
 export const SECOND_SIGN_TRANSACTION_ID: string = "393aeab4c96a8892ecd63e32bbc117f4404a2cb5f7cdfdc8c1757271eb614a2b";
-export const SECOND_SIGN_WALLET_ID = "DUC657EFcecBi2ZnSr7N6AnQMmogce43r1";
+export const SECOND_SIGN_WALLET_ID = "SUC657EFcecBi2ZnSr7N6AnQMmogce43r1";
 export const SECOND_SIGN_TRANSACTION_TIMESTAMP: number = 1234493;
 
 // TRANSACTIONS

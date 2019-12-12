@@ -2,11 +2,11 @@ import { CommandOutput, OUTPUT_FORMAT } from "../../src/formater";
 
 const formatInput: CommandOutput = {
     Height: 157555,
-    Network: "devnet",
+    Network: "sandbox",
     "Supply DUNS": "21315110 DUNS",
     "Supply UNIKs": "140 UNIKs",
-    "Active delegates": 2,
-    "Last block": "https://explorer.devnet.uns.network/block/157555",
+    "Active delegates": 23,
+    "Last block": "https://explorer.sandbox.uns.network/block/157555",
 };
 
 describe("Formaters", () => {
@@ -14,11 +14,11 @@ describe("Formaters", () => {
         const formatOutput = OUTPUT_FORMAT.yaml.action(formatInput);
         // tslint:disable-next-line
         const expectedOutput = `Height: 157555
-Network: devnet
+Network: sandbox
 Supply DUNS: 21315110 DUNS
 Supply UNIKs: 140 UNIKs
-Active delegates: 2
-Last block: https://explorer.devnet.uns.network/block/157555`;
+Active delegates: 23
+Last block: https://explorer.sandbox.uns.network/block/157555`;
         expect(formatOutput).toEqual(expectedOutput);
     });
 
@@ -27,11 +27,11 @@ Last block: https://explorer.devnet.uns.network/block/157555`;
         // tslint:disable-next-line
         expect(formatOutput).toEqual(
             `157555
-devnet
+sandbox
 21315110 DUNS
 140 UNIKs
-2
-https://explorer.devnet.uns.network/block/157555`,
+23
+https://explorer.sandbox.uns.network/block/157555`,
         );
     });
 
@@ -41,11 +41,11 @@ https://explorer.devnet.uns.network/block/157555`,
         expect(formatOutput).toEqual(
             `{
   "Height": 157555,
-  "Network": "devnet",
+  "Network": "sandbox",
   "Supply DUNS": "21315110 DUNS",
   "Supply UNIKs": "140 UNIKs",
-  "Active delegates": 2,
-  "Last block": "https://explorer.devnet.uns.network/block/157555"
+  "Active delegates": 23,
+  "Last block": "https://explorer.sandbox.uns.network/block/157555"
 }`,
         );
     });
@@ -55,7 +55,7 @@ https://explorer.devnet.uns.network/block/157555`,
         // tslint:disable-next-line
         expect(formatOutput).toStrictEqual(
             `Height;Network;Supply DUNS;Supply UNIKs;Active delegates;Last block
-157555;devnet;21315110 DUNS;140 UNIKs;2;https://explorer.devnet.uns.network/block/157555`,
+157555;sandbox;21315110 DUNS;140 UNIKs;23;https://explorer.sandbox.uns.network/block/157555`,
         );
     });
 });

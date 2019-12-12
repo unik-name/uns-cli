@@ -13,9 +13,9 @@ describe("command-utils", () => {
             }
         });
 
-        it("should succeed and return devnet", () => {
-            const network: string = getNetworkNameByNetHash(Networks.devnet.network.nethash);
-            expect(network).toEqual("devnet");
+        it("should succeed and return sandbox", () => {
+            const network: string = getNetworkNameByNetHash(Networks.sandbox.network.nethash);
+            expect(network).toEqual("sandbox");
         });
     });
 });

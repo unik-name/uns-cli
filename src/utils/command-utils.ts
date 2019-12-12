@@ -17,7 +17,7 @@ export const isDevMode = () => {
 };
 
 const getDisableNetworkList = (): string[] => {
-    const networkList = ["unitnet", "mainnet", "testnet"];
+    const networkList = ["unitnet", "mainnet", "testnet", "devnet"];
     if (!isDevMode()) {
         networkList.push("dalinet");
     }
@@ -214,7 +214,7 @@ export function getUrlOrigin(urlString: string) {
     return fullUrl.origin;
 }
 
-type OneOfAllNetworks = "devnet" | "dalinet" | "mainnet" | "unitnet" | "testnet";
+type OneOfAllNetworks = "devnet" | "dalinet" | "mainnet" | "unitnet" | "testnet" | "sandbox";
 
 export function getNetworkNameByNetHash(nethash: string): string {
     const selectedNetworks: string[] = Object.keys(Networks).filter((network: string) => {
