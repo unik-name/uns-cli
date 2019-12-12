@@ -47,6 +47,16 @@ yarn link
 uns COMMAND ARGUMENTS FLAGS
 ```
 
+### Plugins
+
+#### Use Auto-complete plugin
+
+Follow instructions after launching the following command:
+
+```
+uns autocomplete
+```
+
 ### Test
 
 Please update and launch tests if you purpose a pull-request.
