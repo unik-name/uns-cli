@@ -1,27 +1,28 @@
 import { flags } from "@oclif/command";
 import { ChainMeta, Wallet } from "@uns/ts-sdk";
-import { BaseCommand } from "../baseCommand";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
-import { ReadCommand } from "../readCommand";
-import { Token, WithChainmeta } from "../types";
-import { fromSatoshi, getChainContext, getNetworksListListForDescription } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
+import { ReadCommand } from "../../readCommand";
+import { Token, WithChainmeta } from "../../types";
+import { fromSatoshi, getChainContext, getNetworksListListForDescription } from "../../utils";
 
-export class ReadWalletCommand extends ReadCommand {
-    public static description = "Read current data of a specified wallet, ic. balance";
+export class CryptoAccountReadCommand extends ReadCommand {
+    public static description = "Read current data of a specified crypto account, ic. balance";
 
     public static examples = [
-        `$ uns read-wallet {publicKey|address} --listunik --network ${getNetworksListListForDescription()} --format {json|yaml}`,
+        `$ uns cryptoaccount:read {publicKey|address} --listunik --network ${getNetworksListListForDescription()} --format {json|yaml}`,
     ];
 
     public static flags = {
         ...ReadCommand.flags,
-        listunik: flags.boolean({ description: "List UNIK tokens owned by the wallet, if any." }),
+        listunik: flags.boolean({ description: "List UNIK tokens owned by the crypto account, if any." }),
     };
 
     public static args = [
         {
-            name: "walletId",
-            description: "The ID of the wallet. Can be either the publicKey or the address of the wallet.",
+            name: "cryptoAccountId",
+            description:
+                "The ID of the crypto account. Can be either the publicKey or the address of the crypto account.",
             required: true,
         },
     ];
@@ -31,11 +32,11 @@ export class ReadWalletCommand extends ReadCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return ReadWalletCommand;
+        return CryptoAccountReadCommand;
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<NestedCommandOutput> {
-        const walletId = args?.walletId;
+        const walletId = args?.cryptoAccountId;
         // 'Destructuring + types' together 🤐
         // Not so pretty
         const [wallet, tokens]: [

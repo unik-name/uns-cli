@@ -1,15 +1,15 @@
 import { generateMnemonic } from "bip39";
 import { createHash, randomBytes } from "crypto";
 import * as MoreEntropy from "promised-entropy";
-import { BaseCommand } from "../baseCommand";
-import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
-import { getNetworksListListForDescription, getWalletFromPassphrase } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { CommandOutput, Formater, OUTPUT_FORMAT } from "../../formater";
+import { getNetworksListListForDescription, getWalletFromPassphrase } from "../../utils";
 
-export class CreateWalletCommand extends BaseCommand {
-    public static description = "Create UNS wallet";
+export class CryptoAccountCreateCommand extends BaseCommand {
+    public static description = "Create UNS Crypto Account";
 
     public static examples = [
-        `$ uns create-wallet --network ${getNetworksListListForDescription()}
+        `$ uns cryptoaccount:create --network ${getNetworksListListForDescription()}
         --format {json|yaml} --verbose`,
     ];
 
@@ -22,7 +22,7 @@ export class CreateWalletCommand extends BaseCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return CreateWalletCommand;
+        return CryptoAccountCreateCommand;
     }
 
     protected async do(): Promise<CommandOutput> {

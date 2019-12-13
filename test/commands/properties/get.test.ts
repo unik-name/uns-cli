@@ -9,16 +9,18 @@ import {
     TRANSACTION_RESULT,
     UNIK_ID,
     UNIK_RESULT,
-} from "../__fixtures__/commands/get-property-value";
+} from "../../__fixtures__/commands/properties/get";
 import {
     applyExitCase,
     NODE_CONFIGURATION,
     NODE_CONFIGURATION_CRYPTO,
     NODE_STATUS,
     UNS_CLIENT_FOR_TESTS,
-} from "../__fixtures__/commons";
+} from "../../__fixtures__/commons";
 
-describe("get-property-value command", () => {
+const commandName: string = "properties:get";
+
+describe(`${commandName} command`, () => {
     beforeEach(() => {
         process.env.DEV_MODE = "true";
     });
@@ -44,7 +46,7 @@ describe("get-property-value command", () => {
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
                 api.get(`/node/status`).reply(200, NODE_STATUS),
             )
-            .command(["get-property-value", "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
+            .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
             .exit(1)
             // tslint:disable-next-line:no-empty
             .it("Should exit with data consistency error", _ => {});
@@ -70,7 +72,7 @@ describe("get-property-value command", () => {
                 api.get(`/node/status`).reply(200, NODE_STATUS),
             )
             .stdout()
-            .command(["get-property-value", "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type"])
+            .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type"])
             .it("Should retrieve property type without chainmeta", ctx => {
                 expect(ctx.stdout).to.equal(EXPECTED_PROPERTY_OUTPUT);
             });
@@ -94,7 +96,7 @@ describe("get-property-value command", () => {
                 api.get(`/node/status`).reply(200, NODE_STATUS),
             )
             .stdout()
-            .command(["get-property-value", "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
+            .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
             .it("Should retrieve property type with chainmeta", ctx => {
                 expect(ctx.stdout).to.equal(EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT);
             });

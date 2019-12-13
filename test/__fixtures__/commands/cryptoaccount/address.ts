@@ -1,7 +1,7 @@
-import { getUrlOrigin } from "../../../src/utils";
-import { UNS_CLIENT_FOR_TESTS } from "../commons";
+import { getUrlOrigin } from "../../../../src/utils";
+import { UNS_CLIENT_FOR_TESTS } from "../../commons";
 
-const commandName = "get-wallet-address";
+const commandName = "cryptoaccount:address";
 
 export const NOT_FOUND_UNIK_ID = "e1615becbd39ad96344919dffa7b972f293b0a3973b05145fd6d0a1a20cac169";
 export const WALLET_ADDRESS = "STRnY3JjFpAmCX1nFtF8M4v8X7WdvPYRxa";

@@ -1,4 +1,6 @@
-import { getMeta } from "../commons";
+import { getMeta } from "../../commons";
+
+const commandName: string = "properties:get";
 
 export const UNIK_ID = "51615becbd39ad96344919dffa7b972f293b0a3973b05145fd6d0a1a20cac169";
 const WALLET_ADDRESS: string = "DQLiVPs2b6rHYCANjVk7vWVfQqdo5rLvDU";
@@ -68,18 +70,7 @@ export const EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT = `{
 export const shouldExit = [
     {
         description: "Should exit with code 2 if output format is not allowed for that command",
-        args: [
-            "get-property-value",
-            "-n",
-            "dalinet",
-            "--unikid",
-            UNIK_ID,
-            "-k",
-            "property",
-            "-f",
-            "table",
-            "--verbose",
-        ],
+        args: [commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "property", "-f", "table", "--verbose"],
         exitCode: 2,
         mocks: {
             nodeConfiguration: true,
@@ -89,7 +80,7 @@ export const shouldExit = [
     },
     {
         description: "Should exit with code 1 if unikid doesn't match",
-        args: ["get-property-value", "-n", "dalinet", "--unikid", "123", "-k", "type"],
+        args: [commandName, "-n", "dalinet", "--unikid", "123", "-k", "type"],
         exitCode: 1,
         mocks: {
             nodeConfiguration: true,
@@ -99,7 +90,7 @@ export const shouldExit = [
     },
     {
         description: "Should exit with code 1 if property doesn't match",
-        args: ["get-property-value", "-n", "dalinet", "--unikid", UNIK_ID, "-k", "pr@perty"],
+        args: [commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "pr@perty"],
         exitCode: 1,
         mocks: {
             nodeConfiguration: true,

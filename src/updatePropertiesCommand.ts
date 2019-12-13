@@ -9,7 +9,7 @@ import {
 } from "./utils";
 import { WriteCommand } from "./writeCommand";
 
-export abstract class UpdateProperties extends WriteCommand {
+export abstract class PropertiesUpdateCommand extends WriteCommand {
     protected static getUpdateCommandFlags(fees?: number) {
         return {
             ...WriteCommand.getWriteCommandFlags(fees),

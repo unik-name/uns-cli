@@ -1,12 +1,12 @@
-import { BaseCommand } from "../baseCommand";
-import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
-import { checkUnikIdFormat, confirmedFlag, getNetworksListListForDescription, unikidFlag } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
+import { checkUnikIdFormat, confirmedFlag, getNetworksListListForDescription, unikidFlag } from "../../utils";
 
-export class GetPropertiesCommand extends BaseCommand {
+export class PropertiesListCommand extends BaseCommand {
     public static description = "Get properties of UNIK token.";
 
     public static examples = [
-        `$ uns get-properties --unikid {unikId} [--confirmed {number of confirmations}]
+        `$ uns properties:list --unikid {unikId} [--confirmed {number of confirmations}]
         --network ${getNetworksListListForDescription()} --format {json|yaml|table|raw}`,
     ];
 
@@ -21,7 +21,7 @@ export class GetPropertiesCommand extends BaseCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return GetPropertiesCommand;
+        return PropertiesListCommand;
     }
 
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput | CommandOutput[]> {
