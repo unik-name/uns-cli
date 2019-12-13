@@ -8,16 +8,22 @@ import {
     Response,
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
-import { BaseCommand } from "../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../formater";
-import { checkUnikIdFormat, createDiscloseTransaction, explicitValueFlag, passphraseFlag, unikidFlag } from "../utils";
-import { WriteCommand } from "../writeCommand";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, OUTPUT_FORMAT } from "../../formater";
+import {
+    checkUnikIdFormat,
+    createDiscloseTransaction,
+    explicitValueFlag,
+    passphraseFlag,
+    unikidFlag,
+} from "../../utils";
+import { WriteCommand } from "../../writeCommand";
 
-export class DiscloseExplicitValuesCommand extends WriteCommand {
+export class UnikDiscloseCommand extends WriteCommand {
     public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
 
     public static examples = [
-        `$ uns disclose-explicit-values --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob b0b --network sandbox`,
+        `$ uns unik:disclose --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob b0b --network sandbox`,
     ];
 
     public static flags = {
@@ -59,7 +65,7 @@ export class DiscloseExplicitValuesCommand extends WriteCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return DiscloseExplicitValuesCommand;
+        return UnikDiscloseCommand;
     }
 
     protected async do(flags: Record<string, any>): Promise<any> {

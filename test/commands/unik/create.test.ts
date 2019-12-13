@@ -12,14 +12,14 @@ import {
     WALLET,
     WALLET_CHAINMETA,
     WALLET_ID,
-} from "../__fixtures__/commands/create-unik";
+} from "../../__fixtures__/commands/unik/create";
 import {
     applyExitCase,
     NODE_CONFIGURATION,
     NODE_CONFIGURATION_CRYPTO,
     NODE_STATUS,
     UNS_CLIENT_FOR_TESTS,
-} from "../__fixtures__/commons";
+} from "../../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
     test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>

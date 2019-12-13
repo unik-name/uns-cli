@@ -70,6 +70,17 @@
     "oclif": {
         "commands": "./dist/commands",
         "bin": "uns",
+        "topics": {
+            "unik": {
+                "description": "Manage UNIK (`uns unik` to display UNIK commands)"
+            },
+            "cryptoaccount": {
+                "description": "Manage Crypto Account (`uns cryptoaccount` to display Crypto Account commands)"
+            },
+            "properties": {
+                "description": "Manage UNIK properties (`uns properties` to display UNIK properties commands)"
+            }
+        },
         "plugins": [
             "@oclif/plugin-help",
             "@oclif/plugin-warn-if-update-available",

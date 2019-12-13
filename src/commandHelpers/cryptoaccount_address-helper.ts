@@ -1,5 +1,5 @@
 import { ChainMeta } from "@uns/ts-sdk";
-import { GetWalletAddressCommand } from "../commands/get-wallet-address";
+import { CryptoAccountAddressCommand } from "../commands/cryptoaccount/address";
 import { OUTPUT_FORMAT } from "../formater";
 import {
     checkPassphraseFormat,
@@ -11,7 +11,7 @@ import {
 } from "../utils";
 import { CommandHelper } from "./command-helper";
 
-export class GetWalletAddressCommandHelper extends CommandHelper<GetWalletAddressCommand> {
+export class GetWalletAddressCommandHelper extends CommandHelper<CryptoAccountAddressCommand> {
     public async getWalletInformations(id: string, format: string, displayChainmeta: boolean) {
         let address: string;
         let publicKey: string | undefined;

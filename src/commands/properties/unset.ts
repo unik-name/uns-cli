@@ -1,20 +1,20 @@
-import { BaseCommand } from "../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../formater";
-import { UpdateProperties } from "../updatePropertiesCommand";
-import { getNetworksListListForDescription, isDevMode, propertyKeyFlag } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, OUTPUT_FORMAT } from "../../formater";
+import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
+import { getNetworksListListForDescription, isDevMode, propertyKeyFlag } from "../../utils";
 
-export class UnsetProperties extends UpdateProperties {
+export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
     public static hidden = !isDevMode();
 
     public static description = "Unset properties of UNIK token.";
 
     public static examples = [
-        `$ uns unset-properties --network ${getNetworksListListForDescription()} --unkid {unikId}
+        `$ uns properties:unset --network ${getNetworksListListForDescription()} --unkid {unikId}
         -k prop1 -k prop2 --format {json|yaml} --verbose`,
     ];
 
     public static flags = {
-        ...UpdateProperties.getUpdateCommandFlags(),
+        ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         ...propertyKeyFlag("Key of the property to unset. (multiple occurrences)"),
     };
 
@@ -23,7 +23,7 @@ export class UnsetProperties extends UpdateProperties {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return UnsetProperties;
+        return PropertiesUnsetCommand;
     }
 
     protected getProperties(flags: Record<string, any>): { [_: string]: string } {

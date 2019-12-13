@@ -162,12 +162,12 @@ function promptHidden(text: string): Promise<string> {
 }
 
 export const getPassphraseFromUser = (): Promise<string> => {
-    return promptHidden("Enter your wallet passphrase (12 words phrase)");
+    return promptHidden("Enter your crypto account passphrase (12 words phrase)");
 };
 
 export const getSecondPassphraseFromUser = (): Promise<string> => {
     return promptHidden(
-        "You have associated a second passphrase to your wallet. This second passphrase is needed to validate this transaction.\nPlease, enter it (12 words phrase)",
+        "You have associated a second passphrase to your crypto account. This second passphrase is needed to validate this transaction.\nPlease, enter it (12 words phrase)",
     );
 };
 

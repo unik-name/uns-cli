@@ -1,14 +1,14 @@
 import { PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
-import { BaseCommand } from "../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../formater";
-import { ReadCommand } from "../readCommand";
-import { checkConfirmations, checkUnikIdFormat, confirmedFlag, getChainContext } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, OUTPUT_FORMAT } from "../../formater";
+import { ReadCommand } from "../../readCommand";
+import { checkConfirmations, checkUnikIdFormat, confirmedFlag, getChainContext } from "../../utils";
 
-export class IsDisclosedCommand extends ReadCommand {
+export class UnikIsDisclosedCommand extends ReadCommand {
     public static description = "Check if UNIK has one or more disclosed explicit values.";
 
     public static examples = [
-        `$ uns is-disclosed -n sandbox 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b`,
+        `$ uns unik:is-disclosed -n sandbox 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b`,
     ];
 
     public static args = [
@@ -29,7 +29,7 @@ export class IsDisclosedCommand extends ReadCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return IsDisclosedCommand;
+        return UnikIsDisclosedCommand;
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {

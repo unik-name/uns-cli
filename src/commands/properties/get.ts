@@ -1,6 +1,6 @@
-import { BaseCommand } from "../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../formater";
-import { ReadCommand } from "../readCommand";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, OUTPUT_FORMAT } from "../../formater";
+import { ReadCommand } from "../../readCommand";
 import {
     checkConfirmations,
     checkUnikIdFormat,
@@ -10,13 +10,13 @@ import {
     getNetworksListListForDescription,
     propertyKeyFlag,
     unikidFlag,
-} from "../utils";
+} from "../../utils";
 
-export class GetPropertyValueCommand extends ReadCommand {
+export class PropertiesGetCommand extends ReadCommand {
     public static description = "Get the value of a specific property of a UNIK token.";
 
     public static examples = [
-        `$ uns get-property-value --unikid {unikId} -k {propertyKey} [--confirmed {number of confirmations}]
+        `$ uns properties:get --unikid {unikId} -k {propertyKey} [--confirmed {number of confirmations}]
         --network ${getNetworksListListForDescription()} --format {json|yaml|raw}`,
     ];
 
@@ -32,7 +32,7 @@ export class GetPropertyValueCommand extends ReadCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return GetPropertyValueCommand;
+        return PropertiesGetCommand;
     }
 
     protected async do(flags: Record<string, any>): Promise<any> {

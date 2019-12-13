@@ -1,17 +1,19 @@
-import { DiscloseExplicitValuesCommand } from "../../src/commands/disclose-explicit-values";
-import { shouldExit, transaction } from "../__fixtures__/commands/disclose-explicit-values";
-import { applyExitCase, EMPTY_COMMAND_CONFIG } from "../__fixtures__/commons";
+import { UnikDiscloseCommand } from "../../../src/commands/unik/disclose";
+import { shouldExit, transaction } from "../../__fixtures__/commands/unik/disclose";
+import { applyExitCase, EMPTY_COMMAND_CONFIG } from "../../__fixtures__/commons";
 
-describe("disclose-explicit-values command", () => {
+const commandName: string = "unik:disclose";
+
+describe(`${commandName} command`, () => {
     describe("Exit cases", () => {
         shouldExit.forEach(exitCase => applyExitCase(exitCase));
     });
 
     describe("Unit tests", () => {
-        let command: DiscloseExplicitValuesCommand;
+        let command: UnikDiscloseCommand;
 
         beforeEach(() => {
-            command = new DiscloseExplicitValuesCommand([], EMPTY_COMMAND_CONFIG);
+            command = new UnikDiscloseCommand([], EMPTY_COMMAND_CONFIG);
         });
 
         describe("formatResult", () => {

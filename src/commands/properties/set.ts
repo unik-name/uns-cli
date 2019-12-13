@@ -1,18 +1,18 @@
 import { flags } from "@oclif/parser";
-import { BaseCommand } from "../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../formater";
-import { UpdateProperties as UpdatePropertiesCommand } from "../updatePropertiesCommand";
-import { getNetworksListListForDescription, isDevMode } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, OUTPUT_FORMAT } from "../../formater";
+import { PropertiesUpdateCommand as UpdatePropertiesCommand } from "../../updatePropertiesCommand";
+import { getNetworksListListForDescription, isDevMode } from "../../utils";
 
 const KEY_VALUE_SEPARATOR = ":";
 
-export class SetPropertiesCommand extends UpdatePropertiesCommand {
+export class PropertiesSetCommand extends UpdatePropertiesCommand {
     public static hidden = !isDevMode();
 
     public static description = "Set (add or update) properties of UNIK token.";
 
     public static examples = [
-        `$ uns set-properties --network ${getNetworksListListForDescription()} --unkid {unikId}
+        `$ uns properties:set --network ${getNetworksListListForDescription()} --unkid {unikId}
         --properties "{key1}:{value1}" "{key2}:{value2}" --format {json|yaml} --verbose`,
     ];
 
@@ -31,7 +31,7 @@ export class SetPropertiesCommand extends UpdatePropertiesCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return SetPropertiesCommand;
+        return PropertiesSetCommand;
     }
 
     protected getProperties(flags: Record<string, any>): { [_: string]: string } {

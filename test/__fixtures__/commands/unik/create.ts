@@ -9,6 +9,8 @@ import { Wallet } from "@uns/ts-sdk";
 //   "network": "devnet"
 // }
 
+const commandName: string = "unik:create";
+
 export const TRANSACTION_ID: string = "393aeab4c96a8892ecd63e32bbc117f4404a2cb5f7cdfdc8c1757271eb614a2b";
 export const TRANSACTION_TIMESTAMP: number = 1234493;
 export const UNIK_ID = "6b8aca93a5181e736c35d88aeb4047e9d921f5e2b3e8fc7c5cf745e04894f24f";
@@ -95,7 +97,7 @@ export const outputCases = [
     {
         description: "Should create unik token bob of type individual",
         args: [
-            "create-unik",
+            commandName,
             "--network",
             "dalinet",
             "--explicitValue",
@@ -110,7 +112,7 @@ export const outputCases = [
     {
         description: "Should create unik token bob of type individual with verbose",
         args: [
-            "create-unik",
+            commandName,
             "--network",
             "dalinet",
             "--explicitValue",
@@ -126,7 +128,7 @@ export const outputCases = [
     {
         description: "Should create unik token bob of type individual yaml format",
         args: [
-            "create-unik",
+            commandName,
             "--network",
             "dalinet",
             "--explicitValue",
@@ -143,7 +145,7 @@ export const outputCases = [
     {
         description: "Should create unik token bob of type individual yaml format with verbose",
         args: [
-            "create-unik",
+            commandName,
             "--network",
             "dalinet",
             "--explicitValue",
@@ -163,17 +165,17 @@ export const outputCases = [
 export const shouldExit = [
     {
         description: "Should exit with code 2 if explicitValue is not passed",
-        args: ["create-unik", "--network", "dalinet", "--type", "individual"],
+        args: [commandName, "--network", "dalinet", "--type", "individual"],
         exitCode: 2,
     },
     {
         description: "Should exit with code 2 if type is not passed",
-        args: ["create-unik", "--network", "dalinet", "--explicitValue", "bob"],
+        args: [commandName, "--network", "dalinet", "--explicitValue", "bob"],
         exitCode: 2,
     },
     {
         description: "Should exit with code 2 if type is unknown",
-        args: ["create-unik", "--network", "dalinet", "--explicitValue", "bob", "--type", "unknownType"],
+        args: [commandName, "--network", "dalinet", "--explicitValue", "bob", "--type", "unknownType"],
         exitCode: 2,
     },
 ];

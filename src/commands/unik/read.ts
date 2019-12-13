@@ -1,14 +1,14 @@
 import { ChainMeta, Unik } from "@uns/ts-sdk";
-import { BaseCommand } from "../baseCommand";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
-import { ReadCommand } from "../readCommand";
-import { checkUnikIdFormat, getChainContext, getNetworksListListForDescription, unikidFlag } from "../utils";
+import { BaseCommand } from "../../baseCommand";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
+import { ReadCommand } from "../../readCommand";
+import { checkUnikIdFormat, getChainContext, getNetworksListListForDescription, unikidFlag } from "../../utils";
 
-export class ReadUnikCommand extends ReadCommand {
+export class UnikReadCommand extends ReadCommand {
     public static description = "Display UNIK token informations";
 
     public static examples = [
-        `$ uns read-unik --unikid {unikId} --network ${getNetworksListListForDescription()} --format {json|yaml}`,
+        `$ uns unik:read --unikid {unikId} --network ${getNetworksListListForDescription()} --format {json|yaml}`,
     ];
 
     public static flags = {
@@ -21,7 +21,7 @@ export class ReadUnikCommand extends ReadCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return ReadUnikCommand;
+        return UnikReadCommand;
     }
 
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
