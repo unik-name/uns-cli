@@ -48,7 +48,12 @@ export class UnikCreateCommand extends WriteCommand {
          * Compute Fingerprint
          */
         this.actionStart("Computing UNIK fingerprint");
-        const tokenId = await this.api.computeTokenId(this.api.network.backend, flags.explicitValue, flags.type);
+        const tokenId = await this.api.computeTokenId(
+            this.api.network.backend,
+            flags.explicitValue,
+            flags.type,
+            "UNIK",
+        );
         this.actionStop();
         this.log(`unikid: ${tokenId}`);
 

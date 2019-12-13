@@ -84,11 +84,12 @@ export class UNSCLIAPI {
      * @param explicitValue
      * @param type
      */
-    public async computeTokenId(backendUrl: string, explicitValue: string, type: string) {
+    public async computeTokenId(backendUrl: string, explicitValue: string, type: string, nftName: string) {
         const fingerprintUrl = backendUrl + FINGERPRINT_API;
         const fingerPrintBody = {
             type,
             explicitValue,
+            nftName,
         };
 
         const requestOptions = {
@@ -96,6 +97,7 @@ export class UNSCLIAPI {
             headers: {
                 "Content-Type": "application/json",
                 "api-version": 2,
+                "Uns-Network": this.network.name,
             },
             json: true,
         };

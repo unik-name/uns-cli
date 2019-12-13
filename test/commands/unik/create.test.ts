@@ -23,7 +23,7 @@ import {
 
 const applyTestCase = (testCase: any) => {
     test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
-        api.post("/unik-name-fingerprint", { explicitValue: "bob", type: "individual" }).reply(200, {
+        api.post("/unik-name-fingerprint", { explicitValue: "bob", type: "individual", nftName: "UNIK" }).reply(200, {
             data: {
                 fingerprint: UNIK_ID,
             },
