@@ -33,7 +33,7 @@ export class UnikIsDisclosedCommand extends ReadCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
-        const unikId = args?.unikId;
+        const unikId = args?.unikid;
         checkUnikIdFormat(unikId);
         let property: ResponseWithChainMeta<PropertyValue> | undefined;
         let data;
