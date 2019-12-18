@@ -4,7 +4,6 @@ import {
     INftStatus,
     NodeConfiguration,
     NodeStatus,
-    Response,
     ResponseWithChainMeta,
 } from "@uns/ts-sdk";
 import { BaseCommand } from "../baseCommand";
@@ -29,17 +28,17 @@ export class StatusCommand extends BaseCommand {
     }
 
     protected async do(flags: Record<string, any>): Promise<CommandOutput> {
-        const blockchainStatus: BlockchainState | undefined = (await this.unsClient.blockchain.get()).data;
+        const blockchainStatus: BlockchainState = await this.api.getBlockchain();
 
         // Parallel requests + destructurating alltogether
-        const [nftStatus, { data: nodeStatus }, { data: nodeConf }]: [
+        const [nftStatus, nodeStatus, nodeConf]: [
             ResponseWithChainMeta<INftStatus[]>,
-            Response<NodeStatus>,
-            Response<NodeConfiguration>,
+            NodeStatus,
+            NodeConfiguration,
         ] = await Promise.all([
             getNftsStatuses(this.api.network.name),
-            this.unsClient.node.status(),
-            this.unsClient.node.configuration(),
+            this.api.getNodeStatus(),
+            this.api.getNodeConfiguration(),
         ]);
 
         if (!nodeConf || !blockchainStatus || !nodeStatus) {

@@ -66,7 +66,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 2,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: false,
         },
@@ -76,7 +75,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10", "--to"],
         exitCode: 2,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: false,
         },
@@ -86,7 +84,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10"],
         exitCode: 2,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -96,7 +93,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "abc", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -106,7 +102,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "-10", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -116,7 +111,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10.123456789999", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -126,7 +120,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10.000.00", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -136,7 +129,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10,000.00", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -146,7 +138,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10", "--to", "DDwxZwjZQJUjeu7P"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },
@@ -156,7 +147,6 @@ export const shouldExit = [
         args: ["send", "--network", "dalinet", "10", "--to", "@?*"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: true,
         },

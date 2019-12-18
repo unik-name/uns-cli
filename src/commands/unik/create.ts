@@ -1,5 +1,6 @@
 import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
+import { DIDType } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
@@ -48,13 +49,9 @@ export class UnikCreateCommand extends WriteCommand {
          * Compute Fingerprint
          */
         this.actionStart("Computing UNIK fingerprint");
-        const tokenId = await this.api.computeTokenId(
-            this.api.network.backend,
-            flags.explicitValue,
-            flags.type,
-            "UNIK",
-        );
+        const tokenId = await this.api.computeTokenId(flags.explicitValue, flags.type.toUpperCase() as DIDType, "UNIK");
         this.actionStop();
+
         this.log(`unikid: ${tokenId}`);
 
         /**

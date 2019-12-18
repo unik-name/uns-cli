@@ -13,13 +13,7 @@ import {
     WALLET_CHAINMETA,
     WALLET_ID,
 } from "../../__fixtures__/commands/unik/create";
-import {
-    applyExitCase,
-    NODE_CONFIGURATION,
-    NODE_CONFIGURATION_CRYPTO,
-    NODE_STATUS,
-    UNS_CLIENT_FOR_TESTS,
-} from "../../__fixtures__/commons";
+import { applyExitCase, NODE_CONFIGURATION_CRYPTO, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
     test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
@@ -34,7 +28,14 @@ const applyTestCase = (testCase: any) => {
                 .post("/transactions", {
                     transactions: [transaction],
                 })
-                .reply(200, {}),
+                .reply(200, {
+                    data: {
+                        accept: [],
+                        broadcast: [],
+                        invalid: [],
+                        excess: [],
+                    },
+                }),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get("/wallets/020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011").reply(200, {
@@ -61,10 +62,14 @@ const applyTestCase = (testCase: any) => {
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
-        )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get(`/node/status`).reply(200, NODE_STATUS),
+            api.get("/blockchain").reply(200, {
+                data: {
+                    supply: 2119999400000000,
+                    block: {
+                        height: 10,
+                    },
+                },
+            }),
         )
         .stdout()
         .command(testCase.args)

@@ -29,6 +29,11 @@ export class PropertiesListCommand extends BaseCommand {
 
         const unik = await this.api.getUnikById(flags.unikid);
         const lastTransaction = await this.api.getTransaction(unik.transactions.last.id);
+
+        if (!lastTransaction) {
+            throw new Error(`Error fetching transaction ${unik.transactions.first.id}`);
+        }
+
         const properties: any = await this.api.getUnikProperties(flags.unikid);
         const lastUpdateHeight = lastTransaction.chainmeta.height;
 
