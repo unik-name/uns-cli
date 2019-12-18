@@ -32,17 +32,14 @@ const applyTestCase = (testCase: any) => {
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get("/nfts/status").reply(200, {
-                data: ["unik"],
-            }),
-        )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get("/uniks/status").reply(200, {
-                data: {
-                    nftName: "UNIK",
-                    individual: "10",
-                    organization: "3",
-                    network: "1",
-                },
+                data: [
+                    {
+                        nftName: "UNIK",
+                        individual: "10",
+                        organization: "3",
+                        network: "1",
+                    },
+                ],
             }),
         )
         .env({ UNS_NETWORK: testCase.UNS_NETWORK })
