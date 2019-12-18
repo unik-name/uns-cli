@@ -34,6 +34,10 @@ export class UnikReadCommand extends ReadCommand {
         } = await this.api.getUnikProperties(flags.unikid);
         const creationTransaction = await this.api.getTransaction(unik.transactions.first.id);
 
+        if (!creationTransaction) {
+            throw new Error(`Error fetching transaction ${unik.transactions.first.id}`);
+        }
+
         this.checkDataConsistency(
             unik.chainmeta.height,
             properties.chainmeta.height,

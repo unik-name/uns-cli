@@ -9,26 +9,26 @@ import {
 
 const applyTestCase = (testCase: any) => {
     test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-        api.get("/blockchain").reply(200, {
-            data: {
-                supply: 2119999400000000,
-            },
-        }),
+        api
+            .get("/blockchain")
+            .twice()
+            .reply(200, {
+                data: {
+                    supply: 2119999400000000,
+                    block: {
+                        height: 10,
+                    },
+                },
+            }),
     )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api
-                .get(`/node/configuration`)
-                .twice()
-                .reply(200, NODE_CONFIGURATION),
+            api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api
-                .get(`/node/status`)
-                .twice()
-                .reply(200, NODE_STATUS),
+            api.get(`/node/status`).reply(200, NODE_STATUS),
         )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get("/nfts/status").reply(200, {

@@ -1,20 +1,49 @@
-import { Interfaces, Transactions, Utils } from "@uns/ark-crypto";
-import { ChainMeta, getPropertyValue, PropertyValue, ResponseWithChainMeta, Unik, Wallet } from "@uns/ts-sdk";
+import { Interfaces, Managers, Transactions, Utils } from "@uns/ark-crypto";
+import {
+    BlockchainState,
+    ChainMeta,
+    DIDType,
+    FingerprintResult,
+    getPropertyValue,
+    IDiscloseDemand,
+    IDiscloseDemandCertification,
+    IProcessorResult,
+    Network,
+    NodeConfiguration,
+    NodeStatus,
+    PropertyValue,
+    Response,
+    ResponseWithChainMeta,
+    Token,
+    Transaction,
+    Unik,
+    UNSClient,
+    Wallet,
+} from "@uns/ts-sdk";
 import delay from "delay";
-import * as req from "request-promise";
-import { FINGERPRINT_API } from "./config";
 import { handleErrors, handleFetchError } from "./errorHandler";
-import { Token, Transaction, WithChainmeta } from "./types";
+import { WithChainmeta } from "./types";
 import * as UTILS from "./utils";
 import { getUrlOrigin } from "./utils";
 
 export class UNSCLIAPI {
     public network: any;
+    public unsClient: UNSClient;
 
-    public init(networkPreset: any, unsConfig: any, customNodeUrl?: string): UNSCLIAPI {
+    constructor() {
+        this.unsClient = new UNSClient();
+    }
+
+    public init(network: Network, customNodeUrl?: string): UNSCLIAPI {
+        this.unsClient.init({
+            network,
+            customNode: customNodeUrl,
+        });
+
+        const networkPreset = Managers.configManager.getPreset(network);
         this.network = {
             ...networkPreset.network,
-            ...UTILS.getNetwork(unsConfig, customNodeUrl),
+            ...UTILS.getNetwork(this.unsClient.currentEndpointsConfig, customNodeUrl),
             ...this.getLastInfosFromMilestones(networkPreset.milestones),
         };
         return this;
@@ -30,28 +59,17 @@ export class UNSCLIAPI {
             throw new Error(error);
         }
 
-        const requestOptions = {
-            body: {
-                transactions: [transaction],
-            },
-            headers: {
-                "api-version": 2,
-                "Content-Type": "application/json",
-            },
-            json: true,
-        };
+        const transactionResult: Response<IProcessorResult> = await this.unsClient.transaction.send(transaction);
 
-        return req
-            .post(`${this.network.url}/transactions`, requestOptions)
-            .then(resp => {
-                if (resp.errors) {
-                    resp.errors = `Transaction not accepted. Caused by: ${JSON.stringify(handleErrors(resp.errors))}`;
-                }
-                return resp;
-            })
-            .catch(e => {
-                return { errors: `Technical error. ${e.message}` };
-            });
+        if (transactionResult.data?.errors) {
+            return {
+                errors: `Transaction not accepted. Caused by: ${JSON.stringify(
+                    handleErrors(transactionResult.data?.errors),
+                )}`,
+            };
+        }
+
+        return transactionResult.data;
     }
 
     /**
@@ -59,23 +77,25 @@ export class UNSCLIAPI {
      * @param transactionId
      * @param msdelay
      */
-    public async getTransaction(transactionId: string, msdelay: number = 0): Promise<WithChainmeta<Transaction>> {
+    public async getTransaction(
+        transactionId: string,
+        msdelay: number = 0,
+    ): Promise<WithChainmeta<Transaction> | undefined> {
         await delay(msdelay);
-        return req
-            .get(`${this.network.url}/transactions/${transactionId}`)
-            .then(transactionResponse => {
-                const transactionResp = JSON.parse(transactionResponse);
-                return {
-                    ...transactionResp.data,
-                    chainmeta: transactionResp.chainmeta,
-                };
-            })
-            .catch(e => {
-                if (e.statusCode === 404) {
-                    return undefined;
-                }
-                throw new Error(`Error fetching transaction  ${transactionId}. Caused by: ${e.message}`);
-            });
+        try {
+            const transactionResponse: ResponseWithChainMeta<Transaction> = await this.unsClient.transaction.get(
+                transactionId,
+            );
+            return {
+                ...(transactionResponse.data as Transaction),
+                chainmeta: transactionResponse.chainmeta,
+            };
+        } catch (e) {
+            if (e?.response?.status === 404) {
+                return undefined;
+            }
+            throw new Error(`Error fetching transaction  ${transactionId}. Caused by: ${e.message}`);
+        }
     }
 
     /**
@@ -84,32 +104,25 @@ export class UNSCLIAPI {
      * @param explicitValue
      * @param type
      */
-    public async computeTokenId(backendUrl: string, explicitValue: string, type: string, nftName: string) {
-        const fingerprintUrl = backendUrl + FINGERPRINT_API;
-        const fingerPrintBody = {
-            type,
-            explicitValue,
-            nftName,
-        };
+    public async computeTokenId(explicitValue: string, type: DIDType, nftName: string): Promise<string> {
+        try {
+            const fingerPrintResponse: Response<FingerprintResult> = await this.unsClient.fingerprint.compute(
+                explicitValue,
+                type,
+                nftName,
+            );
+            if (fingerPrintResponse.error) {
+                throw fingerPrintResponse.error;
+            }
 
-        const requestOptions = {
-            body: fingerPrintBody,
-            headers: {
-                "Content-Type": "application/json",
-                "api-version": 2,
-                "Uns-Network": this.network.name,
-            },
-            json: true,
-        };
-
-        return req
-            .post(fingerprintUrl, requestOptions)
-            .then(unikFingerprintResponse => {
-                return unikFingerprintResponse.data.fingerprint;
-            })
-            .catch(e => {
-                throw new Error(`Error computing  UNIK id. Caused by ${e.message}`);
-            });
+            const id: string | undefined = fingerPrintResponse.data?.fingerprint;
+            if (!id) {
+                throw new Error("Computed token id is invalid");
+            }
+            return id;
+        } catch (e) {
+            throw new Error(`Error computing  UNIK id. Caused by ${e.message}`);
+        }
     }
 
     /**
@@ -117,29 +130,35 @@ export class UNSCLIAPI {
      * @param unikid
      */
     public async getUnikById(unikid: string): Promise<WithChainmeta<Unik>> {
-        return req
-            .get(`${this.network.url}/nfts/${unikid}`)
-            .then(res => {
-                const unikResponse = JSON.parse(res);
-                return {
-                    ...unikResponse.data,
-                    chainmeta: unikResponse.chainmeta,
-                };
-            })
-            .catch(handleFetchError("UNIK", unikid));
+        try {
+            const unikResponse: ResponseWithChainMeta<Unik> = await this.unsClient.unik.get(unikid);
+            return {
+                ...(unikResponse.data as Unik),
+                chainmeta: unikResponse.chainmeta,
+            };
+        } catch (e) {
+            return handleFetchError("UNIK", unikid)(e);
+        }
     }
 
     /**
      *
      * @param unikid Get UNIK token properties
      */
-    public async getUnikProperties(unikid: string): Promise<WithChainmeta<{ data: Array<{ [_: string]: string }> }>> {
-        return req
-            .get(`${this.network.url}/nfts/${unikid}/properties`)
-            .then(res => {
-                return JSON.parse(res);
-            })
-            .catch(handleFetchError("UNIK properties", unikid));
+    public async getUnikProperties(
+        unikid: string,
+    ): Promise<WithChainmeta<{ data: Array<{ [_: string]: PropertyValue }> }>> {
+        try {
+            const propertiesResponse: ResponseWithChainMeta<Array<{
+                [_: string]: PropertyValue;
+            }>> = await this.unsClient.unik.properties(unikid);
+            return {
+                data: propertiesResponse.data || [],
+                chainmeta: propertiesResponse.chainmeta,
+            };
+        } catch (e) {
+            return handleFetchError("UNIK properties", unikid)(e);
+        }
     }
 
     public async getUnikProperty(
@@ -159,82 +178,70 @@ export class UNSCLIAPI {
      * @param walletIdentifier
      */
     public async getWallet(walletIdentifier: string): Promise<WithChainmeta<Wallet>> {
-        return req
-            .get(`${this.network.url}/wallets/${walletIdentifier}`)
-            .then(res => {
-                const walletResponse = JSON.parse(res);
-                return {
-                    ...walletResponse.data,
-                    chainmeta: walletResponse.chainmeta,
-                };
-            })
-            .catch(handleFetchError("wallet", walletIdentifier));
+        try {
+            const walletResponse: ResponseWithChainMeta<Wallet> = await this.unsClient.wallet.get(walletIdentifier);
+            return {
+                ...(walletResponse.data as Wallet),
+                chainmeta: walletResponse.chainmeta,
+            };
+        } catch (e) {
+            return handleFetchError("wallet", walletIdentifier)(e);
+        }
     }
 
     public async getWalletTokens(
         walletIdentifier: string,
         tokenName: string = "unik",
     ): Promise<{ data: Token[]; chainmeta: ChainMeta }> {
-        return req
-            .get(`${this.network.url}/wallets/${walletIdentifier}/${tokenName}s`)
-            .then(res => {
-                const tokenResponse = JSON.parse(res);
-                return {
-                    data: tokenResponse.data,
-                    chainmeta: tokenResponse.chainmeta,
-                };
-            })
-            .catch(handleFetchError("wallet tokens", walletIdentifier));
-    }
-
-    /**
-     * Get total (D)UNS supply.
-     */
-    public async getSupply() {
-        return req
-            .get(`${this.network.url}/blockchain`)
-            .then(resp => {
-                return JSON.parse(resp).data.supply;
-            })
-            .catch(e => {
-                throw new Error(`Error fetching supply. Caused by ${e}`);
-            });
+        try {
+            const tokenResponse: ResponseWithChainMeta<Token[]> = await this.unsClient.wallet.tokens(
+                walletIdentifier,
+                tokenName,
+            );
+            return {
+                data: tokenResponse.data as Token[],
+                chainmeta: tokenResponse.chainmeta,
+            };
+        } catch (e) {
+            return handleFetchError("wallet tokens", walletIdentifier)(e);
+        }
     }
 
     /**
      * Get the current blockchain height
      */
-    public async getCurrentHeight() {
-        return req
-            .get(`${this.network.url}/node/status`)
-            .then(resp => {
-                return JSON.parse(resp).data.now;
-            })
-            .catch(e => {
-                throw new Error(`Error fetching status.. Caused by ${e}`);
-            });
+    public async getCurrentHeight(): Promise<number> {
+        try {
+            const height: number | undefined = (await this.getBlockchain()).block?.height;
+
+            if (!height) {
+                throw new Error("Current height is undefined");
+            }
+
+            return height;
+        } catch (e) {
+            throw new Error(`Error fetching status.. Caused by ${e}`);
+        }
     }
 
-    public async getConfiguration() {
-        return req
-            .get(`${this.network.url}/node/configuration`)
-            .then(resp => {
-                return JSON.parse(resp).data;
-            })
-            .catch(e => {
-                throw new Error(`Error fetching configuration.. Caused by ${e}`);
-            });
+    public async getNodeConfiguration(): Promise<NodeConfiguration> {
+        try {
+            const nodeConfiguration: NodeConfiguration | undefined = (await this.unsClient.node.configuration()).data;
+            if (!nodeConfiguration) {
+                throw new Error("Node configuration not defined");
+            }
+            return nodeConfiguration;
+        } catch (e) {
+            throw new Error(`Error fetching node configuration... Caused by ${e}`);
+        }
     }
 
-    public async getConfigurationForCrypto() {
-        return req
-            .get(`${this.network.url}/node/configuration/crypto`)
-            .then(resp => {
-                return JSON.parse(resp).data;
-            })
-            .catch(e => {
-                throw new Error(`Error fetching configuration for crypto.. Caused by ${e}`);
-            });
+    public async getConfigurationForCrypto(): Promise<Interfaces.INetworkConfig> {
+        try {
+            return (await this.unsClient.node.configurationCrypto()).data as Interfaces.INetworkConfig;
+        } catch (e) {
+            throw new Error(`Error fetching configuration for crypto.. Caused by ${e}`);
+        }
     }
 
     public async getNonce(walletIdentifier: string): Promise<string> {
@@ -244,6 +251,18 @@ export class UNSCLIAPI {
             return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : "1";
         } catch (ex) {
             return "1";
+        }
+    }
+
+    public async getBlockchain(): Promise<BlockchainState> {
+        try {
+            const blockchain: BlockchainState | undefined = (await this.unsClient.blockchain.get()).data;
+            if (!blockchain) {
+                throw new Error("Blockchain not defined");
+            }
+            return blockchain;
+        } catch (e) {
+            throw new Error(`Error fetching node configuration... Caused by ${e}`);
         }
     }
 
@@ -284,6 +303,29 @@ export class UNSCLIAPI {
 
     public getExplorerUrl() {
         return this.network.client.explorer;
+    }
+
+    public async getNodeStatus(): Promise<NodeStatus> {
+        const status: NodeStatus | undefined = (await this.unsClient.node.status()).data;
+        if (!status) {
+            throw new Error("Error fetching node status");
+        }
+        return status;
+    }
+
+    public async getDiscloseDemandCertification(discloseDemand: IDiscloseDemand) {
+        const discloseDemandCertification: Response<IDiscloseDemandCertification> = await this.unsClient.discloseDemandCertification.get(
+            discloseDemand,
+        );
+
+        if (discloseDemandCertification.error) {
+            throw new Error(discloseDemandCertification.error.message);
+        }
+
+        if (!discloseDemandCertification.data) {
+            throw new Error("Error creating disclose demand certification");
+        }
+        return discloseDemandCertification.data;
     }
 
     /**

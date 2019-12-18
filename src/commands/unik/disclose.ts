@@ -5,7 +5,7 @@ import {
     DIDType,
     IDiscloseDemand,
     IDiscloseDemandCertification,
-    Response,
+    PropertyValue,
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { BaseCommand } from "../../baseCommand";
@@ -160,7 +160,7 @@ export class UnikDiscloseCommand extends WriteCommand {
 
     private async getUnikType(unikId: string): Promise<DIDType> {
         // get unik type
-        const unikType: string | undefined = (await this.unsClient.unik.property(unikId, "type")).data;
+        const unikType: PropertyValue = (await this.api.getUnikProperty(unikId, "type", false)) as PropertyValue;
         if (!unikType) {
             throw new Error(`Unable to get UNIK type (id: ${unikId})`);
         }
@@ -178,14 +178,14 @@ export class UnikDiscloseCommand extends WriteCommand {
     private async checkExplicitValues(unikId: string, unikType: DIDType, listOfExplicitValues: string[]) {
         // Check explicit values
         for (const explicit of listOfExplicitValues) {
-            const fingerPrintResult = await this.unsClient.fingerprint.compute(explicit, unikType, "UNIK");
-
-            if (fingerPrintResult.error) {
-                this.debug(`disclose-explicit-values - ${fingerPrintResult.error.message}`);
+            try {
+                const fingerPrintResult = await this.api.computeTokenId(explicit, unikType, "UNIK");
+                if (fingerPrintResult !== unikId) {
+                    throw new Error("At least one expliciteValue is not valid for this unikid");
+                }
+            } catch (e) {
+                this.debug(`disclose-explicit-values - ${e.message}`);
                 throw new Error("At least one expliciteValue does not match expected format");
-            }
-            if (fingerPrintResult?.data?.fingerprint !== unikId) {
-                throw new Error("At least one expliciteValue is not valid for this unikid");
             }
         }
 
@@ -206,17 +206,9 @@ export class UnikDiscloseCommand extends WriteCommand {
             passphrase,
         );
 
-        const discloseDemandCertification: Response<IDiscloseDemandCertification> = await this.unsClient.discloseDemandCertification.get(
+        const discloseDemandCertification: IDiscloseDemandCertification = await this.api.getDiscloseDemandCertification(
             discloseDemand,
         );
-
-        if (discloseDemandCertification.error) {
-            throw new Error(discloseDemandCertification.error.message);
-        }
-
-        if (!discloseDemandCertification.data) {
-            throw new Error("Error creating disclose demand certification");
-        }
 
         /**
          * Read emitter's wallet nonce
@@ -228,7 +220,7 @@ export class UnikDiscloseCommand extends WriteCommand {
          */
         return await this.createTransaction(
             discloseDemand,
-            discloseDemandCertification.data,
+            discloseDemandCertification,
             flags.fee,
             nonce,
             passphrase,

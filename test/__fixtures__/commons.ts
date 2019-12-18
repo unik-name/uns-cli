@@ -13,11 +13,6 @@ export const applyExitCase = (exitCase: any) => {
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         );
     }
-    if (exitCase?.mocks?.nodeConfiguration) {
-        tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
-        );
-    }
     if (exitCase?.mocks?.status) {
         tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get(`/node/status`).reply(200, NODE_STATUS),

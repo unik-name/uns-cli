@@ -10,13 +10,7 @@ import {
     UNIK_ID,
     UNIK_RESULT,
 } from "../../__fixtures__/commands/properties/get";
-import {
-    applyExitCase,
-    NODE_CONFIGURATION,
-    NODE_CONFIGURATION_CRYPTO,
-    NODE_STATUS,
-    UNS_CLIENT_FOR_TESTS,
-} from "../../__fixtures__/commons";
+import { applyExitCase, NODE_CONFIGURATION_CRYPTO, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
 const commandName: string = "properties:get";
 
@@ -41,10 +35,14 @@ describe(`${commandName} command`, () => {
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
-            )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/status`).reply(200, NODE_STATUS),
+                api.get("/blockchain").reply(200, {
+                    data: {
+                        supply: 2119999400000000,
+                        block: {
+                            height: 10,
+                        },
+                    },
+                }),
             )
             .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
             .exit(1)
@@ -66,10 +64,14 @@ describe(`${commandName} command`, () => {
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
-            )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/status`).reply(200, NODE_STATUS),
+                api.get("/blockchain").reply(200, {
+                    data: {
+                        supply: 2119999400000000,
+                        block: {
+                            height: 10,
+                        },
+                    },
+                }),
             )
             .stdout()
             .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type"])
@@ -90,10 +92,14 @@ describe(`${commandName} command`, () => {
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
-            )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/status`).reply(200, NODE_STATUS),
+                api.get("/blockchain").reply(200, {
+                    data: {
+                        supply: 2119999400000000,
+                        block: {
+                            height: 10,
+                        },
+                    },
+                }),
             )
             .stdout()
             .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])

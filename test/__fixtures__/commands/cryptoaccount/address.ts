@@ -28,7 +28,6 @@ export const shouldExit = [
         args: [commandName, "-n", "dalinet", "-f", "table"],
         exitCode: 2,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: false,
         },
@@ -38,7 +37,6 @@ export const shouldExit = [
         args: [commandName, "-n", "dalinet", NOT_FOUND_UNIK_ID],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: false,
         },
@@ -48,7 +46,6 @@ export const shouldExit = [
         args: [commandName, "-n", "dalinet", "abc"],
         exitCode: 1,
         mocks: {
-            nodeConfiguration: true,
             nodeConfigurationCrypto: true,
             status: false,
         },

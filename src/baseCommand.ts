@@ -2,12 +2,11 @@ import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Managers, Types, Utils } from "@uns/ark-crypto";
-import { ChainMeta, Network, UNSClient } from "@uns/ts-sdk";
+import { ChainMeta, Network, Transaction } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
 import * as LOGGER from "./logger";
-import { Transaction } from "./types";
 import * as UTILS from "./utils";
 import { getWalletFromPassphrase } from "./utils";
 
@@ -32,17 +31,13 @@ export abstract class BaseCommand extends Command {
     };
 
     public api: UNSCLIAPI;
-    protected unsClient: UNSClient;
 
     protected verbose: boolean = false;
 
     private formater: Formater | undefined;
 
-    private maybeNetworkHash: number | undefined;
-
     constructor(argv: any[], config: Config.IConfig) {
         super(argv, config);
-        this.unsClient = new UNSClient();
         this.api = new UNSCLIAPI();
     }
 
@@ -162,7 +157,7 @@ export abstract class BaseCommand extends Command {
         transactionId: string,
         numberOfRetry: number = 0,
         expectedConfirmations: number = 0,
-    ): Promise<Transaction & { chainmeta: ChainMeta; confirmations: number }> {
+    ): Promise<(Transaction & { chainmeta: ChainMeta; confirmations: number }) | undefined> {
         const transactionFromNetwork = await this.api.getTransaction(transactionId, blockTime * 1000);
         const confirmations = transactionFromNetwork ? transactionFromNetwork.confirmations : 0;
         if (confirmations < expectedConfirmations && numberOfRetry > 0) {
@@ -246,10 +241,6 @@ export abstract class BaseCommand extends Command {
         }
     }
 
-    protected get networkHash(): number | undefined {
-        return this.maybeNetworkHash;
-    }
-
     protected async getNextWalletNonceFromPassphrase(passphrase: string): Promise<string> {
         const wallet = getWalletFromPassphrase(passphrase, this.api.network);
         return Utils.BigNumber.make(await this.api.getNonce(wallet.address))
@@ -267,23 +258,17 @@ export abstract class BaseCommand extends Command {
 
         // UNS SDK
         const networkName: Types.NetworkName = flags.network === "local" ? Network.dalinet : flags.network;
-        this.unsClient.init({
-            network: networkName as Network,
-            customNode: flags.node,
-        });
 
         // UNS and Ark Crypto
         Managers.configManager.setFromPreset(networkName);
-        this.api.init(Managers.configManager.getPreset(networkName), this.unsClient.currentEndpointsConfig, flags.node);
+        this.api.init(networkName as Network, flags.node);
 
-        const [configurationCrypto, height, configuration] = await Promise.all([
+        const [configurationCrypto, height] = await Promise.all([
             this.api.getConfigurationForCrypto(),
             this.api.getCurrentHeight(),
-            this.api.getConfiguration(),
         ]);
 
         Managers.configManager.setConfig(configurationCrypto);
         Managers.configManager.setHeight(height);
-        this.maybeNetworkHash = configuration.constants.pubKeyHash;
     }
 }
