@@ -178,7 +178,7 @@ export class UnikDiscloseCommand extends WriteCommand {
     private async checkExplicitValues(unikId: string, unikType: DIDType, listOfExplicitValues: string[]) {
         // Check explicit values
         for (const explicit of listOfExplicitValues) {
-            const fingerPrintResult = await this.unsClient.fingerprint.compute(explicit, unikType);
+            const fingerPrintResult = await this.unsClient.fingerprint.compute(explicit, unikType, "UNIK");
 
             if (fingerPrintResult.error) {
                 this.debug(`disclose-explicit-values - ${fingerPrintResult.error.message}`);
