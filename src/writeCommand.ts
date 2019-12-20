@@ -25,7 +25,7 @@ export abstract class WriteCommand extends BaseCommand {
     /**
      * Return true if a second wallet passphrase is needed
      */
-    public async isSecondPassphraseNeeded(passphrase: string): Promise<boolean> {
+    public async hasSecondPassphrase(passphrase: string): Promise<boolean> {
         const pubkey: string = Identities.PublicKey.fromPassphrase(passphrase);
         return this.applyWalletPredicate(pubkey, wallet => wallet && !!wallet.secondPublicKey);
     }
@@ -52,19 +52,14 @@ export abstract class WriteCommand extends BaseCommand {
         /**
          * Get passphrase
          */
-        let passphrase: string = flags.passphrase;
-        if (!passphrase) {
-            passphrase = await getPassphraseFromUser();
-        }
-
-        checkPassphraseFormat(passphrase);
+        const passphrase: string = await this.getAndCheckPassphrase(flags);
 
         /**
          * Get second passphrase
          */
         let secondPassphrase: string = flags.secondPassphrase;
 
-        if (!secondPassphrase && (await this.isSecondPassphraseNeeded(passphrase))) {
+        if (!secondPassphrase && (await this.hasSecondPassphrase(passphrase))) {
             secondPassphrase = await getSecondPassphraseFromUser();
         }
 
@@ -76,5 +71,15 @@ export abstract class WriteCommand extends BaseCommand {
             first: passphrase,
             second: secondPassphrase,
         };
+    }
+
+    public async getAndCheckPassphrase(flags: Record<string, any>): Promise<string> {
+        let passphrase: string = flags.passphrase;
+        if (!passphrase) {
+            passphrase = await getPassphraseFromUser();
+        }
+
+        checkPassphraseFormat(passphrase);
+        return passphrase;
     }
 }
