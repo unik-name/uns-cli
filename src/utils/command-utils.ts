@@ -157,6 +157,20 @@ export function createDiscloseTransaction(
     return builder.getStruct();
 }
 
+export function createSecondPassphraseTransaction(
+    fees: number,
+    nonce: string,
+    passphrase: string,
+    secondPassphrase: string,
+): Interfaces.ITransactionData {
+    return Transactions.BuilderFactory.secondSignature()
+        .fee(`${fees}`)
+        .nonce(nonce)
+        .signatureAsset(secondPassphrase)
+        .sign(passphrase)
+        .getStruct();
+}
+
 function promptHidden(text: string): Promise<string> {
     return cli.prompt(text, { type: "hide" });
 }
