@@ -39,10 +39,6 @@ export class SendCommand extends WriteCommand {
             description: "Specify that the provided amount is in sato-UNS, not in UNS",
             default: false,
         }),
-        senderAccount: flags.string({
-            description:
-                "The @unik-name OR the public address of the wallet of the sender (warning: @unik-name must be surrounded with double quotes)",
-        }),
     };
 
     public static args = [
