@@ -1,6 +1,6 @@
 {
-    "name": "@uns/uns-cli",
-    "description": "uns CLI",
+    "name": "@uns/cli",
+    "description": "UNS.network CLI",
     "version": "1.2.0",
     "author": "Space Elephant",
     "contributors": [
