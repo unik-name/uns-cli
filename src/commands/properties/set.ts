@@ -12,7 +12,7 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
     public static description = "Set (add or update) properties of UNIK token.";
 
     public static examples = [
-        `$ uns properties:set --network ${getNetworksListListForDescription()} --unkid {unikId}
+        `$ uns properties:set --network ${getNetworksListListForDescription()} --unikid {unikId}
         --properties "{key1}:{value1}" "{key2}:{value2}" --format {json|yaml} --verbose`,
     ];
 
