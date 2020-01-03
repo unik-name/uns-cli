@@ -9,7 +9,7 @@ export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
     public static description = "Unset properties of UNIK token.";
 
     public static examples = [
-        `$ uns properties:unset --network ${getNetworksListListForDescription()} --unkid {unikId}
+        `$ uns properties:unset --network ${getNetworksListListForDescription()} --unikid {unikId}
         -k prop1 -k prop2 --format {json|yaml} --verbose`,
     ];
 
