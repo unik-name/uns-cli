@@ -1,11 +1,6 @@
 import { expect, test } from "@oclif/test";
 import cli from "cli-ux";
-import {
-    NODE_CONFIGURATION,
-    NODE_CONFIGURATION_CRYPTO,
-    NODE_STATUS,
-    UNS_CLIENT_FOR_TESTS,
-} from "../../__fixtures__/commons";
+import { NODE_CONFIGURATION_CRYPTO, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
 const commandName: string = "cryptoaccount:set-second-passphrase";
 
@@ -34,10 +29,17 @@ describe(`${commandName} command`, () => {
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
-            )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/node/status`).reply(200, NODE_STATUS),
+                api
+                    .get("/blockchain")
+                    .once()
+                    .reply(200, {
+                        data: {
+                            supply: 2119999400000000,
+                            block: {
+                                height: 10,
+                            },
+                        },
+                    }),
             )
             .command([commandName, "-n", "dalinet", "--verbose"])
             // tslint:disable-next-line:no-empty
