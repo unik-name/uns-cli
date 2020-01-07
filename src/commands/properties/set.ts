@@ -2,7 +2,7 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand as UpdatePropertiesCommand } from "../../updatePropertiesCommand";
-import { getNetworksListListForDescription, isDevMode } from "../../utils";
+import { checkUnikPropertyFormat, getNetworksListListForDescription, isDevMode } from "../../utils";
 
 const KEY_VALUE_SEPARATOR = ":";
 
@@ -20,7 +20,6 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
         ...UpdatePropertiesCommand.getUpdateCommandFlags(),
         properties: flags.string({
             description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2"`,
-
             required: true,
             multiple: true,
         }),
@@ -42,11 +41,9 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
                 throw new Error(`Property parsing error. Should match key:value ${prop}`);
             }
             const [key, value] = keyValue;
-            const keyMatcher = key.match(/[a-zA-Z_0-9]+/);
-            if (!keyMatcher || keyMatcher[0] !== key) {
-                throw new Error(`Property key ${key} should match [a-zA-Z_0-9]+ pattern`);
-            }
-            properties[key] = value;
+            const trimedKey = key.trim();
+            checkUnikPropertyFormat(trimedKey);
+            properties[trimedKey] = value;
         }
         return properties;
     }

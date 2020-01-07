@@ -1,7 +1,7 @@
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import { getNetworksListListForDescription, isDevMode, propertyKeyFlag } from "../../utils";
+import { checkUnikPropertyFormat, getNetworksListListForDescription, isDevMode, propertyKeyFlag } from "../../utils";
 
 export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
     public static hidden = !isDevMode();
@@ -30,8 +30,11 @@ export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
         const properties: { [_: string]: string } = {};
 
         flags.propertyKey.forEach((prop: string) => {
+            const propToUnset: string = prop.trim();
+            checkUnikPropertyFormat(propToUnset);
+
             // @ts-ignore
-            properties[prop] = null; // Needs to be null!!
+            properties[propToUnset] = null; // Needs to be null!!
         });
         return properties;
     }
