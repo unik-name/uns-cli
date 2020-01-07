@@ -1,3 +1,5 @@
+import { UNS_NFT_PROPERTY_KEY_REGEX } from "@uns/ts-sdk";
+
 export function isTokenId(tokenId: string) {
     return tokenId && tokenId.length === 64;
 }
@@ -8,8 +10,8 @@ export const checkUnikIdFormat = (unikid: string) => {
 };
 
 export const checkUnikPropertyFormat = (propertyKey: string) => {
-    const valid = propertyKey && propertyKey.match(/[a-zA-Z0-9]+/)?.[0] === propertyKey;
+    const valid = propertyKey && propertyKey.match(UNS_NFT_PROPERTY_KEY_REGEX)?.[0] === propertyKey;
     if (!valid) {
-        throw new Error(`Property ${propertyKey} does not match expected format`);
+        throw new Error(`Property key ${propertyKey} should match ${UNS_NFT_PROPERTY_KEY_REGEX} pattern`);
     }
 };

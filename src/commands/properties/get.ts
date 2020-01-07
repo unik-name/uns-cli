@@ -37,9 +37,11 @@ export class PropertiesGetCommand extends ReadCommand {
 
     protected async do(flags: Record<string, any>): Promise<any> {
         checkUnikIdFormat(flags.unikid);
-        checkUnikPropertyFormat(flags.propertyKey);
 
-        const property: any = await this.api.getUnikProperty(flags.unikid, flags.propertyKey, flags.chainmeta);
+        const propertyKey = flags.propertyKey.trim();
+        checkUnikPropertyFormat(propertyKey);
+
+        const property: any = await this.api.getUnikProperty(flags.unikid, propertyKey, flags.chainmeta);
 
         checkConfirmations(property.confirmations, flags.confirmed);
 
@@ -52,7 +54,7 @@ export class PropertiesGetCommand extends ReadCommand {
         return {
             data: {
                 unikid: flags.unikid,
-                property: flags.propertyKey,
+                property: propertyKey,
                 value: propertyValue,
                 confirmations: property.confirmations,
             },
