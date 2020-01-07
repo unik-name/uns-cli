@@ -59,12 +59,12 @@ export class UNSCLIAPI {
             throw new Error(error);
         }
 
-        const transactionResult: Response<IProcessorResult> = await this.unsClient.transaction.send(transaction);
+        const transactionResult: IProcessorResult = await this.unsClient.transaction.send(transaction);
 
-        if (transactionResult.data?.errors) {
+        if (transactionResult?.errors) {
             return {
                 errors: `Transaction not accepted. Caused by: ${JSON.stringify(
-                    handleErrors(transactionResult.data?.errors),
+                    handleErrors(transactionResult.errors),
                 )}`,
             };
         }
