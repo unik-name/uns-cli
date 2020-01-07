@@ -104,6 +104,26 @@ jobs:
           command: yarn test
       - *slack_notification
 
+
+  publish_nightly:
+    <<: *job_config
+    steps:
+      - *setup_envvars
+      - *attach_workspace
+      - run:
+          command: ./scripts/publish_nightly.sh
+      - *slack_notification
+
+  prepublish_nightly:
+    <<: *job_config
+    steps:
+      - *setup_envvars
+      - *attach_workspace
+      - run:
+          command: ./scripts/prepublish_nightly.sh
+      - *persist_repo_to_workspace
+      - *slack_notification
+
 ####################################
 ## Orbs
 ####################################
@@ -128,6 +148,30 @@ workflows:
           requires:
             - build
 
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 3 * * *" # Every day, at 03:00, after ts-sdk and UNS libs
+          filters:
+            branches:
+              only:
+                - develop
+    jobs:
+      - checkout_prepare_dependencies
+      - prepublish_nightly:
+          requires:
+            - checkout_prepare_dependencies
+      - build:
+          requires:
+            - prepublish_nightly
+      - test:
+          requires:
+            - build
+      - publish_nightly:
+          requires:
+            - build
+            - test
+
   weekly:
     triggers:
       - schedule:
@@ -139,9 +183,6 @@ workflows:
     jobs:
       - checkout_prepare_dependencies
       - build:
-          requires:
-            - checkout_prepare_dependencies
-      - check-format:
           requires:
             - checkout_prepare_dependencies
       - test:
