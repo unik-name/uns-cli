@@ -4,7 +4,7 @@ import { DIDType } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { getTypeValue, getUnikTypesList } from "../../types";
+import { CryptoAccountPassphrases, getTypeValue, getUnikTypesList } from "../../types";
 import { createNFTMintTransaction, getNetworksListListForDescription, passphraseFlag } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
@@ -43,7 +43,7 @@ export class UnikCreateCommand extends WriteCommand {
             );
         }
 
-        const passphrases = await this.askForPassphrases(flags);
+        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         /**
          * Compute Fingerprint
@@ -80,24 +80,12 @@ export class UnikCreateCommand extends WriteCommand {
 
         this.log(`Transaction id: ${transaction.id}`);
 
-        /**
-         * Transaction broadcast
-         */
-        this.actionStart("Sending transaction");
-        const sendResponse = await this.api.sendTransaction(transaction);
-        this.actionStop();
-        if (sendResponse.errors) {
-            throw new Error(sendResponse.errors);
-        }
+        await this.broadcastTransaction(transaction);
+
         const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transaction.id}`;
         this.log(`Transaction in explorer: ${transactionUrl}`);
 
-        const awaitConfirmation: number = flags["await-confirmation"];
-        if (awaitConfirmation === 0) {
-            this.info(`Transaction accepted by the network: ${transaction.id}`);
-            this.warn(
-                "Transaction not confirmed yet, still in the pool. Track status of the transaction in the chain explorer.",
-            );
+        if (!this.checkIfAwaitIsNeeded(flags, transaction.id)) {
             return {
                 data: {
                     id: tokenId,
@@ -106,17 +94,7 @@ export class UnikCreateCommand extends WriteCommand {
             };
         }
 
-        /**
-         * Wait for the first transaction confirmation
-         */
-        this.actionStart("Waiting for transaction confirmation");
-        const transactionFromNetwork = await this.waitTransactionConfirmations(
-            this.api.getBlockTime(),
-            transaction.id,
-            flags["await-confirmation"],
-            1,
-        );
-        this.actionStop();
+        const transactionFromNetwork = await this.awaitConfirmations(flags, transaction.id);
 
         /**
          * Result prompt

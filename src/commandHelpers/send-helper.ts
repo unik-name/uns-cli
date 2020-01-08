@@ -1,11 +1,8 @@
 import { Identities, Interfaces } from "@uns/ark-crypto";
-import { didResolve } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { SendCommand } from "../commands/send";
-import { createTransferTransaction } from "../utils";
+import { createTransferTransaction, getUniknameWalletAddress } from "../utils";
 import { CommandHelper } from "./command-helper";
-
-const DID_DEFAULT_QUERY = "?*";
 
 export class SendCommandHelper extends CommandHelper<SendCommand> {
     public createTransactionStruct(
@@ -90,14 +87,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
 
         if (id && id.startsWith("@")) {
             try {
-                const resolveResult = await didResolve(
-                    `${id}${id.endsWith(DID_DEFAULT_QUERY) ? "" : DID_DEFAULT_QUERY}`,
-                    this.cmd.api.network.name,
-                );
-                if (resolveResult.error) {
-                    throw resolveResult.error;
-                }
-                resolvedAddress = resolveResult.data as string;
+                resolvedAddress = await getUniknameWalletAddress(id, this.cmd.api.network.name);
             } catch (e) {
                 if (e && e.response && e.response.status === 404) {
                     throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not exist`);
