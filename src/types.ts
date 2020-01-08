@@ -9,3 +9,8 @@ export const getTypeValue = (tokenType: string): string => {
 };
 
 export type WithChainmeta<T> = T & { chainmeta: ChainMeta };
+
+export interface CryptoAccountPassphrases {
+    first: string;
+    second: string;
+}

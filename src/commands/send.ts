@@ -1,5 +1,6 @@
 import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
+import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
@@ -79,7 +80,7 @@ export class SendCommand extends WriteCommand {
             return "Command aborted by user";
         }
 
-        const passphrases = await this.askForPassphrases(flags);
+        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         const senderWallet = getWalletFromPassphrase(passphrases.first, this.api.network);
         if (senderWallet.address === recipientAddress) {

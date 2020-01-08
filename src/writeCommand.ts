@@ -1,5 +1,6 @@
-import { Identities } from "@uns/ark-crypto";
-import { ChainMeta, Wallet } from "@uns/ts-sdk";
+import { Identities, Interfaces } from "@uns/ark-crypto";
+import { ChainMeta, Transaction, Wallet } from "@uns/ts-sdk";
+import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "./baseCommand";
 import { HttpNotFoundError } from "./errorHandler";
 import {
@@ -48,7 +49,7 @@ export abstract class WriteCommand extends BaseCommand {
         }
     }
 
-    public async askForPassphrases(flags: Record<string, any>): Promise<{ first: string; second: string }> {
+    public async askForPassphrases(flags: Record<string, any>): Promise<CryptoAccountPassphrases> {
         /**
          * Get passphrase
          */
@@ -81,5 +82,48 @@ export abstract class WriteCommand extends BaseCommand {
 
         checkPassphraseFormat(passphrase);
         return passphrase;
+    }
+
+    public checkIfAwaitIsNeeded(flags: Record<string, any>, transactionId: string): boolean {
+        const awaitConfirmation: number = flags["await-confirmation"];
+        if (awaitConfirmation === 0) {
+            this.info(`Transaction accepted by the network: ${transactionId}`);
+            this.warn(
+                "Transaction not confirmed yet, still in the pool. Track status of the transaction in the chain explorer.",
+            );
+            return false;
+        }
+        return true;
+    }
+
+    public async awaitConfirmations(
+        flags: Record<string, any>,
+        transactionId: string,
+    ): Promise<(Transaction & { chainmeta: ChainMeta; confirmations: number }) | undefined> {
+        /**
+         * Wait for the first transaction confirmation
+         */
+        this.actionStart("Waiting for transaction confirmation");
+        const transactionFromNetwork = await this.waitTransactionConfirmations(
+            this.api.getBlockTime(),
+            transactionId,
+            flags["await-confirmation"],
+            1,
+        );
+        this.actionStop();
+
+        return transactionFromNetwork;
+    }
+
+    public async broadcastTransaction(transaction: Interfaces.ITransactionData) {
+        /**
+         * Transaction broadcast
+         */
+        this.actionStart("Sending transaction");
+        const sendResponse = await this.api.sendTransaction(transaction);
+        this.actionStop();
+        if (sendResponse.errors) {
+            throw new Error(sendResponse.errors);
+        }
     }
 }

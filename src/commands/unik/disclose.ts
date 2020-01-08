@@ -8,6 +8,7 @@ import {
     PropertyValue,
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
+import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import {
@@ -71,7 +72,7 @@ export class UnikDiscloseCommand extends WriteCommand {
     protected async do(flags: Record<string, any>): Promise<any> {
         await this.checkUnik(flags.unikid);
 
-        const passphrases = await this.askForPassphrases(flags);
+        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         const confirmation = await cli.confirm(
             "Disclosing a @unik-name to the network can't be cancelled nor revoked. Your ID will be disclosed forever. Do you confirm the disclose demand? [y/n]",
