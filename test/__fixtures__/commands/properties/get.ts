@@ -72,10 +72,6 @@ export const shouldExit = [
         description: "Should exit with code 2 if output format is not allowed for that command",
         args: [commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "property", "-f", "table", "--verbose"],
         exitCode: 2,
-        mocks: {
-            nodeConfigurationCrypto: true,
-            status: true,
-        },
     },
     {
         description: "Should exit with code 1 if unikid doesn't match",
@@ -83,7 +79,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
     {
@@ -92,7 +88,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
 ];

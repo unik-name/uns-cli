@@ -65,28 +65,16 @@ export const shouldExit = [
         description: "Should exit with code 2 if amount is empty",
         args: ["send", "--network", "dalinet", "--to", "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA"],
         exitCode: 2,
-        mocks: {
-            nodeConfigurationCrypto: true,
-            status: false,
-        },
     },
     {
         description: "Should exit with code 2 if to flag is empty",
         args: ["send", "--network", "dalinet", "10", "--to"],
         exitCode: 2,
-        mocks: {
-            nodeConfigurationCrypto: true,
-            status: false,
-        },
     },
     {
         description: "Should exit with code 2 if to flag is absent",
         args: ["send", "--network", "dalinet", "10"],
         exitCode: 2,
-        mocks: {
-            nodeConfigurationCrypto: true,
-            status: true,
-        },
     },
     {
         description: "Should exit with code 1 if amount is not a number",
@@ -94,7 +82,8 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+
+            blockchain: true,
         },
     },
     {
@@ -103,7 +92,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
     {
@@ -112,7 +101,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
     {
@@ -121,7 +110,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
     {
@@ -130,7 +119,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
     {
@@ -139,7 +128,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
     {
@@ -148,7 +137,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: true,
+            blockchain: true,
         },
     },
 ];

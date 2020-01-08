@@ -27,10 +27,6 @@ export const shouldExit = [
         description: "Should exit with code 2 if output format is not allowed for that command",
         args: [commandName, "-n", "dalinet", "-f", "table"],
         exitCode: 2,
-        mocks: {
-            nodeConfigurationCrypto: true,
-            status: false,
-        },
     },
     {
         description: "Should exit with code 1 if UNIK from unikid is not found",
@@ -38,7 +34,13 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: false,
+            blockchain: true,
+            custom: [
+                {
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    cb: (api: any) => api.get(`/uniks/${NOT_FOUND_UNIK_ID}`).reply(404),
+                },
+            ],
         },
     },
     {
@@ -47,7 +49,7 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-            status: false,
+            blockchain: true,
         },
     },
 ];
