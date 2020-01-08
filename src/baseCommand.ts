@@ -68,7 +68,7 @@ export abstract class BaseCommand extends Command {
                 errorMsg = e.message;
             } else {
                 errorMsg = `Command fail because of unexpected value for at least one parameter${
-                    e.args ? ` (${e.args.join(", ")})` : ""
+                    e.args ? ` (${e.args.map((arg: any) => (arg.name ? arg.name : arg)).join(", ")})` : ""
                 }. Please check your parameters.`;
             }
 
