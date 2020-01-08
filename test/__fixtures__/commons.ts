@@ -1,25 +1,47 @@
 import Config from "@oclif/config";
-import { test } from "@oclif/test";
+import { expect, test } from "@oclif/test";
 import { Network, UNSClient } from "@uns/ts-sdk";
 
 export const UNS_CLIENT_FOR_TESTS = new UNSClient();
 UNS_CLIENT_FOR_TESTS.init({ network: Network.default });
 
 export const applyExitCase = (exitCase: any) => {
-    const tester = test.command(exitCase.args).exit(exitCase.exitCode);
+    let tester = test;
+
+    if (exitCase.errorMsg) {
+        tester = tester.stderr();
+    }
 
     if (exitCase?.mocks?.nodeConfigurationCrypto) {
-        tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        tester = tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         );
     }
-    if (exitCase?.mocks?.status) {
-        tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-            api.get(`/node/status`).reply(200, NODE_STATUS),
+
+    if (exitCase?.mocks?.blockchain) {
+        tester = tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/blockchain`).reply(200, BLOCKCHAIN),
         );
     }
-    // tslint:disable-next-line:no-empty
-    tester.it(exitCase.description, _ => {});
+
+    if (exitCase?.mocks?.custom) {
+        for (const customMock of exitCase?.mocks?.custom) {
+            tester = tester.nock(customMock.url, customMock.cb);
+        }
+    }
+
+    tester = tester.command(exitCase.args);
+    if (exitCase.errorMsg) {
+        tester
+            // tslint:disable-next-line:no-empty
+            .catch(_ => {})
+            .it(exitCase.description, (ctx: any) => {
+                expect(ctx.stderr).to.equal(exitCase.errorMsg);
+            });
+    } else {
+        // tslint:disable-next-line:no-empty
+        tester.exit(exitCase.exitCode).it(exitCase.description, _ => {});
+    }
 };
 
 export const getMeta = (blockHeight: number) => {
@@ -287,5 +309,15 @@ export const NODE_STATUS = {
         synced: true,
         now: 693652,
         blocksCount: -1,
+    },
+};
+
+export const BLOCKCHAIN = {
+    data: {
+        block: {
+            height: 185498,
+            id: "b62b615936129743a0e0946027d5ff20dd7ba0ac575c7cf87b5b2723e443b86f",
+        },
+        supply: "10037099600000000",
     },
 };
