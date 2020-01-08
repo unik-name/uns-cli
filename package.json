@@ -79,6 +79,9 @@
             },
             "properties": {
                 "description": "Manage UNIK properties (`uns properties` to display UNIK properties commands)"
+            },
+            "delegate": {
+                "description": "Manage UNS delegates (`uns delegate` to display Delegate commands)"
             }
         },
         "plugins": [

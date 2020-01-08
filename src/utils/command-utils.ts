@@ -171,6 +171,25 @@ export function createSecondPassphraseTransaction(
         .getStruct();
 }
 
+export function createVoteTransaction(
+    delegatePublicKeys: string[],
+    fees: number,
+    nonce: string,
+    passphrase: string,
+    secondPassphrase: string,
+): Interfaces.ITransactionData {
+    const builder = Transactions.BuilderFactory.vote()
+        .fee(`${fees}`)
+        .nonce(nonce)
+        .votesAsset(delegatePublicKeys)
+        .sign(passphrase);
+
+    if (secondPassphrase) {
+        builder.secondSign(secondPassphrase);
+    }
+    return builder.getStruct();
+}
+
 function promptHidden(text: string): Promise<string> {
     return cli.prompt(text, { type: "hide" });
 }
