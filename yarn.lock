@@ -767,7 +767,7 @@
   dependencies:
     "@uns/ark-crypto" "^4.1.0-dev.20200110122300"
 
-"@uns/ts-sdk@2.1.0-dev.20200110162000":
+"@uns/ts-sdk@^2.1.0-dev":
   version "2.1.0-dev.20200110162000"
   resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.1.0-dev.20200110162000.tgz#c1c9ea67e042df3da81ca6605a1b6e50b6d3b18c"
   integrity sha512-JNx2U2115RO1g3o9h5Gmg8B7KXrPXV2myrEKoz2FjWc8sCXN5W9DEp/arD/QXATjNQS8sReYXmmTXXsl/AwCyQ==
