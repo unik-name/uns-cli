@@ -2,7 +2,7 @@ import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Managers, Types, Utils } from "@uns/ark-crypto";
-import { ChainMeta, Network, Transaction } from "@uns/ts-sdk";
+import { ChainMeta, DidResolution, didResolve, Network, Transaction } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UNSCLIAPI } from "./api";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
@@ -246,6 +246,24 @@ export abstract class BaseCommand extends Command {
         return Utils.BigNumber.make(await this.api.getNonce(wallet.address))
             .plus(1)
             .toString();
+    }
+
+    protected async resolveUnikName(
+        unikName: string,
+        flags: { [x: string]: any },
+    ): Promise<DidResolution<any> | undefined> {
+        const didResolveNetwork = flags.network === "local" ? "testnet" : flags.network;
+        try {
+            return await didResolve(unikName, didResolveNetwork);
+        } catch (error) {
+            if (error.response?.status === 404) {
+                this.stop("DID does not exist");
+            } else {
+                this.stop("An error occurred. Please see details below:\n", error);
+            }
+            /*never reached*/
+            return undefined;
+        }
     }
 
     private async setupNetwork(flags: { [x: string]: any }) {

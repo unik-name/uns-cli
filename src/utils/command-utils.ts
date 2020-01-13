@@ -1,9 +1,11 @@
 import { Identities, Interfaces, Networks, Transactions } from "@uns/ark-crypto";
 import { Builders, Transactions as NftTransactions } from "@uns/core-nft-crypto";
 import {
+    DelegateRegisterTransaction,
     DiscloseExplicitTransaction,
     IDiscloseDemand,
     IDiscloseDemandCertification,
+    UNSDelegateRegisterBuilder,
     UNSDiscloseExplicitBuilder,
 } from "@uns/crypto";
 import { ChainMeta } from "@uns/ts-sdk";
@@ -169,6 +171,26 @@ export function createSecondPassphraseTransaction(
         .signatureAsset(secondPassphrase)
         .sign(passphrase)
         .getStruct();
+}
+
+export function createDelegateRegisterTransaction(
+    unikId: string,
+    fees: number,
+    nonce: string,
+    passphrase: string,
+    secondPassphrase: string,
+): Interfaces.ITransactionData {
+    Transactions.TransactionRegistry.registerTransactionType(DelegateRegisterTransaction);
+    const builder = new UNSDelegateRegisterBuilder()
+        .fee(`${fees}`)
+        .nonce(nonce)
+        .usernameAsset(unikId)
+        .sign(passphrase);
+
+    if (secondPassphrase) {
+        builder.secondSign(secondPassphrase);
+    }
+    return builder.getStruct();
 }
 
 export function createVoteTransaction(
