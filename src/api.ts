@@ -165,7 +165,7 @@ export class UNSCLIAPI {
         unikid: string,
         propertyKey: string,
         withChainmeta: boolean,
-    ): Promise<ResponseWithChainMeta<PropertyValue> | PropertyValue> {
+    ): Promise<string | ResponseWithChainMeta<string>> {
         return getPropertyValue(unikid, propertyKey, this.network.name, {
             withChainmeta,
             confirmations: true,
