@@ -5,7 +5,7 @@ import {
     DIDType,
     IDiscloseDemand,
     IDiscloseDemandCertification,
-    PropertyValue,
+    ResponseWithChainMeta,
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
@@ -161,10 +161,19 @@ export class UnikDiscloseCommand extends WriteCommand {
 
     private async getUnikType(unikId: string): Promise<DIDType> {
         // get unik type
-        const unikType: PropertyValue = (await this.api.getUnikProperty(unikId, "type", false)) as PropertyValue;
-        if (!unikType) {
-            throw new Error(`Unable to get UNIK type (id: ${unikId})`);
+        const unikTypeResponse: ResponseWithChainMeta<string> = (await this.api.getUnikProperty(
+            unikId,
+            "type",
+            false,
+        )) as ResponseWithChainMeta<string>;
+        let unikType: string;
+
+        if (unikTypeResponse.error) {
+            throw new Error(`Unable to get UNIK type (id: ${unikId}). Caused by ${unikTypeResponse.error?.message}`);
+        } else {
+            unikType = unikTypeResponse.data as string;
         }
+
         const type: number = Number.parseInt(unikType);
 
         const didType = DIDHelpers.fromCode(type);
