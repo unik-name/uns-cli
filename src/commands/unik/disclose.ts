@@ -51,7 +51,7 @@ export class UnikDiscloseCommand extends WriteCommand {
     }
 
     public getTransactionUrl(transactionId: string): string {
-        return `${this.api.getExplorerUrl()}/transaction/${transactionId}`;
+        return `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transactionId}`;
     }
 
     protected getAvailableFormats(): Formater[] {
@@ -104,7 +104,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         checkUnikIdFormat(unikId);
 
         try {
-            await this.api.getUnikById(unikId);
+            await this.unsClientWrapper.getUnikById(unikId);
         } catch (e) {
             throw new Error("unikid is not valid");
         }
@@ -122,7 +122,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         await this.withAction(
             "Sending transaction",
             async transactionStruct => {
-                const sendResponse = await this.api.sendTransaction(transactionStruct);
+                const sendResponse = await this.unsClientWrapper.sendTransaction(transactionStruct);
                 if (sendResponse.errors) {
                     throw new Error(sendResponse.errors);
                 }
@@ -139,7 +139,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         const transactionFromNetwork = await this.withAction(
             "Waiting for transaction confirmation",
             this.waitTransactionConfirmations.bind(this), // needs .bind(this) to use the correct this in waitTransactionConfirmations function
-            this.api.getBlockTime(),
+            this.unsClientWrapper.getBlockTime(),
             transactionStruct.id,
             awaitDuring,
             confirmations,
@@ -154,7 +154,7 @@ export class UnikDiscloseCommand extends WriteCommand {
 
     private async getUnikType(unikId: string): Promise<DIDType> {
         // get unik type
-        const unikTypeResponse: ResponseWithChainMeta<string> = (await this.api.getUnikProperty(
+        const unikTypeResponse: ResponseWithChainMeta<string> = (await this.unsClientWrapper.getUnikProperty(
             unikId,
             "type",
             false,
@@ -182,7 +182,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         // Check explicit values
         for (const explicit of listOfExplicitValues) {
             try {
-                const fingerPrintResult = await this.api.computeTokenId(explicit, unikType, "UNIK");
+                const fingerPrintResult = await this.unsClientWrapper.computeTokenId(explicit, unikType, "UNIK");
                 if (fingerPrintResult !== unikId) {
                     throw new Error("At least one expliciteValue is not valid for this unikid");
                 }
@@ -209,7 +209,7 @@ export class UnikDiscloseCommand extends WriteCommand {
             passphrase,
         );
 
-        const discloseDemandCertification: IDiscloseDemandCertification = await this.api.getDiscloseDemandCertification(
+        const discloseDemandCertification: IDiscloseDemandCertification = await this.unsClientWrapper.getDiscloseDemandCertification(
             discloseDemand,
         );
 

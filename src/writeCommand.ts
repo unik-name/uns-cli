@@ -42,7 +42,7 @@ export abstract class WriteCommand extends BaseCommand {
      */
     public async applyWalletPredicate(recipientId: string, predicate: (wallet: Wallet) => boolean) {
         try {
-            const wallet: Wallet & { chainmeta: ChainMeta } = await this.api.getWallet(recipientId);
+            const wallet: Wallet & { chainmeta: ChainMeta } = await this.unsClientWrapper.getWallet(recipientId);
             return predicate(wallet);
         } catch (e) {
             if (e instanceof HttpNotFoundError) {
@@ -109,7 +109,7 @@ export abstract class WriteCommand extends BaseCommand {
          */
         this.actionStart("Waiting for transaction confirmation");
         const transactionFromNetwork = await this.waitTransactionConfirmations(
-            this.api.getBlockTime(),
+            this.unsClientWrapper.getBlockTime(),
             transactionId,
             flags["await-confirmation"],
             1,
@@ -124,7 +124,7 @@ export abstract class WriteCommand extends BaseCommand {
          * Transaction broadcast
          */
         this.actionStart("Sending transaction");
-        const sendResponse = await this.api.sendTransaction(transaction);
+        const sendResponse = await this.unsClientWrapper.sendTransaction(transaction);
         this.actionStop();
         if (sendResponse.errors) {
             throw new Error(sendResponse.errors);

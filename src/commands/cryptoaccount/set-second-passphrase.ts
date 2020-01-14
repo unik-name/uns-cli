@@ -54,7 +54,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
          * Transaction broadcast
          */
         this.actionStart("Sending transaction");
-        const sendResponse = await this.api.sendTransaction(transactionStruct);
+        const sendResponse = await this.unsClientWrapper.sendTransaction(transactionStruct);
         this.actionStop();
         if (sendResponse.errors) {
             throw new Error(sendResponse.errors);
@@ -65,7 +65,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
          */
         this.actionStart("Waiting for transaction confirmation");
         const transactionFromNetwork = await this.waitTransactionConfirmations(
-            this.api.getBlockTime(),
+            this.unsClientWrapper.getBlockTime(),
             transactionStruct.id,
             flags["await-confirmation"],
             1,
@@ -76,7 +76,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
          * Result prompt
          */
         if (!transactionFromNetwork) {
-            const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transactionStruct.id}`;
+            const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transactionStruct.id}`;
             this.warn(
                 `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,
             );

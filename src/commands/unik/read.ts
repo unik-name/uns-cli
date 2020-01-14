@@ -27,12 +27,12 @@ export class UnikReadCommand extends ReadCommand {
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
         checkUnikIdFormat(flags.unikid);
 
-        const unik: Unik & { chainmeta: ChainMeta } = await this.api.getUnikById(flags.unikid);
+        const unik: Unik & { chainmeta: ChainMeta } = await this.unsClientWrapper.getUnikById(flags.unikid);
         const properties: {
             data: Array<{ [_: string]: string }>;
             chainmeta: ChainMeta;
-        } = await this.api.getUnikProperties(flags.unikid);
-        const creationTransaction = await this.api.getTransaction(unik.transactions.first.id);
+        } = await this.unsClientWrapper.getUnikProperties(flags.unikid);
+        const creationTransaction = await this.unsClientWrapper.getTransaction(unik.transactions.first.id);
 
         if (!creationTransaction) {
             throw new Error(`Error fetching transaction ${unik.transactions.first.id}`);
@@ -56,7 +56,11 @@ export class UnikReadCommand extends ReadCommand {
         return {
             data,
             ...(flags.chainmeta
-                ? getChainContext(unik.chainmeta, this.api.network.name, this.api.getCurrentNode())
+                ? getChainContext(
+                      unik.chainmeta,
+                      this.unsClientWrapper.network.name,
+                      this.unsClientWrapper.getCurrentNode(),
+                  )
                 : {}),
         };
     }

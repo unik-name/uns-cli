@@ -26,7 +26,7 @@ import { WithChainmeta } from "./types";
 import * as UTILS from "./utils";
 import { getUrlOrigin } from "./utils";
 
-export class UNSCLIAPI {
+export class UnsClientWrapper {
     public network: any;
     public unsClient: UNSClient;
 
@@ -34,7 +34,7 @@ export class UNSCLIAPI {
         this.unsClient = new UNSClient();
     }
 
-    public init(network: Network, customNodeUrl?: string): UNSCLIAPI {
+    public init(network: Network, customNodeUrl?: string): UnsClientWrapper {
         this.unsClient.init({
             network,
             customNode: customNodeUrl,

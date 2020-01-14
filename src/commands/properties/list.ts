@@ -27,14 +27,14 @@ export class PropertiesListCommand extends BaseCommand {
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput | CommandOutput[]> {
         checkUnikIdFormat(flags.unikid);
 
-        const unik = await this.api.getUnikById(flags.unikid);
-        const lastTransaction = await this.api.getTransaction(unik.transactions.last.id);
+        const unik = await this.unsClientWrapper.getUnikById(flags.unikid);
+        const lastTransaction = await this.unsClientWrapper.getTransaction(unik.transactions.last.id);
 
         if (!lastTransaction) {
             throw new Error(`Error fetching transaction ${unik.transactions.first.id}`);
         }
 
-        const properties: any = await this.api.getUnikProperties(flags.unikid);
+        const properties: any = await this.unsClientWrapper.getUnikProperties(flags.unikid);
         const lastUpdateHeight = lastTransaction.chainmeta.height;
 
         this.checkDataConsistency(unik.chainmeta.height, lastUpdateHeight, properties.chainmeta.height);

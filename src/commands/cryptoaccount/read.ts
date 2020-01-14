@@ -45,7 +45,10 @@ export class CryptoAccountReadCommand extends ReadCommand {
                 data: Token[];
                 chainmeta: ChainMeta;
             },
-        ] = await Promise.all([this.api.getWallet(walletId), this.api.getWalletTokens(walletId)]);
+        ] = await Promise.all([
+            this.unsClientWrapper.getWallet(walletId),
+            this.unsClientWrapper.getWalletTokens(walletId),
+        ]);
 
         this.checkDataConsistency(wallet.chainmeta.height, tokens.chainmeta.height);
 
@@ -55,7 +58,7 @@ export class CryptoAccountReadCommand extends ReadCommand {
             username: wallet.username,
             secondPublicKey: wallet.secondPublicKey,
             balance: fromSatoshi(wallet.balance),
-            token: this.api.getToken(),
+            token: this.unsClientWrapper.getToken(),
             isDelegate: wallet.isDelegate,
             vote: wallet.vote,
             nfts: {
@@ -81,7 +84,11 @@ export class CryptoAccountReadCommand extends ReadCommand {
         return {
             data,
             ...(flags.chainmeta
-                ? getChainContext(wallet.chainmeta, this.api.network.name, this.api.getCurrentNode())
+                ? getChainContext(
+                      wallet.chainmeta,
+                      this.unsClientWrapper.network.name,
+                      this.unsClientWrapper.getCurrentNode(),
+                  )
                 : {}),
         };
     }

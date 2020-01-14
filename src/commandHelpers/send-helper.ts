@@ -39,7 +39,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         }
 
         this.cmd.actionStart("Sending transaction");
-        const sendResponse = await this.cmd.api.sendTransaction(transaction);
+        const sendResponse = await this.cmd.unsClientWrapper.sendTransaction(transaction);
         this.cmd.actionStop();
         if (sendResponse.errors) {
             throw new Error(sendResponse.errors);
@@ -47,7 +47,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
 
         this.cmd.actionStart("Waiting for transaction confirmation");
         const transactionFromNetwork = await this.cmd.waitTransactionConfirmations(
-            this.cmd.api.getBlockTime(),
+            this.cmd.unsClientWrapper.getBlockTime(),
             transaction.id,
             nbRetry,
             nbConfirmations,
@@ -87,7 +87,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
 
         if (id && id.startsWith("@")) {
             try {
-                resolvedAddress = await getUniknameWalletAddress(id, this.cmd.api.network.name);
+                resolvedAddress = await getUniknameWalletAddress(id, this.cmd.unsClientWrapper.network.name);
             } catch (e) {
                 if (e && e.response && e.response.status === 404) {
                     throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not exist`);
@@ -95,7 +95,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
                 throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not match expected format`);
             }
         } else {
-            if (!Identities.Address.validate(id, this.cmd.api.getVersion())) {
+            if (!Identities.Address.validate(id, this.cmd.unsClientWrapper.getVersion())) {
                 try {
                     resolvedAddress = Identities.Address.fromPublicKey(id);
                 } catch (_) {
@@ -145,6 +145,6 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
     }
 
     public getTransactionUrl(transactionId: string) {
-        return `${this.cmd.api.getExplorerUrl()}/transaction/${transactionId}`;
+        return `${this.cmd.unsClientWrapper.getExplorerUrl()}/transaction/${transactionId}`;
     }
 }

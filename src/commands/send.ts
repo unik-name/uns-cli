@@ -80,7 +80,7 @@ export class SendCommand extends WriteCommand {
 
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
-        const senderWallet = getWalletFromPassphrase(passphrases.first, this.api.network);
+        const senderWallet = getWalletFromPassphrase(passphrases.first, this.unsClientWrapper.network);
         if (senderWallet.address === recipientAddress) {
             throw new Error("Recipient and Owner are the same");
         }
