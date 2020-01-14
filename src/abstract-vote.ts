@@ -55,7 +55,7 @@ export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
         const transactionFromNetwork = await this.awaitConfirmations(flags, transactionStruct.id);
 
         if (!transactionFromNetwork) {
-            const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transactionStruct.id}`;
+            const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transactionStruct.id}`;
             this.error(
                 `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,
             );
@@ -73,14 +73,14 @@ export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
         let walletAddress: string;
 
         if (delegateId && delegateId.startsWith("@")) {
-            walletAddress = await getUniknameWalletAddress(delegateId, this.api.network.name);
+            walletAddress = await getUniknameWalletAddress(delegateId, this.unsClientWrapper.network.name);
         } else {
             checkUnikIdFormat(delegateId);
-            const unik: Unik = await this.api.getUnikById(delegateId);
+            const unik: Unik = await this.unsClientWrapper.getUnikById(delegateId);
             walletAddress = unik.ownerId;
         }
 
-        const wallet: WithChainmeta<Wallet> = await this.api.getWallet(walletAddress);
+        const wallet: WithChainmeta<Wallet> = await this.unsClientWrapper.getWallet(walletAddress);
         if (!wallet) {
             throw new Error("Delegate not found");
         }

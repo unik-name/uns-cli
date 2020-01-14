@@ -52,8 +52,8 @@ export class ResolveCommand extends ReadCommand {
                     if (flags.chainmeta && resolved.chainmeta) {
                         const metas = getChainContext(
                             resolved.chainmeta,
-                            this.api.network.name,
-                            this.api.getCurrentNode(),
+                            this.unsClientWrapper.network.name,
+                            this.unsClientWrapper.getCurrentNode(),
                         );
                         resolvedResult.chainmeta = metas.chainmeta;
                     }

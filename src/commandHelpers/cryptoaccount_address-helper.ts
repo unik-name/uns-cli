@@ -18,11 +18,11 @@ export class GetWalletAddressCommandHelper extends CommandHelper<CryptoAccountAd
         let chainMeta: ChainMeta | undefined;
         if (isTokenId(id)) {
             // Get token
-            const unik = await this.cmd.api.getUnikById(id);
+            const unik = await this.cmd.unsClientWrapper.getUnikById(id);
             address = unik.ownerId;
             if (format !== OUTPUT_FORMAT.raw.key) {
                 // Get Wallet
-                const wallet = await this.cmd.api.getWallet(address);
+                const wallet = await this.cmd.unsClientWrapper.getWallet(address);
                 publicKey = wallet.publicKey;
                 if (displayChainmeta) {
                     chainMeta = wallet.chainmeta;
@@ -41,7 +41,7 @@ export class GetWalletAddressCommandHelper extends CommandHelper<CryptoAccountAd
             }
             checkPassphraseFormat(passphrase);
 
-            const wallet = getWalletFromPassphrase(passphrase, this.cmd.api.network);
+            const wallet = getWalletFromPassphrase(passphrase, this.cmd.unsClientWrapper.network);
             address = wallet.address;
             publicKey = wallet.publicKey;
         }

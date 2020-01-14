@@ -28,7 +28,7 @@ export class StatusCommand extends BaseCommand {
     }
 
     protected async do(flags: Record<string, any>): Promise<CommandOutput> {
-        const blockchainStatus: BlockchainState = await this.api.getBlockchain();
+        const blockchainStatus: BlockchainState = await this.unsClientWrapper.getBlockchain();
 
         // Parallel requests + destructurating alltogether
         const [nftStatus, nodeStatus, nodeConf]: [
@@ -36,9 +36,9 @@ export class StatusCommand extends BaseCommand {
             NodeStatus,
             NodeConfiguration,
         ] = await Promise.all([
-            getNftsStatuses(this.api.network.name),
-            this.api.getNodeStatus(),
-            this.api.getNodeConfiguration(),
+            getNftsStatuses(this.unsClientWrapper.network.name),
+            this.unsClientWrapper.getNodeStatus(),
+            this.unsClientWrapper.getNodeConfiguration(),
         ]);
 
         if (!nodeConf || !blockchainStatus || !nodeStatus) {

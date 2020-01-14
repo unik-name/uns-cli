@@ -4,9 +4,9 @@ import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Managers, Types, Utils } from "@uns/ark-crypto";
 import { ChainMeta, DidResolution, didResolve, Network, Transaction } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
-import { UNSCLIAPI } from "./api";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
 import * as LOGGER from "./logger";
+import { UnsClientWrapper } from "./sdkWrapper";
 import * as UTILS from "./utils";
 import { getWalletFromPassphrase } from "./utils";
 
@@ -30,7 +30,7 @@ export abstract class BaseCommand extends Command {
         }),
     };
 
-    public api: UNSCLIAPI;
+    public unsClientWrapper: UnsClientWrapper;
 
     protected verbose: boolean = false;
 
@@ -38,7 +38,7 @@ export abstract class BaseCommand extends Command {
 
     constructor(argv: any[], config: Config.IConfig) {
         super(argv, config);
-        this.api = new UNSCLIAPI();
+        this.unsClientWrapper = new UnsClientWrapper();
     }
 
     public async init() {
@@ -96,7 +96,7 @@ export abstract class BaseCommand extends Command {
             this.info("DEV MODE IS ACTIVATED");
         }
         try {
-            this.info(`node: ${this.api.getCurrentNode()}`);
+            this.info(`node: ${this.unsClientWrapper.getCurrentNode()}`);
             const commandResult = await this.do(flags, args);
             if (commandResult && typeof commandResult === "string") {
                 super.log(commandResult);
@@ -158,7 +158,7 @@ export abstract class BaseCommand extends Command {
         numberOfRetry: number = 0,
         expectedConfirmations: number = 0,
     ): Promise<(Transaction & { chainmeta: ChainMeta; confirmations: number }) | undefined> {
-        const transactionFromNetwork = await this.api.getTransaction(transactionId, blockTime * 1000);
+        const transactionFromNetwork = await this.unsClientWrapper.getTransaction(transactionId, blockTime * 1000);
         const confirmations = transactionFromNetwork ? transactionFromNetwork.confirmations : 0;
         if (confirmations < expectedConfirmations && numberOfRetry > 0) {
             return await this.waitTransactionConfirmations(
@@ -242,8 +242,8 @@ export abstract class BaseCommand extends Command {
     }
 
     protected async getNextWalletNonceFromPassphrase(passphrase: string): Promise<string> {
-        const wallet = getWalletFromPassphrase(passphrase, this.api.network);
-        return Utils.BigNumber.make(await this.api.getNonce(wallet.address))
+        const wallet = getWalletFromPassphrase(passphrase, this.unsClientWrapper.network);
+        return Utils.BigNumber.make(await this.unsClientWrapper.getNonce(wallet.address))
             .plus(1)
             .toString();
     }
@@ -279,11 +279,11 @@ export abstract class BaseCommand extends Command {
 
         // UNS and Ark Crypto
         Managers.configManager.setFromPreset(networkName);
-        this.api.init(networkName as Network, flags.node);
+        this.unsClientWrapper.init(networkName as Network, flags.node);
 
         const [configurationCrypto, height] = await Promise.all([
-            this.api.getConfigurationForCrypto(),
-            this.api.getCurrentHeight(),
+            this.unsClientWrapper.getConfigurationForCrypto(),
+            this.unsClientWrapper.getCurrentHeight(),
         ]);
 
         Managers.configManager.setConfig(configurationCrypto);

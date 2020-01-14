@@ -41,7 +41,7 @@ export class PropertiesGetCommand extends ReadCommand {
         const propertyKey = flags.propertyKey.trim();
         checkUnikPropertyFormat(propertyKey);
 
-        const property: any = await this.api.getUnikProperty(flags.unikid, propertyKey, flags.chainmeta);
+        const property: any = await this.unsClientWrapper.getUnikProperty(flags.unikid, propertyKey, flags.chainmeta);
 
         checkConfirmations(property.confirmations, flags.confirmed);
 
@@ -59,7 +59,11 @@ export class PropertiesGetCommand extends ReadCommand {
                 confirmations: property.confirmations,
             },
             ...(flags.chainmeta
-                ? getChainContext(property.chainmeta, this.api.network.name, this.api.getCurrentNode())
+                ? getChainContext(
+                      property.chainmeta,
+                      this.unsClientWrapper.network.name,
+                      this.unsClientWrapper.getCurrentNode(),
+                  )
                 : {}),
         };
     }

@@ -39,7 +39,7 @@ export class UnikIsDisclosedCommand extends ReadCommand {
         let data;
         let chainmeta;
         try {
-            property = (await this.api.getUnikProperty(
+            property = (await this.unsClientWrapper.getUnikProperty(
                 unikId,
                 "explicitValues",
                 flags.chainmeta,
@@ -60,7 +60,7 @@ export class UnikIsDisclosedCommand extends ReadCommand {
             chainmeta = property.chainmeta;
         } catch (error) {
             if (error.response.status === 404) {
-                const unik = await this.api.getUnikById(unikId);
+                const unik = await this.unsClientWrapper.getUnikById(unikId);
 
                 data = {
                     unikid: unikId,
@@ -76,7 +76,9 @@ export class UnikIsDisclosedCommand extends ReadCommand {
         }
         return {
             data,
-            ...(flags.chainmeta ? getChainContext(chainmeta, this.api.network.name, this.api.getCurrentNode()) : {}),
+            ...(flags.chainmeta
+                ? getChainContext(chainmeta, this.unsClientWrapper.network.name, this.unsClientWrapper.getCurrentNode())
+                : {}),
         };
     }
 }

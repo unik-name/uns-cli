@@ -22,7 +22,7 @@ export abstract class AbstractDelegateCommand extends WriteCommand {
         let unikid: string;
         if (isTokenId(args.id)) {
             unikid = args.id;
-            ownerAddress = (await this.api.getUnikById(unikid)).ownerId;
+            ownerAddress = (await this.unsClientWrapper.getUnikById(unikid)).ownerId;
         } else {
             const resolved = await this.resolveUnikName(args.id, flags);
             unikid = resolved?.data.unikid;
@@ -34,7 +34,7 @@ export abstract class AbstractDelegateCommand extends WriteCommand {
         /**
          * Read unik owner wallet nonce
          */
-        const nonce = Utils.BigNumber.make(await this.api.getNonce(ownerAddress))
+        const nonce = Utils.BigNumber.make(await this.unsClientWrapper.getNonce(ownerAddress))
             .plus(1)
             .toString();
 
@@ -69,7 +69,7 @@ export abstract class AbstractDelegateCommand extends WriteCommand {
         const transactionFromNetwork = await this.awaitConfirmations(flags, transactionStruct.id);
 
         if (!transactionFromNetwork) {
-            const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transactionStruct.id}`;
+            const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transactionStruct.id}`;
             this.error(
                 `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,
             );

@@ -24,7 +24,7 @@ export class CryptoAccountCreateCommand extends BaseCommand {
 
     protected async do(): Promise<CommandOutput> {
         const passphrase = await generatePassphrase();
-        const wallet = getWalletFromPassphrase(passphrase, this.api.network);
+        const wallet = getWalletFromPassphrase(passphrase, this.unsClientWrapper.network);
 
         // Do not use this.error. It throws error and close. {exit: 0} option closes too.
         this.warn("This information is not saved anywhere. You need to copy and save it by your own.");

@@ -48,7 +48,11 @@ export class UnikCreateCommand extends WriteCommand {
          * Compute Fingerprint
          */
         this.actionStart("Computing UNIK fingerprint");
-        const tokenId = await this.api.computeTokenId(flags.explicitValue, flags.type.toUpperCase() as DIDType, "UNIK");
+        const tokenId = await this.unsClientWrapper.computeTokenId(
+            flags.explicitValue,
+            flags.type.toUpperCase() as DIDType,
+            "UNIK",
+        );
         this.actionStop();
 
         this.log(`unikid: ${tokenId}`);
@@ -81,7 +85,7 @@ export class UnikCreateCommand extends WriteCommand {
 
         await this.broadcastTransaction(transaction);
 
-        const transactionUrl = `${this.api.getExplorerUrl()}/transaction/${transaction.id}`;
+        const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transaction.id}`;
         this.log(`Transaction in explorer: ${transactionUrl}`);
 
         if (!this.checkIfAwaitIsNeeded(flags, transaction.id)) {
@@ -105,7 +109,7 @@ export class UnikCreateCommand extends WriteCommand {
                 }`,
             );
 
-            const tokenUrl = `${this.api.getExplorerUrl()}/uniks/${tokenId}`;
+            const tokenUrl = `${this.unsClientWrapper.getExplorerUrl()}/uniks/${tokenId}`;
             this.log(`UNIK nft in UNS explorer: ${tokenUrl}`);
         } else {
             this.error(
