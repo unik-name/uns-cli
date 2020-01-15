@@ -1,11 +1,11 @@
 import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
-import { DIDType } from "@uns/ts-sdk";
+import { createCertifiedNnfMintTransaction, DIDType, isError, SdkResult } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases, getTypeValue, getUnikTypesList } from "../../types";
-import { createNFTMintTransaction, getNetworksListListForDescription } from "../../utils";
+import { getNetworksListListForDescription, NFT_NAME } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
@@ -66,38 +66,43 @@ export class UnikCreateCommand extends WriteCommand {
          * Transaction creation
          */
         this.actionStart("Creating transaction");
-        const transaction: Interfaces.ITransactionData = createNFTMintTransaction(
+        const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNnfMintTransaction(
+            this.unsClientWrapper.network.name,
             tokenId,
             getTypeValue(flags.type),
             flags.fee,
-            // this.networkHash,
             nonce,
             passphrases.first,
             passphrases.second,
+            NFT_NAME,
         );
         this.actionStop();
 
-        if (!transaction.id) {
+        if (isError(result)) {
+            throw new Error(`${result.message} ${result.code ? ` (${result.code})` : ""}`);
+        }
+
+        if (!result.id) {
             throw new Error("Transaction id can't be undefined");
         }
 
-        this.log(`Transaction id: ${transaction.id}`);
+        this.log(`Transaction id: ${result.id}`);
 
-        await this.broadcastTransaction(transaction);
+        await this.broadcastTransaction(result);
 
-        const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transaction.id}`;
+        const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${result.id}`;
         this.log(`Transaction in explorer: ${transactionUrl}`);
 
-        if (!this.checkIfAwaitIsNeeded(flags, transaction.id)) {
+        if (!this.checkIfAwaitIsNeeded(flags, result.id)) {
             return {
                 data: {
                     id: tokenId,
-                    transaction: transaction.id,
+                    transaction: result.id,
                 },
             };
         }
 
-        const transactionFromNetwork = await this.awaitConfirmations(flags, transaction.id);
+        const transactionFromNetwork = await this.awaitConfirmations(flags, result.id);
 
         /**
          * Result prompt
@@ -119,7 +124,7 @@ export class UnikCreateCommand extends WriteCommand {
         return {
             data: {
                 id: tokenId,
-                transaction: transaction.id,
+                transaction: result.id,
                 confirmations: transactionFromNetwork.confirmations,
             },
         };

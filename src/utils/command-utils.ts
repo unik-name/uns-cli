@@ -14,7 +14,7 @@ import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
 import * as urlModule from "url";
 
-const NFT_NAME = "unik";
+export const NFT_NAME = "unik";
 
 export const isDevMode = () => {
     return process.env.DEV_MODE === "true";
@@ -44,34 +44,6 @@ export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
         url,
         backend: unsConfig.service.url,
     };
-};
-
-/**
- * Create NFTMint transaction structure
- * @param client
- * @param tokenId
- * @param passphrase
- */
-export const createNFTMintTransaction = (
-    tokenId: string,
-    tokenType: string,
-    fees: number,
-    nonce: string,
-    passphrase: string,
-    secondPassPhrase: string,
-): Interfaces.ITransactionData => {
-    Transactions.TransactionRegistry.registerTransactionType(NftTransactions.NftMintTransaction);
-    const builder = new Builders.NftMintBuilder(NFT_NAME, tokenId)
-        .properties({ type: tokenType })
-        .fee(`${fees}`)
-        .nonce(nonce)
-        .sign(passphrase);
-
-    if (secondPassPhrase) {
-        builder.secondSign(secondPassPhrase);
-    }
-
-    return builder.getStruct();
 };
 
 /**
