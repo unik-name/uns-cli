@@ -78,7 +78,7 @@ const applyTestCase = (testCase: any) => {
         });
 };
 
-describe("creat-unik command", () => {
+describe("create-unik command", () => {
     beforeEach(() => {
         process.env.DEV_MODE = "true";
     });
