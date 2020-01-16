@@ -42,7 +42,7 @@ export const shouldExit = [
     {
         description: "Should exit with code 1 if delegate not found with token id",
         args: [commandName, "-n", "dalinet", UNIK_ID_NOT_FOUND],
-        errorMsg: `» :stop: Error fetching UNIK ${UNIK_ID_NOT_FOUND}. Caused by Not Found;\n`,
+        errorMsg: `» :stop: No UNIK found with id ${UNIK_ID_NOT_FOUND}.;\n`,
         mocks: {
             nodeConfigurationCrypto: true,
             blockchain: true,
@@ -50,22 +50,6 @@ export const shouldExit = [
                 {
                     url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
                     cb: (api: any) => api.get(`/uniks/${UNIK_ID_NOT_FOUND}`).reply(404),
-                },
-            ],
-        },
-    },
-    {
-        description: "Should exit with code 1 if delegate not found with @unikname",
-        args: [commandName, "-n", "dalinet", "@delegateId"],
-        exitCode: 1,
-        errorMsg: `» :stop: Error fetching wallet ${wallet.address}. Caused by Not Found;\n`,
-        mocks: {
-            nodeConfigurationCrypto: true,
-            blockchain: true,
-            custom: [
-                {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
-                    cb: (api: any) => api.get(`/wallets/${wallet.address}`).reply(404),
                 },
             ],
         },
