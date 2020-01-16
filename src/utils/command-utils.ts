@@ -2,10 +2,12 @@ import { Identities, Interfaces, Networks, Transactions } from "@uns/ark-crypto"
 import { Builders, Transactions as NftTransactions } from "@uns/core-nft-crypto";
 import {
     DelegateRegisterTransaction,
+    DelegateResignTransaction,
     DiscloseExplicitTransaction,
     IDiscloseDemand,
     IDiscloseDemandCertification,
     UNSDelegateRegisterBuilder,
+    UNSDelegateResignBuilder,
     UNSDiscloseExplicitBuilder,
 } from "@uns/crypto";
 import { ChainMeta } from "@uns/ts-sdk";
@@ -185,6 +187,24 @@ export function createDelegateRegisterTransaction(
         .fee(`${fees}`)
         .nonce(nonce)
         .usernameAsset(unikId)
+        .sign(passphrase);
+
+    if (secondPassphrase) {
+        builder.secondSign(secondPassphrase);
+    }
+    return builder.getStruct();
+}
+
+export function createDelegateResignTransaction(
+    fees: number,
+    nonce: string,
+    passphrase: string,
+    secondPassphrase: string,
+): Interfaces.ITransactionData {
+    Transactions.TransactionRegistry.registerTransactionType(DelegateResignTransaction);
+    const builder = new UNSDelegateResignBuilder()
+        .fee(`${fees}`)
+        .nonce(nonce)
         .sign(passphrase);
 
     if (secondPassphrase) {
