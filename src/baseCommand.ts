@@ -110,6 +110,9 @@ export abstract class BaseCommand extends Command {
             }
         } catch (globalCatchException) {
             this.stop(globalCatchException.message);
+            if (this.verbose) {
+                this.stop(globalCatchException.stack);
+            }
             this.exit(1);
         }
     }
