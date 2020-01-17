@@ -3,7 +3,7 @@
 set -ex
 
 # Check new commits since 24h
-if [ $(git log --since="7 day" | wc -l) -eq 0 ]; then
+if [ $(git log --since="1 day" | wc -l) -eq 0 ]; then
     echo "Nothing to publish since 1 day.";
     exit 0;
 fi
