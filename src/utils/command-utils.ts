@@ -56,7 +56,6 @@ export const createNFTMintTransaction = (
     tokenId: string,
     tokenType: string,
     fees: number,
-    // networkHash: number,
     nonce: string,
     passphrase: string,
     secondPassPhrase: string,
@@ -65,7 +64,6 @@ export const createNFTMintTransaction = (
     const builder = new Builders.NftMintBuilder(NFT_NAME, tokenId)
         .properties({ type: tokenType })
         .fee(`${fees}`)
-        // .network(networkHash)
         .nonce(nonce)
         .sign(passphrase);
 
@@ -88,20 +86,21 @@ export const createNFTUpdateTransaction = (
     tokenId: string,
     properties: { [_: string]: string },
     fees: number,
-    // networkHash: number,
     nonce: string,
     passphrase: string,
+    secondPassPhrase?: string,
 ): Interfaces.ITransactionData => {
     Transactions.TransactionRegistry.registerTransactionType(NftTransactions.NftUpdateTransaction);
-    return (
-        new Builders.NftUpdateBuilder(NFT_NAME, tokenId)
-            .properties(properties)
-            .fee(`${fees}`)
-            // .network(networkHash)
-            .nonce(nonce)
-            .sign(passphrase)
-            .getStruct()
-    );
+    const builder = new Builders.NftUpdateBuilder(NFT_NAME, tokenId)
+        .properties(properties)
+        .fee(`${fees}`)
+        .nonce(nonce)
+        .sign(passphrase);
+
+    if (secondPassPhrase) {
+        builder.secondSign(secondPassPhrase);
+    }
+    return builder.getStruct();
 };
 
 /**
@@ -117,7 +116,6 @@ export function createTransferTransaction(
     amount: number,
     fees: number,
     recipientId: string,
-    // networkHash: number,
     nonce: string,
     passphrase: string,
     secondPassPhrase?: string,
@@ -125,7 +123,6 @@ export function createTransferTransaction(
     const builder = Transactions.BuilderFactory.transfer()
         .amount(`${amount}`)
         .fee(`${fees}`)
-        // .network(networkHash)
         .nonce(nonce)
         .recipientId(recipientId)
         .sign(passphrase);
@@ -141,7 +138,6 @@ export function createDiscloseTransaction(
     discloseDemand: IDiscloseDemand,
     discloseDemandCertification: IDiscloseDemandCertification,
     fees: number,
-    // networkHash: number,
     nonce: string,
     passphrase: string,
     secondPassphrase?: string,
@@ -149,7 +145,6 @@ export function createDiscloseTransaction(
     Transactions.TransactionRegistry.registerTransactionType(DiscloseExplicitTransaction);
     const builder = new UNSDiscloseExplicitBuilder()
         .fee(`${fees}`)
-        // .network(networkHash)
         .nonce(nonce)
         .discloseDemand(discloseDemand, discloseDemandCertification)
         .sign(passphrase);

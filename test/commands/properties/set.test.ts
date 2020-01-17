@@ -7,7 +7,7 @@ const PASSPHRASE = "reveal front short spend enjoy label element text alert answ
 const commandName: string = "properties:set";
 
 const walletAddress = "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA";
-
+const walletPubKey = "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011";
 describe(`${commandName} command`, () => {
     beforeEach(() => {
         process.env.DEV_MODE = "true";
@@ -18,6 +18,11 @@ describe(`${commandName} command`, () => {
             "toolong1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";
 
         test.stderr()
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api => {
+                api.get(`/wallets/${walletPubKey}`).reply(200, {
+                    data: {},
+                });
+            })
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api => {
                 api.get(`/wallets/${walletAddress}`).reply(200, {
                     data: {

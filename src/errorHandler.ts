@@ -54,7 +54,7 @@ export class HttpNotFoundError extends Error {
 export function handleFetchError(resourceName: string, id: string) {
     return (e: any) => {
         const error =
-            e.statusCode === 404 || e.response.status === 404
+            e.statusCode === 404 || e.response?.status === 404
                 ? new HttpNotFoundError(`No ${resourceName} found with id ${id}.`)
                 : new Error(`Error fetching ${resourceName} ${id}. Caused by ${e.message}`);
         throw error;

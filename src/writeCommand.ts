@@ -9,6 +9,8 @@ import {
     feeFlag,
     getPassphraseFromUser,
     getSecondPassphraseFromUser,
+    passphraseFlag,
+    secondPassphraseFlag,
     senderAccountFlag,
 } from "./utils";
 
@@ -20,6 +22,8 @@ export abstract class WriteCommand extends BaseCommand {
             ...feeFlag(fees),
             ...awaitConfirmationFlag,
             ...senderAccountFlag(),
+            ...passphraseFlag,
+            ...secondPassphraseFlag,
         };
     }
 
