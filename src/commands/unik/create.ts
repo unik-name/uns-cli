@@ -5,7 +5,7 @@ import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases, getTypeValue, getUnikTypesList } from "../../types";
-import { createNFTMintTransaction, getNetworksListListForDescription, passphraseFlag } from "../../utils";
+import { createNFTMintTransaction, getNetworksListListForDescription } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
@@ -25,7 +25,6 @@ export class UnikCreateCommand extends WriteCommand {
             required: true,
             options: getUnikTypesList(),
         }),
-        ...passphraseFlag,
     };
 
     protected getAvailableFormats(): Formater[] {

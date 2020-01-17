@@ -11,13 +11,7 @@ import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
-import {
-    checkUnikIdFormat,
-    createDiscloseTransaction,
-    explicitValueFlag,
-    passphraseFlag,
-    unikidFlag,
-} from "../../utils";
+import { checkUnikIdFormat, createDiscloseTransaction, explicitValueFlag, unikidFlag } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikDiscloseCommand extends WriteCommand {
@@ -29,7 +23,6 @@ export class UnikDiscloseCommand extends WriteCommand {
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),
-        ...passphraseFlag,
         ...unikidFlag("The UNIK token on which to disclose values"),
         ...explicitValueFlag("Array of explicit value to disclose, separated with a space.", true),
     };

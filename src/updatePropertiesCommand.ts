@@ -1,12 +1,6 @@
+import { CryptoAccountPassphrases } from "types";
 import { CommandOutput } from "./formater";
-import {
-    checkPassphraseFormat,
-    checkUnikIdFormat,
-    createNFTUpdateTransaction,
-    getPassphraseFromUser,
-    passphraseFlag,
-    unikidFlag,
-} from "./utils";
+import { checkUnikIdFormat, createNFTUpdateTransaction, unikidFlag } from "./utils";
 import { WriteCommand } from "./writeCommand";
 
 export abstract class PropertiesUpdateCommand extends WriteCommand {
@@ -14,7 +8,6 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         return {
             ...WriteCommand.getWriteCommandFlags(fees),
             ...unikidFlag("The UNIK token on which to update the properties."),
-            ...passphraseFlag,
         };
     }
 
@@ -24,19 +17,12 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         // Check unikid format
         checkUnikIdFormat(flags.unikid);
 
-        // Get passphrase
-        let passphrase = flags.passphrase;
-        if (!passphrase) {
-            passphrase = await getPassphraseFromUser();
-        }
-
-        // Check passphrase format
-        checkPassphraseFormat(passphrase);
+        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         /**
          * Read emitter's wallet nonce
          */
-        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
 
         const properties = this.getProperties(flags);
 
@@ -45,9 +31,9 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
             flags.unikid,
             properties,
             flags.fee,
-            // this.networkHash,
             nonce,
-            passphrase,
+            passphrases.first,
+            passphrases.second,
         );
 
         if (!transactionStruct.id) {

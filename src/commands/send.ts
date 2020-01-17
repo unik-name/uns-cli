@@ -4,7 +4,7 @@ import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import { getWalletFromPassphrase, passphraseFlag, secondPassphraseFlag, toSatoshi } from "../utils";
+import { getWalletFromPassphrase, toSatoshi } from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -19,8 +19,6 @@ export class SendCommand extends WriteCommand {
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),
-        ...passphraseFlag,
-        ...secondPassphraseFlag,
         to: flags.string({
             description:
                 "The recipient public address, public key OR the @unik-name of the recipient (warning: @unik-name must be surrounded with double quotes)",
