@@ -726,10 +726,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uns/ark-crypto@^4.1.0-dev", "@uns/ark-crypto@^4.1.0-dev.20200116154400":
-  version "4.1.0-dev.20200116154400"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.1.0-dev.20200116154400.tgz#e5bf018ce0c5ee0f8eadcb947e97168f330892db"
-  integrity sha512-FZU/4GLDi9QdhLBCMoYlK4uI2+nNdISYczWTxq5N9py/WMep7x5q5n4XDht4mLS/bzh4/eG9NBHbQOeD3ikIzQ==
+"@uns/ark-crypto@^4.1.0-dev.20200119221500":
+  version "4.1.0-dev.20200119221500"
+  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-4.1.0-dev.20200119221500.tgz#fb66ed5c0ef7d06890fbf5e857973f1490ba13b0"
+  integrity sha512-u+mmsGUkbsiVv196bEBXesTPsKMwHnSGhYMDfdkPf1A+ABlFR/OZUXYzMF89LxNbAl0TbwPgtMy2IME49NpRnQ==
   dependencies:
     "@arkecosystem/utils" "0.8.3"
     ajv "^6.10.2"
@@ -752,29 +752,30 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/core-nft-crypto@^4.1.0-dev":
-  version "4.1.0-dev.20200116154400"
-  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-4.1.0-dev.20200116154400.tgz#7eafe267dd6781d3d1188db191121c77ce00f59c"
-  integrity sha512-36nzyJeyda3qb4FSBV0LcnJVWEuOeZev9jCupzbjYP6iIBszX2YIVXb34Z3zfaDYj+vqoUI9MMUKGn3mNhDOaA==
+"@uns/core-nft-crypto@^4.1.0-dev.20200119221500":
+  version "4.1.0-dev.20200119221500"
+  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-4.1.0-dev.20200119221500.tgz#b3aa331b126e867ce51e86a0fde8819526b87839"
+  integrity sha512-U6UMOjqSd0mncpuxcdJFBdoTkFwzAdu69xev1oSpwmhEPuj+4hJdXKi0m2cGx7bYVGduTvXt6wmQ5yIqjgOA3A==
   dependencies:
     "@arkecosystem/core-interfaces" "^2.6.0-next.4"
-    "@uns/ark-crypto" "^4.1.0-dev.20200116154400"
+    "@uns/ark-crypto" "^4.1.0-dev.20200119221500"
 
-"@uns/crypto@^4.1.0-dev":
-  version "4.1.0-dev.20200116154400"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-4.1.0-dev.20200116154400.tgz#d19773c2ed2bcda50a6b77065ab0a23348dd18d1"
-  integrity sha512-zrz5FWgyLACk80mvEVLAEOBHAYirvg5/HfgTUEqJZa97WFu9XvA20enD6ZtRNsKtKgqx+K5Vyu7Lzchw4TDodw==
+"@uns/crypto@^4.1.0-dev.20200119221500":
+  version "4.1.0-dev.20200119221500"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-4.1.0-dev.20200119221500.tgz#c6b726b65a328875e9a6375c46e54489aa336887"
+  integrity sha512-T80gXOmjIy3g7VLPlwDyOLAeqzYnKrE6UO/HFkl9d/O0ofnUwaFKLthKnG5pQ4DPOo+laXkJwvdSEkzQ/Oap/w==
   dependencies:
-    "@uns/ark-crypto" "^4.1.0-dev.20200116154400"
+    "@uns/ark-crypto" "^4.1.0-dev.20200119221500"
+    "@uns/core-nft-crypto" "^4.1.0-dev.20200119221500"
 
 "@uns/ts-sdk@^2.1.0-dev":
-  version "2.1.0-dev.20200111021013"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.1.0-dev.20200111021013.tgz#0d7291e877e47f91a3b1efac036491b277fa3ab1"
-  integrity sha512-xUQkd/zIq+TMXedrUsFvBli/CgLidSLC0dYuur3Y5bZjcuNcq7jzdOo7JkOVIaBO7Vyhg+UzWaKz4Jzue8LWMA==
+  version "2.1.0-dev.20200119215924"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.1.0-dev.20200119215924.tgz#f547f8c21c377a6a125b5eef3c34117a03a075cf"
+  integrity sha512-FQVaWfk0fHuIt2F93dlbBUJgNh50Fv9B64bVY4ebQFLZnupr9PcD9EPAtqKbBBtryRKqNhNspj9JAvYE7zO4AA==
   dependencies:
-    "@uns/ark-crypto" "^4.1.0-dev"
-    "@uns/core-nft-crypto" "^4.1.0-dev"
-    "@uns/crypto" "^4.1.0-dev"
+    "@uns/ark-crypto" "^4.1.0-dev.20200119221500"
+    "@uns/core-nft-crypto" "^4.1.0-dev.20200119221500"
+    "@uns/crypto" "^4.1.0-dev.20200119221500"
     deepmerge "^4.0.0"
     is-url-superb "^3.0.0"
     ky "^0.13.0"
@@ -845,7 +846,17 @@ ajv-keywords@^3.4.1:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.4.1.tgz#ef916e271c64ac12171fd8384eaae6b2345854da"
   integrity sha512-RO1ibKvd27e6FEShVFfPALuHI3WjSVNeK5FIsmme/LYRNxjKuNj+Dt7bucLa6NdSv3JcVTyMlm9kGR84z1XpaQ==
 
-ajv@^6.10.2, ajv@^6.5.5:
+ajv@^6.10.2:
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.11.0.tgz#c3607cbc8ae392d8a5a536f25b21f8e5f3f87fe9"
+  integrity sha512-nCprB/0syFYy9fVYU1ox1l2KN8S9I+tziH8D4zdZuLT3N6RMlGSGt5FSTpAiHB/Whv8Qs1cWHma1aMKZyaHRKA==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
+
+ajv@^6.5.5:
   version "6.10.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.10.2.tgz#d3cea04d6b017b2894ad69040fec8b623eb4bd52"
   integrity sha512-TXtUUEYHuaTEbLZWIKUr5pmBuhDLy+8KYtPYdcV8qC+pOZL+NKqYwvWSRrVXHn+ZmRRAu8vJTAznH7Oag6RVRw==
@@ -2358,6 +2369,11 @@ fast-deep-equal@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
   integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
+
+fast-deep-equal@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.1.tgz#545145077c501491e33b15ec408c294376e94ae4"
+  integrity sha512-8UEa58QDLauDNfpbrX55Q9jrGHThw2ZMdOky5Gl1CDtVeJDPVrG4Jxx1N8jw2gkWaff5UUuX1KJd+9zGe2B+ZA==
 
 fast-glob@^3.0.3:
   version "3.0.4"
