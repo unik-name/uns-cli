@@ -41,7 +41,7 @@ describe(`${commandName} command`, () => {
                         },
                     }),
             )
-            .command([commandName, "-n", "dalinet", "--verbose"])
+            .command([commandName, "-n", "dalinet"])
             // tslint:disable-next-line:no-empty
             .catch(_ => {})
             .it("on existing second passphrase", ctx => {
