@@ -35,11 +35,11 @@ export const WALLET_CHAINMETA = {
 export const transaction = {
     id: TRANSACTION_ID,
     signature:
-        "ce47173bae3c6edb1db991013ec29498bc35e4fb5df7470aee13ce8c43ad537dd00458eeedecee9e7974bb76133a53797dfeed752a82c336a464719605b41a67",
-    typeGroup: 2000,
+        "9ee1be3a76e97e4e8ae95a31148193557d69cf6d34e36cb7d16044b80289d7713aa41cd5995bd2a06f5d9dbb6e646c53655431b338748c0070b7b6306b23d28b",
+    typeGroup: 2001,
     nonce: "2",
     version: 2,
-    type: 0,
+    type: 3,
     fee: "100000000",
     senderPublicKey: "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011",
     amount: "0",
@@ -47,8 +47,19 @@ export const transaction = {
         nft: {
             unik: {
                 tokenId: UNIK_ID,
-                properties: { type: "1" },
+                properties: {
+                    type: "1",
+                },
             },
+        },
+        certification: {
+            payload: {
+                iss: "2b9799c35cbe4e8fb93c79c83aebe229f9f9909d7d13138ba837fca932dada76",
+                sub: "6d8f88a373dbdb704dabdfd1ae4311a35484685ef3885c6e08bf7200648a9884",
+                iat: 1579507453173,
+            },
+            signature:
+                "3045022100fbff7614e5658b692484efccc4a1e2495e655c7fd95287a1ee857c42b789ca50022018d4f23db7b920a1465276cedb63aac3f923556e7bede080792c59638df16ee3",
         },
     },
 };
@@ -179,3 +190,26 @@ export const shouldExit = [
         exitCode: 2,
     },
 ];
+
+export const MINT_CERTIFICATION_DEMAND = {
+    nft: {
+        unik: {
+            tokenId: "6b8aca93a5181e736c35d88aeb4047e9d921f5e2b3e8fc7c5cf745e04894f24f",
+            properties: {
+                type: "1",
+            },
+        },
+    },
+};
+
+export const MINT_CERTIFICATION = {
+    data: {
+        payload: {
+            iss: "2b9799c35cbe4e8fb93c79c83aebe229f9f9909d7d13138ba837fca932dada76",
+            sub: "6d8f88a373dbdb704dabdfd1ae4311a35484685ef3885c6e08bf7200648a9884",
+            iat: 1579507453173,
+        },
+        signature:
+            "3045022100fbff7614e5658b692484efccc4a1e2495e655c7fd95287a1ee857c42b789ca50022018d4f23db7b920a1465276cedb63aac3f923556e7bede080792c59638df16ee3",
+    },
+};

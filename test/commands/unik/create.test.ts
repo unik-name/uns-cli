@@ -1,8 +1,10 @@
 import { expect, test } from "@oclif/test";
 import { Crypto, Transactions } from "@uns/ark-crypto";
-import { Transactions as NftTransactions } from "@uns/core-nft-crypto";
+import { CertifiedNftMintTransaction } from "@uns/crypto";
 import {
     meta,
+    MINT_CERTIFICATION,
+    MINT_CERTIFICATION_DEMAND,
     outputCases,
     shouldExit,
     transaction,
@@ -23,6 +25,9 @@ const applyTestCase = (testCase: any) => {
             },
         }),
     )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
+            api.post("/mint-demand-certification", MINT_CERTIFICATION_DEMAND).reply(201, MINT_CERTIFICATION),
+        )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api
                 .post("/transactions", {
@@ -96,7 +101,7 @@ describe("create-unik command", () => {
 
         jest.setTimeout(10000);
         afterEach(() => {
-            Transactions.TransactionRegistry.deregisterTransactionType(NftTransactions.NftMintTransaction);
+            Transactions.TransactionRegistry.deregisterTransactionType(CertifiedNftMintTransaction);
         });
         outputCases.forEach(testCase => applyTestCase(testCase));
     });
