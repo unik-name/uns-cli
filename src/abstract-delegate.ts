@@ -1,7 +1,7 @@
 import { Interfaces, Utils } from "@uns/ark-crypto";
 import { NestedCommandOutput } from "./formater";
 import { CryptoAccountPassphrases } from "./types";
-import { isTokenId } from "./utils";
+import { isTokenId, resolveUnikName } from "./utils";
 import { WriteCommand } from "./writeCommand";
 
 export abstract class AbstractDelegateCommand extends WriteCommand {
@@ -24,7 +24,10 @@ export abstract class AbstractDelegateCommand extends WriteCommand {
             unikid = args.id;
             ownerAddress = (await this.unsClientWrapper.getUnikById(unikid)).ownerId;
         } else {
-            const resolved = await this.resolveUnikName(args.id, flags);
+            const resolved = await resolveUnikName(args.id, flags);
+            if (resolved.error) {
+                throw resolved.error;
+            }
             unikid = resolved?.data.unikid;
             ownerAddress = resolved?.data.ownerAddress;
         }

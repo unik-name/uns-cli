@@ -3,7 +3,7 @@ import flatten from "flat";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import { confirmedFlag, getChainContext, getNetworksListListForDescription } from "../utils";
+import { confirmedFlag, getChainContext, getNetworksListListForDescription, resolveUnikName } from "../utils";
 
 export class ResolveCommand extends ReadCommand {
     public static description = "Resolve a decentralized identifier.";
@@ -35,38 +35,40 @@ export class ResolveCommand extends ReadCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
-        const resolved: DidResolution<any> | undefined = await this.resolveUnikName(args?.did, flags);
-
-        if (resolved) {
-            if (resolved.error) {
+        const resolved: DidResolution<any> = await resolveUnikName(args?.did, flags);
+        if (resolved.error) {
+            if (resolved.error.message) {
+                this.stop(resolved.error.message);
+            } else {
                 // DidParserError
                 this.stop("DID does not match expected format");
+            }
+        } else {
+            if (resolved.confirmations && resolved.confirmations < flags.confirmed) {
+                this.warn("DID has not reach the requested confirmation level.");
             } else {
-                if (resolved.confirmations && resolved.confirmations < flags.confirmed) {
-                    this.warn("DID has not reach the requested confirmation level.");
-                } else {
-                    const resolvedResult: any = {
-                        data: resolved.data,
-                    };
+                const resolvedResult: any = {
+                    data: resolved.data,
+                };
 
-                    if (flags.chainmeta && resolved.chainmeta) {
-                        const metas = getChainContext(
-                            resolved.chainmeta,
-                            this.unsClientWrapper.network.name,
-                            this.unsClientWrapper.getCurrentNode(),
-                        );
-                        resolvedResult.chainmeta = metas.chainmeta;
-                    }
-
-                    if (flags.format === OUTPUT_FORMAT.raw.key && resolvedResult.data instanceof Object) {
-                        const flattenResult = flatten(resolvedResult.data);
-                        this.log("", flattenResult);
-                        return flattenResult;
-                    }
-                    return resolvedResult;
+                if (flags.chainmeta && resolved.chainmeta) {
+                    const metas = getChainContext(
+                        resolved.chainmeta,
+                        this.unsClientWrapper.network.name,
+                        this.unsClientWrapper.getCurrentNode(),
+                    );
+                    resolvedResult.chainmeta = metas.chainmeta;
                 }
+
+                if (flags.format === OUTPUT_FORMAT.raw.key && resolvedResult.data instanceof Object) {
+                    const flattenResult = flatten(resolvedResult.data);
+                    this.log("", flattenResult);
+                    return flattenResult;
+                }
+                return resolvedResult;
             }
         }
+
         return "DID not resolved";
     }
 }
