@@ -1,3 +1,4 @@
+import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { createSecondPassphraseTransaction, generatePassphrase } from "../../utils";
@@ -9,8 +10,14 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
     public static examples = [`$ uns cryptoaccount:set-second-passphrase --network sandbox`];
 
     public static flags = {
-        ...WriteCommand.flags,
+        ...CryptoAccountSetSecondPassphraseCommand.getFlags(),
     };
+
+    protected static getFlags() {
+        const flags = WriteCommand.flags;
+        delete flags.secondPassphrase;
+        return flags;
+    }
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml, OUTPUT_FORMAT.raw];
@@ -21,9 +28,9 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
     }
 
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
-        const passphrase: string = await this.getAndCheckPassphrase(flags);
+        const passphrase: CryptoAccountPassphrases = await this.askForPassphrases(flags, false);
 
-        if (await this.hasSecondPassphrase(passphrase)) {
+        if (await this.hasSecondPassphrase(passphrase.first)) {
             throw new Error("A second passphrase already exists. Not possible to change it.");
         }
 
@@ -32,7 +39,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
         /**
          * Read emitter's wallet nonce
          */
-        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase);
+        const nonce = await this.getNextWalletNonceFromPassphrase(passphrase.first);
 
         /**
          * Transaction creation
@@ -41,7 +48,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
         const transactionStruct = createSecondPassphraseTransaction(
             flags.fee,
             nonce,
-            passphrase,
+            passphrase.first,
             generatedSecondPassphrase,
         );
         this.actionStop();

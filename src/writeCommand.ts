@@ -53,39 +53,28 @@ export abstract class WriteCommand extends BaseCommand {
         }
     }
 
-    public async askForPassphrases(flags: Record<string, any>): Promise<CryptoAccountPassphrases> {
-        /**
-         * Get passphrase
-         */
-        const passphrase: string = await this.getAndCheckPassphrase(flags);
-
-        /**
-         * Get second passphrase
-         */
+    public async askForPassphrases(
+        flags: Record<string, any>,
+        checkSecondPassphrase = true,
+    ): Promise<CryptoAccountPassphrases> {
+        let passphrase: string = flags.passphrase;
         let secondPassphrase: string = flags.secondPassphrase;
 
-        if (!secondPassphrase && (await this.hasSecondPassphrase(passphrase))) {
-            secondPassphrase = await getSecondPassphraseFromUser();
-        }
-
-        if (secondPassphrase) {
-            checkPassphraseFormat(secondPassphrase);
-        }
-
-        return {
-            first: passphrase,
-            second: secondPassphrase,
-        };
-    }
-
-    public async getAndCheckPassphrase(flags: Record<string, any>): Promise<string> {
-        let passphrase: string = flags.passphrase;
         if (!passphrase) {
             passphrase = await getPassphraseFromUser();
         }
-
         checkPassphraseFormat(passphrase);
-        return passphrase;
+
+        if (checkSecondPassphrase) {
+            if (!secondPassphrase && (await this.hasSecondPassphrase(passphrase))) {
+                secondPassphrase = await getSecondPassphraseFromUser();
+            }
+            if (secondPassphrase) {
+                checkPassphraseFormat(secondPassphrase);
+            }
+        }
+
+        return { first: passphrase, second: secondPassphrase };
     }
 
     public checkIfAwaitIsNeeded(flags: Record<string, any>, transactionId: string): boolean {
