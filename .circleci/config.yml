@@ -104,8 +104,7 @@ jobs:
           command: yarn test
       - *slack_notification
 
-
-  publish_nightly:
+  publish_dev_build:
     <<: *job_config
     steps:
       - *setup_envvars
@@ -147,6 +146,15 @@ workflows:
       - test:
           requires:
             - build
+            - check-format
+      - publish_dev_build:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                - develop
 
   nightly:
     triggers:
@@ -167,7 +175,7 @@ workflows:
       - test:
           requires:
             - build
-      - publish_nightly:
+      - publish_dev_build:
           requires:
             - build
             - test
