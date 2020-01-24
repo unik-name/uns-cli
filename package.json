@@ -19,7 +19,7 @@
         "@oclif/plugin-help": "^2.1.6",
         "@oclif/plugin-not-found": "^1.2.3",
         "@oclif/plugin-warn-if-update-available": "^1.7.0",
-        "@uns/ts-sdk": "^2.1.0-dev",
+        "@uns/ts-sdk": "^2.1.0-dev.20200128092956",
         "cli-ux": "^5.3.1",
         "delay": "^4.1.0",
         "flat": "^4.1.0",
