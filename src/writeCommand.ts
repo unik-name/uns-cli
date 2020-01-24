@@ -58,7 +58,7 @@ export abstract class WriteCommand extends BaseCommand {
         checkSecondPassphrase = true,
     ): Promise<CryptoAccountPassphrases> {
         let passphrase: string = flags.passphrase;
-        let secondPassphrase: string = flags.secondPassphrase;
+        let secondPassphrase: string = flags["second-passphrase"];
 
         if (!passphrase) {
             passphrase = await getPassphraseFromUser();

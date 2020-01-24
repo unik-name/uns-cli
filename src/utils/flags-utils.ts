@@ -10,7 +10,7 @@ export const passphraseFlag = {
 };
 
 export const secondPassphraseFlag = {
-    secondPassphrase: flags.string({
+    "second-passphrase": flags.string({
         description:
             "The second crypto account passphrase. If you have created a second passphrase on your crypto account, you have to enter it.",
     }),
