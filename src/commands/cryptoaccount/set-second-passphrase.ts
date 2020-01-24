@@ -15,7 +15,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
 
     protected static getFlags() {
         const flags = WriteCommand.flags;
-        delete flags.secondPassphrase;
+        delete flags["second-passphrase"];
         return flags;
     }
 
