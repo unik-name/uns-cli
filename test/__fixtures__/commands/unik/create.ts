@@ -11,7 +11,7 @@ import { Wallet } from "@uns/ts-sdk";
 
 const commandName: string = "unik:create";
 
-export const TRANSACTION_ID: string = "393aeab4c96a8892ecd63e32bbc117f4404a2cb5f7cdfdc8c1757271eb614a2b";
+export const TRANSACTION_ID: string = "7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0";
 export const TRANSACTION_TIMESTAMP: number = 1234493;
 export const UNIK_ID = "6b8aca93a5181e736c35d88aeb4047e9d921f5e2b3e8fc7c5cf745e04894f24f";
 export const WALLET_ID: string = "DDwxZwjZQJUjeu7PxQbLnA5wkt5Pe3ZMGA";
@@ -80,10 +80,42 @@ export const meta = {
     },
 };
 
+const transactionStructInfo = `» :info: Broadcast transaction {
+  id: '7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0',
+  signature: '9ee1be3a76e97e4e8ae95a31148193557d69cf6d34e36cb7d16044b80289d7713aa41cd5995bd2a06f5d9dbb6e646c53655431b338748c0070b7b6306b23d28b',
+  secondSignature: undefined,
+  version: 2,
+  type: 3,
+  fee: BigNumber { value: 100000000n },
+  senderPublicKey: '020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011',
+  network: undefined,
+  typeGroup: 2001,
+  nonce: BigNumber { value: 2n },
+  recipientId: undefined,
+  amount: BigNumber { value: 0n },
+  asset: {
+    nft: {
+      unik: {
+        tokenId: '6b8aca93a5181e736c35d88aeb4047e9d921f5e2b3e8fc7c5cf745e04894f24f',
+        properties: { type: '1' }
+      }
+    },
+    certification: {
+      payload: {
+        iss: '2b9799c35cbe4e8fb93c79c83aebe229f9f9909d7d13138ba837fca932dada76',
+        sub: '6d8f88a373dbdb704dabdfd1ae4311a35484685ef3885c6e08bf7200648a9884',
+        iat: 1579507453173
+      },
+      signature: '3045022100fbff7614e5658b692484efccc4a1e2495e655c7fd95287a1ee857c42b789ca50022018d4f23db7b920a1465276cedb63aac3f923556e7bede080792c59638df16ee3'
+    }
+  }
+};`;
+
 const verboseOutput = `» :info: DEV MODE IS ACTIVATED;
 » :info: node: https://forger1.dalinet.uns.network;
 unikid: ${UNIK_ID}
 Transaction id: ${TRANSACTION_ID}
+${transactionStructInfo}
 Transaction in explorer: https://dalinet.explorer.uns.network/transaction/${TRANSACTION_ID}
 UNIK nft forged:  20 confirmations
 UNIK nft in UNS explorer: https://dalinet.explorer.uns.network/uniks/${UNIK_ID}
@@ -92,7 +124,7 @@ UNIK nft in UNS explorer: https://dalinet.explorer.uns.network/uniks/${UNIK_ID}
 const createUnikResultJson = `{
   "data": {
     "id": "6b8aca93a5181e736c35d88aeb4047e9d921f5e2b3e8fc7c5cf745e04894f24f",
-    "transaction": "393aeab4c96a8892ecd63e32bbc117f4404a2cb5f7cdfdc8c1757271eb614a2b",
+    "transaction": "7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0",
     "confirmations": 20
   }
 }
@@ -100,7 +132,7 @@ const createUnikResultJson = `{
 
 const createUnikResultYaml = `data:
   id: 6b8aca93a5181e736c35d88aeb4047e9d921f5e2b3e8fc7c5cf745e04894f24f
-  transaction: 393aeab4c96a8892ecd63e32bbc117f4404a2cb5f7cdfdc8c1757271eb614a2b
+  transaction: 7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0
   confirmations: 20
 `;
 

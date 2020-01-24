@@ -87,3 +87,13 @@ export const senderAccountFlag = () => {
         }),
     };
 };
+
+export const certificationFlag = () => {
+    return {
+        certification: flags.boolean({
+            default: true,
+            allowNo: true,
+            hidden: true,
+        }),
+    };
+};

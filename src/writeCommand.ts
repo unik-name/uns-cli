@@ -109,6 +109,7 @@ export abstract class WriteCommand extends BaseCommand {
     }
 
     public async broadcastTransaction(transaction: Interfaces.ITransactionData) {
+        this.info("Broadcast transaction %o", transaction);
         /**
          * Transaction broadcast
          */

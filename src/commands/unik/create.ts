@@ -5,7 +5,7 @@ import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases, getTypeValue, getUnikTypesList } from "../../types";
-import { getNetworksListListForDescription, NFT_NAME } from "../../utils";
+import { certificationFlag, getNetworksListListForDescription, isDevMode, NFT_NAME } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
@@ -18,14 +18,26 @@ export class UnikCreateCommand extends WriteCommand {
     ];
 
     public static flags = {
-        ...WriteCommand.flags,
-        explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
-        type: flags.string({
-            description: "UNIK nft type",
-            required: true,
-            options: getUnikTypesList(),
-        }),
+        ...UnikCreateCommand.getFlags(),
     };
+
+    protected static getFlags() {
+        const unikFlags = {
+            ...WriteCommand.flags,
+            explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
+            type: flags.string({
+                description: "UNIK nft type",
+                required: true,
+                options: getUnikTypesList(),
+            }),
+        };
+
+        if (isDevMode()) {
+            Object.assign(unikFlags, certificationFlag());
+        }
+
+        return unikFlags;
+    }
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
@@ -75,6 +87,7 @@ export class UnikCreateCommand extends WriteCommand {
             passphrases.first,
             passphrases.second,
             NFT_NAME,
+            !!flags.certification,
         );
         this.actionStop();
 
