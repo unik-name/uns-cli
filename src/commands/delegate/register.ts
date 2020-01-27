@@ -14,7 +14,8 @@ export abstract class DelegateRegisterCommand extends AbstractDelegateCommand {
     public static args = [
         {
             name: "id",
-            description: "The Unikname between double quote, or the unikid to register as delegate.",
+            description:
+                '@unikname with format "@unik:<type>:<explicitValue>", or the unikid to register as delegate. If you give only "@explicitValue", type considered is individual',
             required: true,
         },
     ];

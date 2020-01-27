@@ -17,7 +17,8 @@ export class DelegateVoteCreateCommand extends AbstractDelegateVoteCreateCommand
     public static args = [
         {
             name: "id",
-            description: "The Unikname between double quote, or the unikid of the delegate to vote for.",
+            description:
+                '@unikname with format "@unik:<type>:<explicitValue>", or the unikid of the delegate to vote for. If you give only "@explicitValue", type considered is individual',
             required: true,
         },
     ];

@@ -14,7 +14,8 @@ export abstract class DelegateResignCommand extends AbstractDelegateCommand {
     public static args = [
         {
             name: "id",
-            description: "The delegate Unikname between double quote, or the unikid to unregister.",
+            description:
+                '@unikname with format "@unik:<type>:<explicitValue>", or the unikid to resign. If you give only "@explicitValue", type considered is individual',
             required: true,
         },
     ];
