@@ -270,3 +270,15 @@ export function getNetworkNameByNetHash(nethash: string): string {
 
     return selectedNetworks[0];
 }
+
+export function getDelegateIdArgumentDescription(specificDescriptionPart: string): string {
+    return `unikid or the @unikname with DID format to ${specificDescriptionPart}. (${getDidDocsUrl()})`;
+}
+
+function getDidDocsUrl(): string {
+    return `${getDocsUrl()}/uns-use-the-network/cheatsheet.html#did-decentralized-identifier`;
+}
+
+function getDocsUrl() {
+    return "https://docs.uns.network";
+}
