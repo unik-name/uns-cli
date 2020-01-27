@@ -7,8 +7,14 @@ import { WriteCommand } from "./writeCommand";
 
 export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
     public static flags = {
-        ...WriteCommand.flags,
+        ...AbstractDelegateVoteCreateCommand.getFlags(),
     };
+
+    protected static getFlags() {
+        const flags = WriteCommand.flags;
+        delete flags.senderAccount;
+        return flags;
+    }
 
     protected abstract getVotes(delegatePublicKey: string): string[];
 

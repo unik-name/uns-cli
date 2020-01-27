@@ -6,8 +6,14 @@ import { WriteCommand } from "./writeCommand";
 
 export abstract class AbstractDelegateCommand extends WriteCommand {
     public static flags = {
-        ...WriteCommand.flags,
+        ...AbstractDelegateCommand.getFlags(),
     };
+
+    protected static getFlags() {
+        const flags = WriteCommand.flags;
+        delete flags.senderAccount;
+        return flags;
+    }
 
     protected abstract getTransaction(
         unikid: string,
