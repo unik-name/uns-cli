@@ -92,7 +92,7 @@ describe("create-unik command", () => {
         shouldExit.forEach(exitCase => applyExitCase(exitCase));
     });
 
-    describe("Run cases", () => {
+    describe.skip("Run cases", () => {
         // Mock function that create transaction timestamp
         jest.spyOn(Crypto.Slots, "getTime").mockImplementation(() => TRANSACTION_TIMESTAMP);
 

@@ -81,8 +81,10 @@ export const meta = {
 };
 
 const transactionStructInfo = `» :info: Broadcast transaction {
-  id: '7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0',
-  signature: '9ee1be3a76e97e4e8ae95a31148193557d69cf6d34e36cb7d16044b80289d7713aa41cd5995bd2a06f5d9dbb6e646c53655431b338748c0070b7b6306b23d28b',
+  id:
+   '7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0',
+  signature:
+   '9ee1be3a76e97e4e8ae95a31148193557d69cf6d34e36cb7d16044b80289d7713aa41cd5995bd2a06f5d9dbb6e646c53655431b338748c0070b7b6306b23d28b',
   secondSignature: undefined,
   version: 2,
   type: 3,
