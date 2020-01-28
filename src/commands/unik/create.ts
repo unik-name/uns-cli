@@ -87,7 +87,7 @@ export class UnikCreateCommand extends WriteCommand {
             passphrases.first,
             passphrases.second,
             NFT_NAME,
-            !!flags.certification,
+            this.getCertificationMode(flags),
         );
         this.actionStop();
 
@@ -141,5 +141,12 @@ export class UnikCreateCommand extends WriteCommand {
                 confirmations: transactionFromNetwork.confirmations,
             },
         };
+    }
+
+    private getCertificationMode(flags: Record<string, any>): boolean {
+        if (isDevMode()) {
+            return !!flags.certification;
+        }
+        return true;
     }
 }
