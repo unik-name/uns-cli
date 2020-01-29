@@ -15,7 +15,7 @@ describe(`${commandName} command`, () => {
                 "cactus cute please spirit reveal raw goose emotion latin subject forum panic",
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get("/wallets/0283c5017e5d19847d2362623559274974ceb5f40cdaafe38c0e7ac5348825056c").reply(200, {
+                api.get("/wallets/DMBbnpPRge4NprMxNDyLkBa1bRq7QjvqRc").reply(200, {
                     data: {
                         address: "DMBbnpPRge4NprMxNDyLkBa1bRq7QjvqRc",
                         publicKey: "0283c5017e5d19847d2362623559274974ceb5f40cdaafe38c0e7ac5348825056c",

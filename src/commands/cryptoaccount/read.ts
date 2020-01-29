@@ -22,7 +22,7 @@ export class CryptoAccountReadCommand extends ReadCommand {
         {
             name: "cryptoAccountId",
             description:
-                "The ID of the crypto account. Can be either the publicKey or the address of the crypto account.",
+                "The ID of the crypto account. Can be either the publicKey or the address (preferred) of the crypto account.",
             required: true,
         },
     ];

@@ -174,18 +174,18 @@ export class UnsClientWrapper {
     }
 
     /**
-     * Get Wallet by address or public key.
-     * @param walletIdentifier
+     * Get Wallet by address or public key. Find by public key should return 404 instead of find by address (if wallet really exists)
+     * @param cryptoAccountAddress
      */
-    public async getWallet(walletIdentifier: string): Promise<WithChainmeta<Wallet>> {
+    public async getWallet(cryptoAccountAddress: string): Promise<WithChainmeta<Wallet>> {
         try {
-            const walletResponse: ResponseWithChainMeta<Wallet> = await this.unsClient.wallet.get(walletIdentifier);
+            const walletResponse: ResponseWithChainMeta<Wallet> = await this.unsClient.wallet.get(cryptoAccountAddress);
             return {
                 ...(walletResponse.data as Wallet),
                 chainmeta: walletResponse.chainmeta,
             };
         } catch (e) {
-            return handleFetchError("wallet", walletIdentifier)(e);
+            return handleFetchError("wallet", cryptoAccountAddress)(e);
         }
     }
 
@@ -244,9 +244,9 @@ export class UnsClientWrapper {
         }
     }
 
-    public async getNonce(walletIdentifier: string): Promise<string> {
+    public async getNonce(cryptoAccountAddress: string): Promise<string> {
         try {
-            const data: any = await this.getWallet(walletIdentifier);
+            const data: any = await this.getWallet(cryptoAccountAddress);
             // TODO: add nonce to Wallet type
             return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : "1";
         } catch (ex) {
