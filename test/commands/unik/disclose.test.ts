@@ -14,8 +14,8 @@ import {
     UNIK,
     UNIK_ID,
     WALLET,
+    WALLET_ADDRESS,
     WALLET_PASSPHRASE,
-    WALLET_PUB_KEY,
 } from "../../__fixtures__/commands/unik/disclose";
 import { applyExitCase, EMPTY_COMMAND_CONFIG, NODE_CONFIGURATION_CRYPTO } from "../../__fixtures__/commons";
 import { UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
@@ -104,7 +104,7 @@ describe(`${commandName} command`, () => {
                 }),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/wallets/${WALLET_PUB_KEY}`).reply(200, {
+                api.get(`/wallets/${WALLET_ADDRESS}`).reply(200, {
                     data: WALLET,
                     chainmeta: CHAINMETA,
                 }),
