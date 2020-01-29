@@ -1,15 +1,15 @@
 import { expect, test } from "@oclif/test";
 import { Crypto, Transactions } from "@uns/ark-crypto";
 import { CertifiedNftMintTransaction } from "@uns/crypto";
+import * as SDK from "@uns/ts-sdk";
 import {
     meta,
-    MINT_CERTIFICATION,
-    MINT_CERTIFICATION_DEMAND,
     outputCases,
     shouldExit,
     transaction,
     TRANSACTION_ID,
     TRANSACTION_TIMESTAMP,
+    transactionFromSDK,
     UNIK_ID,
     WALLET,
     WALLET_CHAINMETA,
@@ -25,9 +25,6 @@ const applyTestCase = (testCase: any) => {
             },
         }),
     )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
-            api.post("/mint-demand-certification", MINT_CERTIFICATION_DEMAND).reply(201, MINT_CERTIFICATION),
-        )
         .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
             api
                 .post("/transactions", {
@@ -76,6 +73,11 @@ const applyTestCase = (testCase: any) => {
                 },
             }),
         )
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            api.get(`/wallets/${WALLET_ID}/uniks`).reply(200, {
+                data: [],
+            }),
+        )
         .stdout()
         .command(testCase.args)
         .it(testCase.description, ctx => {
@@ -98,6 +100,12 @@ describe("create-unik command", () => {
 
         // Mock function that create transaction id
         jest.spyOn(Transactions.Utils, "getId").mockImplementation(() => TRANSACTION_ID);
+
+        jest.spyOn(SDK, "createCertifiedNnfMintTransaction").mockImplementation(() => {
+            return new Promise((resolve, _) => {
+                return resolve(transactionFromSDK);
+            });
+        });
 
         jest.setTimeout(10000);
         afterEach(() => {
