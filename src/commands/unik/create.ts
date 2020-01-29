@@ -56,6 +56,8 @@ export class UnikCreateCommand extends WriteCommand {
 
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
+        const typeValue: string = getTypeValue(flags.type);
+
         /**
          * Compute Fingerprint
          */
@@ -81,7 +83,7 @@ export class UnikCreateCommand extends WriteCommand {
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNnfMintTransaction(
             this.unsClientWrapper.network.name,
             tokenId,
-            getTypeValue(flags.type),
+            typeValue,
             flags.fee,
             nonce,
             passphrases.first,
