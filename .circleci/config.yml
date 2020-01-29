@@ -123,6 +123,15 @@ jobs:
       - *persist_repo_to_workspace
       - *slack_notification
 
+  publish_next_build:
+    <<: *job_config
+    steps:
+      - *setup_envvars
+      - *attach_workspace
+      - run:
+          command: ./scripts/publish_next.sh
+      - *slack_notification
+
 ####################################
 ## Orbs
 ####################################
@@ -155,6 +164,15 @@ workflows:
             branches:
               only:
                 - develop
+      - publish_next_build:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                - /release-.*/
+                - /release\/.*/
 
   nightly:
     triggers:
