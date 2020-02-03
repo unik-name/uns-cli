@@ -17,14 +17,14 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         // Check unikid format
         checkUnikIdFormat(flags.unikid);
 
+        const properties = this.getProperties(flags);
+
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         /**
          * Read emitter's wallet nonce
          */
         const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
-
-        const properties = this.getProperties(flags);
 
         // Update transaction
         const transactionStruct = createNFTUpdateTransaction(

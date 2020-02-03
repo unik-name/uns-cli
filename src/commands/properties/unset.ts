@@ -15,7 +15,7 @@ export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
-        ...propertyKeyFlag("Key of the property to unset. (multiple occurrences)"),
+        ...propertyKeyFlag('Key of the property to unset. (multiple occurrences, key must start with "usr/")'),
     };
 
     protected getAvailableFormats(): Formater[] {

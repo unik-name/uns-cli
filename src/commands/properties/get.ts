@@ -39,7 +39,7 @@ export class PropertiesGetCommand extends ReadCommand {
         checkUnikIdFormat(flags.unikid);
 
         const propertyKey = flags.propertyKey.trim();
-        checkUnikPropertyFormat(propertyKey);
+        checkUnikPropertyFormat(propertyKey, false);
 
         const property: any = await this.unsClientWrapper.getUnikProperty(flags.unikid, propertyKey, flags.chainmeta);
 
