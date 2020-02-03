@@ -45,13 +45,13 @@ describe(`${commandName} command`, () => {
                 "--passphrase",
                 PASSPHRASE,
                 "--properties",
-                `tooLong:${tooLongValue}`,
+                `usr/tooLong:${tooLongValue}`,
             ])
             // tslint:disable-next-line:no-empty
             .catch(_ => {})
             .it("Should throw too long property", ctx => {
                 expect(ctx.stderr).to.equal(
-                    "» :stop: data.asset.nft['unik'].properties['tooLong'] should NOT be longer than 255 characters;\n",
+                    "» :stop: data.asset.nft['unik'].properties['usr/tooLong'] should NOT be longer than 255 characters;\n",
                 );
             });
     });

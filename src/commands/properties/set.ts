@@ -19,7 +19,7 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
     public static flags = {
         ...UpdatePropertiesCommand.getUpdateCommandFlags(),
         properties: flags.string({
-            description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2"`,
+            description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2" (key must start with "usr/")`,
             required: true,
             multiple: true,
         }),

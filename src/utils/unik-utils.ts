@@ -9,10 +9,14 @@ export const checkUnikIdFormat = (unikid: string) => {
     }
 };
 
-export const checkUnikPropertyFormat = (propertyKey: string) => {
+export const checkUnikPropertyFormat = (propertyKey: string, toWrite: boolean = true) => {
     const valid = propertyKey && propertyKey.match(UNS_NFT_PROPERTY_KEY_REGEX)?.[0] === propertyKey;
     if (!valid) {
         throw new Error(`Property key ${propertyKey} should match ${UNS_NFT_PROPERTY_KEY_REGEX} pattern`);
+    }
+
+    if (toWrite && !propertyKey.startsWith("usr/")) {
+        throw new Error('Property key must start with "usr/."');
     }
 };
 
