@@ -103,21 +103,10 @@ export class UnikCreateCommand extends WriteCommand {
 
         this.log(`Transaction id: ${result.id}`);
 
-        await this.broadcastTransaction(result);
-
         const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${result.id}`;
         this.log(`Transaction in explorer: ${transactionUrl}`);
 
-        if (!this.checkIfAwaitIsNeeded(flags, result.id)) {
-            return {
-                data: {
-                    id: tokenId,
-                    transaction: result.id,
-                },
-            };
-        }
-
-        const transactionFromNetwork = await this.awaitConfirmations(flags, result.id);
+        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(result, flags);
 
         /**
          * Result prompt

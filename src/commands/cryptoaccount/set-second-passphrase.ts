@@ -53,31 +53,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
         );
         this.actionStop();
 
-        if (!transactionStruct.id) {
-            throw new Error("Transaction id can't be undefined");
-        }
-
-        /**
-         * Transaction broadcast
-         */
-        this.actionStart("Sending transaction");
-        const sendResponse = await this.unsClientWrapper.sendTransaction(transactionStruct);
-        this.actionStop();
-        if (sendResponse.errors) {
-            throw new Error(sendResponse.errors);
-        }
-
-        /**
-         * Wait for the first transaction confirmation
-         */
-        this.actionStart("Waiting for transaction confirmation");
-        const transactionFromNetwork = await this.waitTransactionConfirmations(
-            this.unsClientWrapper.getBlockTime(),
-            transactionStruct.id,
-            flags["await-confirmation"],
-            1,
-        );
-        this.actionStop();
+        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(transactionStruct, flags);
 
         /**
          * Result prompt

@@ -41,18 +41,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         }
 
         this.log("Binding new propert" + (Object.keys(properties).length > 1 ? "ies" : "y") + " to UNIK.");
-        const sendResult = await this.unsClientWrapper.sendTransaction(transactionStruct);
-        if (sendResult.errors) {
-            throw new Error(`Transaction not accepted. Caused by: ${JSON.stringify(sendResult.errors)}`);
-        }
-        this.actionStart("Waiting for transaction confirmation");
-        const finalTransaction = await this.waitTransactionConfirmations(
-            this.unsClientWrapper.getBlockTime(),
-            transactionStruct.id,
-            flags["await-confirmation"],
-            1,
-        );
-        this.actionStop();
+        const finalTransaction = await this.sendAndWaitConfirmationsIfNeeded(transactionStruct, flags);
 
         return {
             id: flags.unikid,
