@@ -29,33 +29,6 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         return sendTransactionStruct;
     }
 
-    public async sendAndWaitTransactionConfirmations(
-        transaction: Interfaces.ITransactionData,
-        nbRetry: number,
-        nbConfirmations: number,
-    ) {
-        if (!transaction.id) {
-            throw new Error("Transaction id can't be undefined");
-        }
-
-        this.cmd.actionStart("Sending transaction");
-        const sendResponse = await this.cmd.unsClientWrapper.sendTransaction(transaction);
-        this.cmd.actionStop();
-        if (sendResponse.errors) {
-            throw new Error(sendResponse.errors);
-        }
-
-        this.cmd.actionStart("Waiting for transaction confirmation");
-        const transactionFromNetwork = await this.cmd.waitTransactionConfirmations(
-            this.cmd.unsClientWrapper.getBlockTime(),
-            transaction.id,
-            nbRetry,
-            nbConfirmations,
-        );
-        this.cmd.actionStop();
-        return transactionFromNetwork;
-    }
-
     public checkAndGetAmount(amountArg: string, isSatoAmount: boolean) {
         // Check amount
         const amountParts = amountArg.replace(" ", "").split(".");

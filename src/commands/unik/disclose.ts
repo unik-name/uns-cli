@@ -86,17 +86,12 @@ export class UnikDiscloseCommand extends WriteCommand {
             passphrases.second,
         );
 
-        if (!transactionStruct.id) {
-            throw new Error("Transaction id can't be undefined");
-        }
-
-        const transactionFromNetwork = await this.sendAndWaitConfirmations(
+        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(
             transactionStruct,
             flags["await-confirmation"],
-            1,
         );
 
-        return await this.formatResult(transactionFromNetwork, transactionStruct.id);
+        return await this.formatResult(transactionFromNetwork, transactionStruct.id as string);
     }
 
     private async checkUnik(unikId: string) {
@@ -108,48 +103,6 @@ export class UnikDiscloseCommand extends WriteCommand {
         } catch (e) {
             throw new Error("unikid is not valid");
         }
-    }
-
-    private async sendAndWaitConfirmations(
-        transactionStruct: Interfaces.ITransactionData,
-        awaitDuring: number,
-        confirmations: number,
-    ) {
-        /**
-         * Transaction broadcast
-         */
-
-        await this.withAction(
-            "Sending transaction",
-            async transactionStruct => {
-                const sendResponse = await this.unsClientWrapper.sendTransaction(transactionStruct);
-                if (sendResponse.errors) {
-                    throw new Error(sendResponse.errors);
-                }
-                this.info(
-                    `Transaction to disclose explicit values sent to the pool (${this.getTransactionUrl(
-                        transactionStruct.id,
-                    )})`,
-                );
-                return sendResponse;
-            },
-            transactionStruct,
-        );
-
-        const transactionFromNetwork = await this.withAction(
-            "Waiting for transaction confirmation",
-            this.waitTransactionConfirmations.bind(this), // needs .bind(this) to use the correct this in waitTransactionConfirmations function
-            this.unsClientWrapper.getBlockTime(),
-            transactionStruct.id,
-            awaitDuring,
-            confirmations,
-        );
-
-        if (!transactionFromNetwork) {
-            return transactionStruct.id;
-        }
-
-        return transactionFromNetwork;
     }
 
     private async getUnikType(unikId: string): Promise<DIDType> {
@@ -249,6 +202,6 @@ export class UnikDiscloseCommand extends WriteCommand {
                 secondPassphrase,
             );
         };
-        return await this.withAction2<Interfaces.ITransactionData>("Creating transaction", todo);
+        return await this.withAction<Interfaces.ITransactionData>("Creating transaction", todo);
     }
 }

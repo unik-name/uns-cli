@@ -65,17 +65,7 @@ export abstract class AbstractDelegateCommand extends WriteCommand {
             throw new Error("Transaction id can't be undefined");
         }
 
-        await this.broadcastTransaction(transactionStruct);
-
-        if (!this.checkIfAwaitIsNeeded(flags, transactionStruct.id)) {
-            return {
-                data: {
-                    transaction: transactionStruct.id,
-                },
-            };
-        }
-
-        const transactionFromNetwork = await this.awaitConfirmations(flags, transactionStruct.id);
+        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(transactionStruct, flags);
 
         if (!transactionFromNetwork) {
             const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${transactionStruct.id}`;

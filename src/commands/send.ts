@@ -111,11 +111,7 @@ export class SendCommand extends WriteCommand {
             throw new Error("Transaction id can't be undefined");
         }
 
-        const transactionFromNetwork = await cmdHelper.sendAndWaitTransactionConfirmations(
-            transaction,
-            flags["await-confirmation"],
-            1,
-        );
+        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(transaction, flags);
 
         return cmdHelper.formatOutput(transactionFromNetwork, transaction.id);
     }

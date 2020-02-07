@@ -77,7 +77,28 @@ export abstract class WriteCommand extends BaseCommand {
         return { first: passphrase, second: secondPassphrase };
     }
 
-    public checkIfAwaitIsNeeded(flags: Record<string, any>, transactionId: string): boolean {
+    public async sendAndWaitConfirmationsIfNeeded(
+        transaction: Interfaces.ITransactionData,
+        flags: Record<string, any>,
+    ): Promise<any> {
+        if (!transaction.id) {
+            throw new Error("Transaction id can't be undefined");
+        }
+
+        await this.broadcastTransaction(transaction);
+
+        if (!this.checkIfAwaitIsNeeded(flags, transaction.id)) {
+            return {
+                data: {
+                    transaction: transaction.id,
+                },
+            };
+        }
+
+        return await this.awaitConfirmations(flags, transaction.id);
+    }
+
+    private checkIfAwaitIsNeeded(flags: Record<string, any>, transactionId: string): boolean {
         const awaitConfirmation: number = flags["await-confirmation"];
         if (awaitConfirmation === 0) {
             this.info(`Transaction accepted by the network: ${transactionId}`);
@@ -89,35 +110,38 @@ export abstract class WriteCommand extends BaseCommand {
         return true;
     }
 
-    public async awaitConfirmations(
+    private async awaitConfirmations(
         flags: Record<string, any>,
         transactionId: string,
     ): Promise<(Transaction & { chainmeta: ChainMeta; confirmations: number }) | undefined> {
-        /**
-         * Wait for the first transaction confirmation
-         */
-        this.actionStart("Waiting for transaction confirmation");
-        const transactionFromNetwork = await this.waitTransactionConfirmations(
-            this.unsClientWrapper.getBlockTime(),
-            transactionId,
-            flags["await-confirmation"],
-            1,
-        );
-        this.actionStop();
+        const awaitAction = async () => {
+            return await this.waitTransactionConfirmations(
+                this.unsClientWrapper.getBlockTime(),
+                transactionId,
+                flags["await-confirmation"],
+                1,
+            );
+        };
 
-        return transactionFromNetwork;
+        return await this.withAction("Waiting for transaction confirmation", awaitAction);
     }
 
-    public async broadcastTransaction(transaction: Interfaces.ITransactionData) {
+    private async broadcastTransaction(transaction: Interfaces.ITransactionData, successInfo?: string) {
         this.info("Broadcast transaction %o", transaction);
+
         /**
          * Transaction broadcast
          */
-        this.actionStart("Sending transaction");
-        const sendResponse = await this.unsClientWrapper.sendTransaction(transaction);
-        this.actionStop();
-        if (sendResponse.errors) {
-            throw new Error(sendResponse.errors);
-        }
+        const sendAction = async () => {
+            const sendResponse = await this.unsClientWrapper.sendTransaction(transaction);
+            if (sendResponse.errors) {
+                throw new Error(sendResponse.errors);
+            }
+            if (successInfo) {
+                this.info(successInfo);
+            }
+        };
+
+        await this.withAction<Interfaces.ITransactionData>("Sending transaction", sendAction);
     }
 }
