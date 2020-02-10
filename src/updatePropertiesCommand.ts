@@ -1,8 +1,9 @@
+import { Interfaces } from "@uns/ark-crypto";
+import { createCertifiedNftUpdateTransaction, isError, SdkResult } from "@uns/ts-sdk";
 import { CryptoAccountPassphrases } from "types";
 import { CommandOutput } from "./formater";
-import { checkUnikIdFormat, createNFTUpdateTransaction, unikidFlag } from "./utils";
+import { checkUnikIdFormat, NFT_NAME, unikidFlag } from "./utils";
 import { WriteCommand } from "./writeCommand";
-
 export abstract class PropertiesUpdateCommand extends WriteCommand {
     protected static getUpdateCommandFlags(fees?: number) {
         return {
@@ -27,14 +28,23 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
 
         // Update transaction
-        const transactionStruct = createNFTUpdateTransaction(
+
+        const transactionStruct: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftUpdateTransaction(
+            this.unsClientWrapper.network.name,
             flags.unikid,
             properties,
             flags.fee,
             nonce,
             passphrases.first,
             passphrases.second,
+            NFT_NAME,
         );
+
+        if (isError(transactionStruct)) {
+            throw new Error(
+                `${transactionStruct.message} ${transactionStruct.code ? ` (${transactionStruct.code})` : ""}`,
+            );
+        }
 
         if (!transactionStruct.id) {
             throw new Error("Transaction id can't be undefined");
