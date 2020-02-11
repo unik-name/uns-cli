@@ -18,13 +18,13 @@ export class UnikDiscloseCommand extends WriteCommand {
     public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
 
     public static examples = [
-        `$ uns unik:disclose --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob b0b --network sandbox`,
+        `$ uns unik:disclose --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob -e b0b --network sandbox`,
     ];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),
         ...unikidFlag("The UNIK token on which to disclose values"),
-        ...explicitValueFlag("Array of explicit value to disclose, separated with a space.", true),
+        ...explicitValueFlag("Explicit value to disclose.", true),
     };
 
     public async formatResult(transactionFromNetwork: any, transactionId: string) {
@@ -77,10 +77,13 @@ export class UnikDiscloseCommand extends WriteCommand {
 
         const unikType = await this.getUnikType(flags.unikid);
 
-        await this.checkExplicitValues(flags.unikid, unikType, flags.explicitValue);
+        // Remove duplicates explicits
+        const explicitValues = [...new Set(flags.explicitValue)] as string[];
+        await this.checkExplicitValues(flags.unikid, unikType, explicitValues);
 
         const transactionStruct: Interfaces.ITransactionData = await this.createTransactionStruct(
             flags,
+            explicitValues,
             unikType,
             passphrases.first,
             passphrases.second,
@@ -150,6 +153,7 @@ export class UnikDiscloseCommand extends WriteCommand {
 
     private async createTransactionStruct(
         flags: Record<string, any>,
+        explicitValues: string[],
         unikType: DIDType,
         passphrase: string,
         secondPassphrase: string,
@@ -157,7 +161,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         // Create Disclose Demand
         const discloseDemand: IDiscloseDemand = buildDiscloseDemand(
             flags.unikid,
-            flags.explicitValue,
+            explicitValues,
             DIDHelpers.fromLabel(unikType),
             passphrase,
         );
