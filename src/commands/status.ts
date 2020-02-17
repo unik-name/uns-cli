@@ -1,11 +1,4 @@
-import {
-    BlockchainState,
-    getNftsStatuses,
-    INftStatus,
-    NodeConfiguration,
-    NodeStatus,
-    ResponseWithChainMeta,
-} from "@uns/ts-sdk";
+import { BlockchainState, INftStatus, NodeConfiguration, NodeStatus, ResponseWithChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
 import { fromSatoshi, getNetworkNameByNetHash, getNetworksListListForDescription } from "../utils";
@@ -36,7 +29,7 @@ export class StatusCommand extends BaseCommand {
             NodeStatus,
             NodeConfiguration,
         ] = await Promise.all([
-            getNftsStatuses(this.unsClientWrapper.network.name),
+            this.unsClientWrapper.unsClient.nft.status(),
             this.unsClientWrapper.getNodeStatus(),
             this.unsClientWrapper.getNodeConfiguration(),
         ]);

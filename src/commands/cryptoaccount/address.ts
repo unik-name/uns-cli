@@ -44,7 +44,7 @@ export class CryptoAccountAddressCommand extends ReadCommand {
             address,
             publicKey,
             chainMeta,
-            this.unsClientWrapper.network.name,
+            this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
             this.unsClientWrapper.getCurrentNode(),
         );
     }

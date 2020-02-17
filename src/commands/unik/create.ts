@@ -81,7 +81,7 @@ export class UnikCreateCommand extends WriteCommand {
          */
         this.actionStart("Creating transaction");
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNnfMintTransaction(
-            this.unsClientWrapper.network.name,
+            this.unsClientWrapper.unsClient,
             tokenId,
             typeValue,
             flags.fee,

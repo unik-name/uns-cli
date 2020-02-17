@@ -1,4 +1,4 @@
-import { didResolve, Network } from "@uns/ts-sdk";
+import { didResolve, UNSClient } from "@uns/ts-sdk";
 import { generateMnemonic } from "bip39";
 import { createHash, randomBytes } from "crypto";
 import * as MoreEntropy from "promised-entropy";
@@ -26,11 +26,11 @@ export async function generatePassphrase() {
     return generateMnemonic(nbBits, _ => entropy);
 }
 
-export async function getUniknameWalletAddress(id: string, networkName: Network) {
+export async function getUniknameWalletAddress(id: string, unsClient: UNSClient) {
     const DID_DEFAULT_QUERY = "?*";
     const resolveResult = await didResolve(
         `${id}${id.endsWith(DID_DEFAULT_QUERY) ? "" : DID_DEFAULT_QUERY}`,
-        networkName,
+        unsClient,
     );
     if (resolveResult.error) {
         throw resolveResult.error;

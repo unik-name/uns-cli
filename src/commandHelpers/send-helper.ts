@@ -60,7 +60,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
 
         if (id && id.startsWith("@")) {
             try {
-                resolvedAddress = await getUniknameWalletAddress(id, this.cmd.unsClientWrapper.network.name);
+                resolvedAddress = await getUniknameWalletAddress(id, this.cmd.unsClientWrapper.unsClient);
             } catch (e) {
                 if (e && e.response && e.response.status === 404) {
                     throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not exist`);

@@ -30,7 +30,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         // Update transaction
 
         const transactionStruct: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftUpdateTransaction(
-            this.unsClientWrapper.network.name,
+            this.unsClientWrapper.unsClient,
             flags.unikid,
             properties,
             flags.fee,
