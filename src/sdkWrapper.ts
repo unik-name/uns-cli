@@ -166,7 +166,7 @@ export class UnsClientWrapper {
         propertyKey: string,
         withChainmeta: boolean,
     ): Promise<string | ResponseWithChainMeta<string>> {
-        return getPropertyValue(unikid, propertyKey, this.network.name, {
+        return getPropertyValue(unikid, propertyKey, this.unsClient, {
             withChainmeta,
             confirmations: true,
             disableHtmlEscape: true,

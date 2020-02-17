@@ -69,7 +69,7 @@ export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
         let walletAddress: string;
 
         if (delegateId && delegateId.startsWith("@")) {
-            walletAddress = await getUniknameWalletAddress(delegateId, this.unsClientWrapper.network.name);
+            walletAddress = await getUniknameWalletAddress(delegateId, this.unsClientWrapper.unsClient);
         } else {
             checkUnikIdFormat(delegateId);
             const unik: Unik = await this.unsClientWrapper.getUnikById(delegateId);

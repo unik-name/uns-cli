@@ -77,7 +77,11 @@ export class UnikIsDisclosedCommand extends ReadCommand {
         return {
             data,
             ...(flags.chainmeta
-                ? getChainContext(chainmeta, this.unsClientWrapper.network.name, this.unsClientWrapper.getCurrentNode())
+                ? getChainContext(
+                      chainmeta,
+                      this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
+                      this.unsClientWrapper.getCurrentNode(),
+                  )
                 : {}),
         };
     }
