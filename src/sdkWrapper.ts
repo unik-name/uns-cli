@@ -1,3 +1,4 @@
+import Config from "@oclif/config";
 import { Interfaces, Managers, Transactions, Utils } from "@uns/ark-crypto";
 import {
     BlockchainState,
@@ -30,7 +31,7 @@ export class UnsClientWrapper {
     public network: any;
     public unsClient: UNSClient;
 
-    constructor() {
+    constructor(private commandConfig: Config.IConfig) {
         this.unsClient = new UNSClient();
     }
 
@@ -38,6 +39,9 @@ export class UnsClientWrapper {
         this.unsClient.init({
             network,
             customNode: customNodeUrl,
+            headers: {
+                "User-Agent": this.commandConfig.userAgent,
+            },
         });
 
         const networkPreset = Managers.configManager.getPreset(network);

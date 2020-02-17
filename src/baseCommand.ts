@@ -38,7 +38,7 @@ export abstract class BaseCommand extends Command {
 
     constructor(argv: any[], config: Config.IConfig) {
         super(argv, config);
-        this.unsClientWrapper = new UnsClientWrapper();
+        this.unsClientWrapper = new UnsClientWrapper(config);
     }
 
     public async init() {
