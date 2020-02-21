@@ -16,6 +16,7 @@ import {
     explicitValueFlag,
     getNetworksListListForDescription,
     getTargetArg,
+    isDid,
 } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
@@ -67,6 +68,15 @@ export class UnikDiscloseCommand extends WriteCommand {
     }
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
+        let explicitValues: string[] = flags.explicitValue;
+        if (!explicitValues) {
+            if (isDid(args.target)) {
+                const explicitValue = args.target.split(":").pop();
+                explicitValues = [explicitValue];
+            } else {
+                throw new Error("Please provide an explicitValue through --explicitValue flag");
+            }
+        }
 
         const { unikid } = await this.targetResolve(flags, args.target);
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
@@ -82,7 +92,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         const unikType = await this.getUnikType(unikid);
 
         // Remove duplicates explicits
-        const explicitValues = [...new Set(flags.explicitValues)] as string[];
+        explicitValues = [...new Set(explicitValues)] as string[];
 
         await this.checkExplicitValues(unikid, unikType, explicitValues);
 

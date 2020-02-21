@@ -56,12 +56,12 @@ export const confirmedFlag = {
     }),
 };
 
-export const explicitValueFlag = (description: string, multiple: boolean = false) => {
+export const explicitValueFlag = (description: string, multiple: boolean = false, required: boolean = true) => {
     return {
         explicitValue: flags.string({
             char: "e",
             description,
-            required: true,
+            required,
             multiple,
         }),
     };
