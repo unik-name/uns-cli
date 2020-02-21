@@ -8,7 +8,7 @@ export const shouldExit = [
         description: "Should exit with code 2 no delegate id",
         args: [commandName, "-n", "dalinet"],
         errorMsg:
-            "» :stop: Command fail because of unexpected value for at least one parameter (id). Please check your parameters.;\n",
+            "» :stop: Command fail because of unexpected value for at least one parameter (target). Please check your parameters.;\n",
     },
     {
         description: "Should exit with code 1 if delegate not found with token id",

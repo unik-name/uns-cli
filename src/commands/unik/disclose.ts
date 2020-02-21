@@ -11,21 +11,25 @@ import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
-import { checkUnikIdFormat, createDiscloseTransaction, explicitValueFlag, unikidFlag } from "../../utils";
+import {
+    createDiscloseTransaction,
+    explicitValueFlag,
+    getNetworksListListForDescription,
+    getTargetArg,
+} from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikDiscloseCommand extends WriteCommand {
     public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
 
-    public static examples = [
-        `$ uns unik:disclose --unikid 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b -e bob -e b0b --network sandbox`,
-    ];
+    public static examples = [`$ uns unik:disclose @bob -e bob -e b0b -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
-        ...WriteCommand.getWriteCommandFlags(),
-        ...unikidFlag("The UNIK token on which to disclose values"),
+        ...WriteCommand.getWriteCommandFlags(false),
         ...explicitValueFlag("Explicit value to disclose.", true),
     };
+
+    public static args = [getTargetArg()];
 
     public async formatResult(transactionFromNetwork: any, transactionId: string) {
         /**
@@ -62,9 +66,9 @@ export class UnikDiscloseCommand extends WriteCommand {
         return UnikDiscloseCommand;
     }
 
-    protected async do(flags: Record<string, any>): Promise<any> {
-        await this.checkUnik(flags.unikid);
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
 
+        const { unikid } = await this.targetResolve(flags, args.target);
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         const confirmation = await cli.confirm(
@@ -75,11 +79,12 @@ export class UnikDiscloseCommand extends WriteCommand {
             return "Command aborted by user";
         }
 
-        const unikType = await this.getUnikType(flags.unikid);
+        const unikType = await this.getUnikType(unikid);
 
         // Remove duplicates explicits
-        const explicitValues = [...new Set(flags.explicitValue)] as string[];
-        await this.checkExplicitValues(flags.unikid, unikType, explicitValues);
+        const explicitValues = [...new Set(flags.explicitValues)] as string[];
+
+        await this.checkExplicitValues(unikid, unikType, explicitValues);
 
         const transactionStruct: Interfaces.ITransactionData = await this.createTransactionStruct(
             flags,
@@ -95,17 +100,6 @@ export class UnikDiscloseCommand extends WriteCommand {
         );
 
         return await this.formatResult(transactionFromNetwork, transactionStruct.id as string);
-    }
-
-    private async checkUnik(unikId: string) {
-        // Check unikid format
-        checkUnikIdFormat(unikId);
-
-        try {
-            await this.unsClientWrapper.getUnikById(unikId);
-        } catch (e) {
-            throw new Error("unikid is not valid");
-        }
     }
 
     private async getUnikType(unikId: string): Promise<DIDType> {

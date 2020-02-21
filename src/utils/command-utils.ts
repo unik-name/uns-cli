@@ -282,3 +282,18 @@ function getDidDocsUrl(): string {
 function getDocsUrl() {
     return "https://docs.uns.network";
 }
+
+export function getTargetArg() {
+    return {
+        name: "target",
+        description: `Target unikid or @unikname (see ${getDidDocsUrl()})`,
+        required: true,
+    };
+}
+export function getDelegateArg(descStr: string) {
+    return {
+        name: "target",
+        description: getDelegateIdArgumentDescription(descStr),
+        required: true,
+    };
+}

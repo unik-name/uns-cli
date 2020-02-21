@@ -2,6 +2,7 @@ import { expect, test } from "@oclif/test";
 import { Transactions, Utils } from "@uns/ark-crypto";
 import { CertifiedNftUpdateTransaction } from "@uns/crypto";
 import * as SDK from "@uns/ts-sdk";
+import { UNIK_RESULT } from "../../__fixtures__/commands/properties/get";
 import { BLOCKCHAIN, NODE_CONFIGURATION_CRYPTO, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
 const UNIK_ID = "51615becbd39ad96344919dffa7b972f293b0a3973b05145fd6d0a1a20cac169";
@@ -60,6 +61,9 @@ describe(`${commandName} command`, () => {
         });
 
         test.stderr()
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+                api.get(`/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT),
+            )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api => {
                 api.get(`/wallets/${walletAddress}`).reply(200, {
                     data: {
@@ -75,10 +79,9 @@ describe(`${commandName} command`, () => {
             )
             .command([
                 commandName,
+                UNIK_ID,
                 "-n",
                 "dalinet",
-                "--unikid",
-                UNIK_ID,
                 "--passphrase",
                 PASSPHRASE,
                 "--properties",

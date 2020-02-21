@@ -10,7 +10,7 @@ export class CryptoAccountReadCommand extends ReadCommand {
     public static description = "Read current data of a specified crypto account, ic. balance";
 
     public static examples = [
-        `$ uns cryptoaccount:read {publicKey|address} --listunik --network ${getNetworksListListForDescription()} --format {json|yaml}`,
+        `$ uns cryptoaccount:read {publicKey|address} --listunik -n ${getNetworksListListForDescription()}`,
     ];
 
     public static flags = {

@@ -10,7 +10,7 @@ export class ResolveCommand extends ReadCommand {
 
     public static examples = [
         `$ uns resolve --confirmed {number of confirmations}
-        --network ${getNetworksListListForDescription()} --format {json|yaml|table|raw} "@bob?phone"`,
+        -n ${getNetworksListListForDescription()} "@bob?usr/phone"`,
     ];
 
     public static flags = {
@@ -34,8 +34,8 @@ export class ResolveCommand extends ReadCommand {
         return ResolveCommand;
     }
 
-    protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
-        const resolved: DidResolution<any> = await resolveUnikName(args?.did, flags);
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
+        const resolved: DidResolution<any> = await resolveUnikName(args.did, flags);
         if (resolved.error) {
             if (resolved.error.message) {
                 this.stop(resolved.error.message);

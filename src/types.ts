@@ -14,3 +14,10 @@ export interface CryptoAccountPassphrases {
     first: string;
     second: string;
 }
+
+export interface UnikInfos {
+    unikid: string;
+    ownerAddress: string;
+    chainmeta: ChainMeta;
+    transactions?: any;
+}

@@ -2,12 +2,13 @@ import { BaseCommand } from "../../baseCommand";
 import { GetWalletAddressCommandHelper } from "../../commandHelpers/cryptoaccount_address-helper";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
+import { getNetworksListListForDescription } from "../../utils";
 
 export class CryptoAccountAddressCommand extends ReadCommand {
     public static description = "Get Crypto Account address";
 
     public static examples = [
-        `$ uns cryptoaccount:address 5380aed31fde9cf6a07379bd450f5cc99c5da96a50bfe6db5ab7f117db3d2b53 --network sandbox --format yaml --verbose`,
+        `$ uns cryptoaccount:address 5380aed31fde9cf6a07379bd450f5cc99c5da96a50bfe6db5ab7f117db3d2b53 -n ${getNetworksListListForDescription()}`,
     ];
 
     public static flags = {

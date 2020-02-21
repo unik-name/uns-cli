@@ -80,7 +80,7 @@ export const propertyKeyFlag = (description: string, multiple: boolean = true) =
 
 export const senderAccountFlag = () => {
     return {
-        senderAccount: flags.string({
+        "sender-account": flags.string({
             required: false,
             description:
                 "The @unik-name OR the public address of the wallet of the sender (warning: @unik-name must be surrounded with double quotes)",

@@ -2,22 +2,20 @@ import { PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
-import { checkConfirmations, checkUnikIdFormat, confirmedFlag, getChainContext } from "../../utils";
+import {
+    checkConfirmations,
+    confirmedFlag,
+    getChainContext,
+    getNetworksListListForDescription,
+    getTargetArg,
+} from "../../utils";
 
 export class UnikIsDisclosedCommand extends ReadCommand {
     public static description = "Check if UNIK has one or more disclosed explicit values.";
 
-    public static examples = [
-        `$ uns unik:is-disclosed -n sandbox 636795fff13c8f2d2fd90f9aa124d7f583920fce83588895c917927ee522db3b`,
-    ];
+    public static examples = [`$ uns unik:is-disclosed @bob -n ${getNetworksListListForDescription()}`];
 
-    public static args = [
-        {
-            name: "unikid",
-            description: "The UNIK token to query",
-            required: true,
-        },
-    ];
+    public static args = [getTargetArg()];
 
     public static flags = {
         ...ReadCommand.flags,
@@ -32,15 +30,14 @@ export class UnikIsDisclosedCommand extends ReadCommand {
         return UnikIsDisclosedCommand;
     }
 
-    protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
-        const unikId = args?.unikid;
-        checkUnikIdFormat(unikId);
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
+        const target = await this.targetResolve(flags, args.target);
+
         let property: ResponseWithChainMeta<PropertyValue> | undefined;
         let data;
-        let chainmeta;
         try {
             property = (await this.unsClientWrapper.getUnikProperty(
-                unikId,
+                target.unikid,
                 "explicitValues",
                 flags.chainmeta,
             )) as ResponseWithChainMeta<PropertyValue>;
@@ -53,20 +50,17 @@ export class UnikIsDisclosedCommand extends ReadCommand {
             checkConfirmations(property.confirmations, flags.confirmed);
 
             data = {
-                unikid: unikId,
+                unikid: target.unikid,
                 isDisclosed: true,
                 confirmations: property.confirmations,
             };
-            chainmeta = property.chainmeta;
+            target.chainmeta = property.chainmeta;
         } catch (error) {
             if (error.response.status === 404) {
-                const unik = await this.unsClientWrapper.getUnikById(unikId);
-
                 data = {
-                    unikid: unikId,
+                    unikid: target.unikid,
                     isDisclosed: false,
                 };
-                chainmeta = unik.chainmeta;
             } else {
                 throw error;
             }
@@ -78,7 +72,7 @@ export class UnikIsDisclosedCommand extends ReadCommand {
             data,
             ...(flags.chainmeta
                 ? getChainContext(
-                      chainmeta,
+                      target.chainmeta,
                       this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
                       this.unsClientWrapper.getCurrentNode(),
                   )

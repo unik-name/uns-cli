@@ -2,21 +2,21 @@ import { Interfaces } from "@uns/ark-crypto";
 import { createCertifiedNftUpdateTransaction, isError, SdkResult } from "@uns/ts-sdk";
 import { CryptoAccountPassphrases } from "types";
 import { CommandOutput } from "./formater";
-import { checkUnikIdFormat, NFT_NAME, unikidFlag } from "./utils";
+import { getTargetArg, NFT_NAME } from "./utils";
 import { WriteCommand } from "./writeCommand";
 export abstract class PropertiesUpdateCommand extends WriteCommand {
     protected static getUpdateCommandFlags(fees?: number) {
-        return {
-            ...WriteCommand.getWriteCommandFlags(fees),
-            ...unikidFlag("The UNIK token on which to update the properties."),
-        };
+        return WriteCommand.getWriteCommandFlags(false, fees);
+    }
+
+    protected static getUpdateCommandArgs() {
+        return [getTargetArg()];
     }
 
     protected abstract getProperties(flags: Record<string, any>): { [_: string]: string };
 
-    protected async do(flags: Record<string, any>): Promise<CommandOutput> {
-        // Check unikid format
-        checkUnikIdFormat(flags.unikid);
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<CommandOutput> {
+        const { unikid } = await this.targetResolve(flags, args.target);
 
         const properties = this.getProperties(flags);
 
@@ -31,7 +31,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
 
         const transactionStruct: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftUpdateTransaction(
             this.unsClientWrapper.unsClient,
-            flags.unikid,
+            unikid,
             properties,
             flags.fee,
             nonce,

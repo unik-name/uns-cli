@@ -3,29 +3,29 @@ import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
 import {
     checkConfirmations,
-    checkUnikIdFormat,
     checkUnikPropertyFormat,
     confirmedFlag,
     getChainContext,
     getNetworksListListForDescription,
+    getTargetArg,
     propertyKeyFlag,
-    unikidFlag,
 } from "../../utils";
 
 export class PropertiesGetCommand extends ReadCommand {
     public static description = "Get the value of a specific property of a UNIK token.";
 
     public static examples = [
-        `$ uns properties:get --unikid {unikId} -k {propertyKey} [--confirmed {number of confirmations}]
-        --network ${getNetworksListListForDescription()} --format {json|yaml|raw}`,
+        `$ uns properties:get @bob -k {propertyKey} [--confirmed {number of confirmations}]
+        -n ${getNetworksListListForDescription()}`,
     ];
 
     public static flags = {
         ...ReadCommand.flags,
-        ...unikidFlag("UNIK token id on which to get the property."),
         ...confirmedFlag,
         ...propertyKeyFlag("Key of the property for which we query the value.", false),
     };
+
+    public static args = [getTargetArg()];
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml, OUTPUT_FORMAT.raw];
@@ -35,13 +35,13 @@ export class PropertiesGetCommand extends ReadCommand {
         return PropertiesGetCommand;
     }
 
-    protected async do(flags: Record<string, any>): Promise<any> {
-        checkUnikIdFormat(flags.unikid);
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
+        const { unikid } = await this.targetResolve(flags, args.target);
 
         const propertyKey = flags.propertyKey.trim();
         checkUnikPropertyFormat(propertyKey, false);
 
-        const property: any = await this.unsClientWrapper.getUnikProperty(flags.unikid, propertyKey, flags.chainmeta);
+        const property: any = await this.unsClientWrapper.getUnikProperty(unikid, propertyKey, flags.chainmeta);
 
         checkConfirmations(property.confirmations, flags.confirmed);
 
@@ -53,7 +53,7 @@ export class PropertiesGetCommand extends ReadCommand {
 
         return {
             data: {
-                unikid: flags.unikid,
+                unikid,
                 property: propertyKey,
                 value: propertyValue,
                 confirmations: property.confirmations,

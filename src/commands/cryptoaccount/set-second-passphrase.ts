@@ -1,13 +1,13 @@
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { createSecondPassphraseTransaction, generatePassphrase } from "../../utils";
+import { createSecondPassphraseTransaction, generatePassphrase, getNetworksListListForDescription } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
     public static description = "Set Crypto Account second passphrase";
 
-    public static examples = [`$ uns cryptoaccount:set-second-passphrase --network sandbox`];
+    public static examples = [`$ uns cryptoaccount:set-second-passphrase -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
         ...CryptoAccountSetSecondPassphraseCommand.getFlags(),

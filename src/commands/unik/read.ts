@@ -1,20 +1,19 @@
-import { ChainMeta, Unik } from "@uns/ts-sdk";
+import { ChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
-import { checkUnikIdFormat, getChainContext, getNetworksListListForDescription, unikidFlag } from "../../utils";
+import { getChainContext, getNetworksListListForDescription, getTargetArg } from "../../utils";
 
 export class UnikReadCommand extends ReadCommand {
     public static description = "Display UNIK token informations";
 
-    public static examples = [
-        `$ uns unik:read --unikid {unikId} --network ${getNetworksListListForDescription()} --format {json|yaml}`,
-    ];
+    public static examples = [`$ uns unik:read @bob -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
         ...ReadCommand.flags,
-        ...unikidFlag("Token id to read"),
     };
+
+    public static args = [getTargetArg()];
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
@@ -24,29 +23,32 @@ export class UnikReadCommand extends ReadCommand {
         return UnikReadCommand;
     }
 
-    protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
-        checkUnikIdFormat(flags.unikid);
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
+        const target = await this.targetResolve(flags, args.target);
 
-        const unik: Unik & { chainmeta: ChainMeta } = await this.unsClientWrapper.getUnikById(flags.unikid);
         const properties: {
             data: Array<{ [_: string]: string }>;
             chainmeta: ChainMeta;
-        } = await this.unsClientWrapper.getUnikProperties(flags.unikid);
-        const creationTransaction = await this.unsClientWrapper.getTransaction(unik.transactions.first.id);
+        } = await this.unsClientWrapper.getUnikProperties(target.unikid);
+
+        if (target.transactions === undefined) {
+            target.transactions = (await this.unsClientWrapper.getUnikById(target.unikid)).transactions;
+        }
+        const creationTransaction = await this.unsClientWrapper.getTransaction(target.transactions.first.id);
 
         if (!creationTransaction) {
-            throw new Error(`Error fetching transaction ${unik.transactions.first.id}`);
+            throw new Error(`Error fetching transaction ${target.transactions.first.id}`);
         }
 
         this.checkDataConsistency(
-            unik.chainmeta.height,
+            target.chainmeta.height,
             properties.chainmeta.height,
             creationTransaction.chainmeta.height,
         );
 
         const data = {
-            id: unik.id,
-            ownerAddress: unik.ownerId,
+            id: target.unikid,
+            ownerAddress: target.ownerAddress,
             creationBlock: creationTransaction.blockId,
             creationTransaction: creationTransaction.id,
             creationDate: creationTransaction.timestamp.human,
@@ -57,7 +59,7 @@ export class UnikReadCommand extends ReadCommand {
             data,
             ...(flags.chainmeta
                 ? getChainContext(
-                      unik.chainmeta,
+                      target.chainmeta,
                       this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
                       this.unsClientWrapper.getCurrentNode(),
                   )

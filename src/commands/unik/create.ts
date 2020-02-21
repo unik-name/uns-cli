@@ -14,7 +14,7 @@ export class UnikCreateCommand extends WriteCommand {
     public static examples = [
         `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join(
             "|",
-        )}] --network ${getNetworksListListForDescription()} --format {json|yaml}`,
+        )}] -n ${getNetworksListListForDescription()}`,
     ];
 
     public static flags = {

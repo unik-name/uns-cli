@@ -70,12 +70,12 @@ export const EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT = `{
 export const shouldExit = [
     {
         description: "Should exit with code 2 if output format is not allowed for that command",
-        args: [commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "property", "-f", "table", "--verbose"],
+        args: [commandName, UNIK_ID, "-n", "dalinet", "-k", "property", "-f", "table", "--verbose"],
         exitCode: 2,
     },
     {
         description: "Should exit with code 1 if unikid doesn't match",
-        args: [commandName, "-n", "dalinet", "--unikid", "123", "-k", "type"],
+        args: [commandName, "123", "-n", "dalinet", "-k", "type"],
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
@@ -84,7 +84,7 @@ export const shouldExit = [
     },
     {
         description: "Should exit with code 1 if property doesn't match",
-        args: [commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "pr@perty"],
+        args: [commandName, UNIK_ID, "-n", "dalinet", "-k", "pr@perty"],
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,

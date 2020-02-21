@@ -12,8 +12,8 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
     public static description = "Set (add or update) properties of UNIK token.";
 
     public static examples = [
-        `$ uns properties:set --network ${getNetworksListListForDescription()} --unikid {unikId}
-        --properties "{key1}:{value1}" "{key2}:{value2}" --format {json|yaml} --verbose`,
+        `$ uns properties:set @bob -n ${getNetworksListListForDescription()}
+        --properties "{key1}:{value1}" "{key2}:{value2}"`,
     ];
 
     public static flags = {
@@ -24,6 +24,8 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
             multiple: true,
         }),
     };
+
+    public static args = UpdatePropertiesCommand.getUpdateCommandArgs();
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];

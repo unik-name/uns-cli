@@ -134,6 +134,7 @@ describe(`${commandName} command`, () => {
             .stdout()
             .command([
                 commandName,
+                UNIK_ID,
                 "--passphrase",
                 WALLET_PASSPHRASE,
                 "-n",
@@ -142,8 +143,6 @@ describe(`${commandName} command`, () => {
                 "captain-obvious",
                 "--explicitValue",
                 "captain0bvious",
-                "--unikid",
-                UNIK_ID,
             ])
             .it("Should disclose captain-obvious without error", ctx => {
                 oclifExpect(ctx.stdout).to.equal(DISCLOSE_OUTPUT);
