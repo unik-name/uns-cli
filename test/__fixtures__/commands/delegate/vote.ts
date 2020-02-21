@@ -28,12 +28,12 @@ export const shouldExit = [
         description: "Should exit with code 2 no delegate id",
         args: [commandName, "-n", "dalinet"],
         errorMsg:
-            "» :stop: Command fail because of unexpected value for at least one parameter (id). Please check your parameters.;\n",
+            "» :stop: Command fail because of unexpected value for at least one parameter (target). Please check your parameters.;\n",
     },
     {
         description: "Should exit with code 1 if delegate id malformed (no @)",
         args: [commandName, "-n", "dalinet", "delegateId"],
-        errorMsg: "» :stop: Unikid parameter does not match expected format;\n",
+        errorMsg: "» :stop: Unik target argument does not match expected format.;\n",
         mocks: {
             nodeConfigurationCrypto: true,
             blockchain: true,

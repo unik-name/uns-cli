@@ -1,29 +1,20 @@
 import { Interfaces } from "@uns/ark-crypto";
-import { Unik, Wallet } from "@uns/ts-sdk";
+import { Wallet } from "@uns/ts-sdk";
 import { NestedCommandOutput } from "./formater";
 import { CryptoAccountPassphrases, WithChainmeta } from "./types";
-import { checkUnikIdFormat, createVoteTransaction, getUniknameWalletAddress } from "./utils";
+import { createVoteTransaction } from "./utils";
 import { WriteCommand } from "./writeCommand";
 
 export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
     public static flags = {
-        ...AbstractDelegateVoteCreateCommand.getFlags(),
+        ...WriteCommand.getWriteCommandFlags(false),
     };
-
-    protected static getFlags() {
-        const flags = WriteCommand.flags;
-        delete flags.senderAccount;
-        return flags;
-    }
 
     protected abstract getVotes(delegatePublicKey: string): string[];
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
-        const delegateId: string = args.id;
-
         // Get Delegate public key
-        const delegatePublicKey: string = await this.resolveDelegateWalletPublicKey(delegateId);
-
+        const delegatePublicKey: string = await this.resolveDelegateWalletPublicKey(flags, args.target);
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         /**
@@ -65,18 +56,10 @@ export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
         };
     }
 
-    private async resolveDelegateWalletPublicKey(delegateId: string): Promise<string> {
-        let walletAddress: string;
+    private async resolveDelegateWalletPublicKey(flags: Record<string, any>, delegateId: string): Promise<string> {
+        const { ownerAddress } = await this.targetResolve(flags, delegateId);
+        const wallet: WithChainmeta<Wallet> = await this.unsClientWrapper.getWallet(ownerAddress);
 
-        if (delegateId && delegateId.startsWith("@")) {
-            walletAddress = await getUniknameWalletAddress(delegateId, this.unsClientWrapper.unsClient);
-        } else {
-            checkUnikIdFormat(delegateId);
-            const unik: Unik = await this.unsClientWrapper.getUnikById(delegateId);
-            walletAddress = unik.ownerId;
-        }
-
-        const wallet: WithChainmeta<Wallet> = await this.unsClientWrapper.getWallet(walletAddress);
         if (!wallet) {
             throw new Error("Delegate not found");
         }

@@ -1,7 +1,7 @@
 import { Identities, Interfaces } from "@uns/ark-crypto";
 import { cli } from "cli-ux";
 import { SendCommand } from "../commands/send";
-import { createTransferTransaction, getUniknameWalletAddress } from "../utils";
+import { createTransferTransaction } from "../utils";
 import { CommandHelper } from "./command-helper";
 
 export class SendCommandHelper extends CommandHelper<SendCommand> {
@@ -55,30 +55,16 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         return amount;
     }
 
-    public async resolveWalletAddress(id: string, isRecipient: boolean = true): Promise<string> {
-        let resolvedAddress: string;
-
-        if (id && id.startsWith("@")) {
+    public async getWalletAddress(id: string, isRecipient: boolean = true): Promise<string> {
+        if (!Identities.Address.validate(id, this.cmd.unsClientWrapper.getVersion())) {
             try {
-                resolvedAddress = await getUniknameWalletAddress(id, this.cmd.unsClientWrapper.unsClient);
-            } catch (e) {
-                if (e && e.response && e.response.status === 404) {
-                    throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not exist`);
-                }
-                throw new Error(`${isRecipient ? "Recipient" : "Sender"} @unik-name does not match expected format`);
+                return Identities.Address.fromPublicKey(id);
+            } catch (_) {
+                throw new Error(`${isRecipient ? "Recipient" : "Sender"} address does not match expected format`);
             }
         } else {
-            if (!Identities.Address.validate(id, this.cmd.unsClientWrapper.getVersion())) {
-                try {
-                    resolvedAddress = Identities.Address.fromPublicKey(id);
-                } catch (_) {
-                    throw new Error(`${isRecipient ? "Recipient" : "Sender"} address does not match expected format`);
-                }
-            } else {
-                resolvedAddress = id;
-            }
+            return id;
         }
-        return resolvedAddress;
     }
 
     public async checkAndConfirmWallet(checkWallet: boolean, address: string) {

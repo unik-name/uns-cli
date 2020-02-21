@@ -1,19 +1,12 @@
 import { Interfaces, Utils } from "@uns/ark-crypto";
 import { NestedCommandOutput } from "./formater";
 import { CryptoAccountPassphrases } from "./types";
-import { isTokenId, resolveUnikName } from "./utils";
 import { WriteCommand } from "./writeCommand";
 
 export abstract class AbstractDelegateCommand extends WriteCommand {
     public static flags = {
-        ...AbstractDelegateCommand.getFlags(),
+        ...WriteCommand.getWriteCommandFlags(false),
     };
-
-    protected static getFlags() {
-        const flags = WriteCommand.flags;
-        delete flags.senderAccount;
-        return flags;
-    }
 
     protected abstract getTransaction(
         unikid: string,
@@ -24,20 +17,7 @@ export abstract class AbstractDelegateCommand extends WriteCommand {
     ): Interfaces.ITransactionData;
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
-        let ownerAddress: string;
-        let unikid: string;
-        if (isTokenId(args.id)) {
-            unikid = args.id;
-            ownerAddress = (await this.unsClientWrapper.getUnikById(unikid)).ownerId;
-        } else {
-            const resolved = await resolveUnikName(args.id, flags);
-            if (resolved.error) {
-                throw resolved.error;
-            }
-            unikid = resolved?.data.unikid;
-            ownerAddress = resolved?.data.ownerAddress;
-        }
-
+        const { ownerAddress, unikid } = await this.targetResolve(flags, args.target);
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         /**

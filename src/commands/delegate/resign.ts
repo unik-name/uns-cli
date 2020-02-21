@@ -1,27 +1,14 @@
 import { Interfaces } from "@uns/ark-crypto";
 import { BaseCommand } from "baseCommand";
 import { AbstractDelegateCommand } from "../../abstract-delegate";
-import {
-    createDelegateResignTransaction,
-    getDelegateIdArgumentDescription,
-    getNetworksListListForDescription,
-} from "../../utils";
+import { createDelegateResignTransaction, getDelegateArg, getNetworksListListForDescription } from "../../utils";
 
 export abstract class DelegateResignCommand extends AbstractDelegateCommand {
     public static description = "Resign delegate registration of a UNIK or unikid";
 
-    public static examples = [
-        `$ uns delegate:resign --network ${getNetworksListListForDescription()} ID
-        --format {json|yaml} --verbose`,
-    ];
+    public static examples = [`$ uns delegate:resign @bob -n ${getNetworksListListForDescription()}`];
 
-    public static args = [
-        {
-            name: "id",
-            description: getDelegateIdArgumentDescription("resign"),
-            required: true,
-        },
-    ];
+    public static args = [getDelegateArg("resign")];
 
     public static flags = {
         ...AbstractDelegateCommand.flags,

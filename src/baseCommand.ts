@@ -4,11 +4,13 @@ import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Managers, Types, Utils } from "@uns/ark-crypto";
 import { ChainMeta, Network, Transaction } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
+import { UnikInfos } from "types";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
 import * as LOGGER from "./logger";
 import { UnsClientWrapper } from "./sdkWrapper";
 import * as UTILS from "./utils";
-import { getWalletFromPassphrase } from "./utils";
+import { getWalletFromPassphrase, isDid } from "./utils";
+import { isTokenId, resolveUnikName } from "./utils";
 
 export abstract class BaseCommand extends Command {
     public static baseFlags = {
@@ -181,6 +183,33 @@ export abstract class BaseCommand extends Command {
                 arg.startsWith(`--${flagName}=`) ||
                 (flagChar && (arg === `-${flagChar}` || arg.startsWith(`-${flagChar}=`))),
         );
+    }
+
+    public async targetResolve(flags: Record<string, any>, target: string): Promise<UnikInfos> {
+        let ownerAddress: string;
+        let unikid: string;
+        let chainmeta: ChainMeta;
+        let transactions;
+
+        if (isTokenId(target)) {
+            unikid = target;
+            const unikInfos = await this.unsClientWrapper.getUnikById(unikid);
+            ownerAddress = unikInfos.ownerId;
+            chainmeta = unikInfos.chainmeta;
+            transactions = unikInfos.transactions;
+        } else if (isDid(target)) {
+            const resolved = await resolveUnikName(target, flags);
+            if (resolved.error) {
+                throw resolved.error;
+            }
+            unikid = resolved?.data.unikid;
+            ownerAddress = resolved?.data.ownerAddress;
+            chainmeta = resolved?.chainmeta as ChainMeta;
+        } else {
+            throw new Error(`Unik target argument does not match expected format.`);
+        }
+
+        return { unikid, ownerAddress, chainmeta, transactions };
     }
 
     protected async withAction<T>(actionDescription: string, callback: () => any): Promise<T> {

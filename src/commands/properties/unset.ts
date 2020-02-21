@@ -9,14 +9,16 @@ export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
     public static description = "Unset properties of UNIK token.";
 
     public static examples = [
-        `$ uns properties:unset --network ${getNetworksListListForDescription()} --unikid {unikId}
-        -k prop1 -k prop2 --format {json|yaml} --verbose`,
+        `$ uns properties:unset @bob -n ${getNetworksListListForDescription()}
+        -k prop1 -k prop2`,
     ];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         ...propertyKeyFlag('Key of the property to unset. (multiple occurrences, key must start with "usr/")'),
     };
+
+    public static args = PropertiesUpdateCommand.getUpdateCommandArgs();
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];

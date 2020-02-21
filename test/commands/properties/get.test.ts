@@ -26,7 +26,10 @@ describe(`${commandName} command`, () => {
             api.get(`/uniks/${UNIK_ID}/properties/type`).reply(200, PROPERTY_RESULT_FOR_CONSISTENCY_FAIL),
         )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT),
+                api
+                    .get(`/uniks/${UNIK_ID}`)
+                    .twice()
+                    .reply(200, UNIK_RESULT),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
                 api.get(`/transactions/${TRANSACTION_ID}`).reply(200, TRANSACTION_RESULT),
@@ -44,7 +47,7 @@ describe(`${commandName} command`, () => {
                     },
                 }),
             )
-            .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
+            .command([commandName, UNIK_ID, "-n", "dalinet", "-k", "type", "--chainmeta"])
             .exit(1)
             // tslint:disable-next-line:no-empty
             .it("Should exit with data consistency error", _ => {});
@@ -55,7 +58,10 @@ describe(`${commandName} command`, () => {
             api.get(`/uniks/${UNIK_ID}/properties/type`).reply(200, PROPERTY_RESULT),
         )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT),
+                api
+                    .get(`/uniks/${UNIK_ID}`)
+                    .twice()
+                    .reply(200, UNIK_RESULT),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
                 api.get(`/transactions/${TRANSACTION_ID}`).reply(200, TRANSACTION_RESULT),
@@ -74,7 +80,7 @@ describe(`${commandName} command`, () => {
                 }),
             )
             .stdout()
-            .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type"])
+            .command([commandName, UNIK_ID, "-n", "dalinet", "-k", "type"])
             .it("Should retrieve property type without chainmeta", ctx => {
                 expect(ctx.stdout).to.equal(EXPECTED_PROPERTY_OUTPUT);
             });
@@ -83,7 +89,10 @@ describe(`${commandName} command`, () => {
             api.get(`/uniks/${UNIK_ID}/properties/type`).reply(200, PROPERTY_RESULT),
         )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
-                api.get(`/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT),
+                api
+                    .get(`/uniks/${UNIK_ID}`)
+                    .twice()
+                    .reply(200, UNIK_RESULT),
             )
             .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
                 api.get(`/transactions/${TRANSACTION_ID}`).reply(200, TRANSACTION_RESULT),
@@ -102,7 +111,7 @@ describe(`${commandName} command`, () => {
                 }),
             )
             .stdout()
-            .command([commandName, "-n", "dalinet", "--unikid", UNIK_ID, "-k", "type", "--chainmeta"])
+            .command([commandName, UNIK_ID, "-n", "dalinet", "-k", "type", "--chainmeta"])
             .it("Should retrieve property type with chainmeta", ctx => {
                 expect(ctx.stdout).to.equal(EXPECTED_PROPERTY_WITH_CHAINMETA_OUTPUT);
             });

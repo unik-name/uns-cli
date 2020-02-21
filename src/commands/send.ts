@@ -4,7 +4,14 @@ import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import { getWalletFromPassphrase, toSatoshi } from "../utils";
+import {
+    getNetworksListListForDescription,
+    getTargetArg,
+    getWalletFromPassphrase,
+    isDid,
+    isTokenId,
+    toSatoshi,
+} from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -13,17 +20,12 @@ export class SendCommand extends WriteCommand {
     public static description = "Send owned UNS protocol tokens to another wallet.";
 
     public static examples = [
-        `$ uns send 1237.77 --to SNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 --network sandbox --format json`,
-        `$ uns send 1237.77 --to "@bob"`,
+        `$ uns send 1237.77 SNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 -n ${getNetworksListListForDescription()}`,
+        `$ uns send 1237.77 "@bob"`,
     ];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),
-        to: flags.string({
-            description:
-                "The recipient public address, public key OR the @unik-name of the recipient (warning: @unik-name must be surrounded with double quotes)",
-            required: true,
-        }),
         check: flags.boolean({
             description:
                 "Check if recipient address exists on chain before sending tokens. (--no-check to bypass recipient check)",
@@ -46,6 +48,7 @@ export class SendCommand extends WriteCommand {
             description: "The quantity of tokens to send to the recipient.",
             required: true,
         },
+        getTargetArg(),
     ];
 
     protected getAvailableFormats(): Formater[] {
@@ -56,11 +59,11 @@ export class SendCommand extends WriteCommand {
         return SendCommand;
     }
 
-    protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<any> {
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
         const cmdHelper = new SendCommandHelper(this);
 
         // Check and get amount
-        const amount: number = cmdHelper.checkAndGetAmount(args?.amount, flags.sato);
+        const amount: number = cmdHelper.checkAndGetAmount(args.amount, flags.sato);
         const satoAmount = flags.sato ? amount : toSatoshi(amount);
 
         const transactionSatoAmount: number = flags[feesIncludedFlagId] ? satoAmount - flags.fee : satoAmount;
@@ -70,7 +73,12 @@ export class SendCommand extends WriteCommand {
             return undefined;
         }
 
-        const recipientAddress = await cmdHelper.resolveWalletAddress(flags.to);
+        let recipientAddress: string;
+        if (isDid(args.target) || isTokenId(args.target)) {
+            recipientAddress = (await this.targetResolve(flags, args.target)).ownerAddress;
+        } else {
+            recipientAddress = await cmdHelper.getWalletAddress(args.target);
+        }
 
         // Check recipient wallet existence if needed
         const canContinue = await cmdHelper.checkAndConfirmWallet(flags.check, recipientAddress);
@@ -87,7 +95,13 @@ export class SendCommand extends WriteCommand {
 
         if (flags.senderAccount) {
             // Check if senderAccount correspond to first passphrase
-            const unikNameSenderAddress = await cmdHelper.resolveWalletAddress(flags.senderAccount, false);
+            let unikNameSenderAddress: string;
+            if (isDid(flags.senderAccount) || isTokenId(flags.senderAccount)) {
+                unikNameSenderAddress = (await this.targetResolve(flags, flags.senderAccount)).ownerAddress;
+            } else {
+                unikNameSenderAddress = await cmdHelper.getWalletAddress(flags.senderAccount, false);
+            }
+
             if (unikNameSenderAddress !== senderWallet.address) {
                 throw new Error(`Wrong passphrase for sender account ${flags.senderAccount}`);
             }

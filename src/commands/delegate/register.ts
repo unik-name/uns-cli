@@ -1,27 +1,14 @@
 import { Interfaces } from "@uns/ark-crypto";
 import { BaseCommand } from "baseCommand";
 import { AbstractDelegateCommand } from "../../abstract-delegate";
-import {
-    createDelegateRegisterTransaction,
-    getDelegateIdArgumentDescription,
-    getNetworksListListForDescription,
-} from "./../../utils";
+import { createDelegateRegisterTransaction, getDelegateArg, getNetworksListListForDescription } from "./../../utils";
 
 export abstract class DelegateRegisterCommand extends AbstractDelegateCommand {
     public static description = "Register a UNIK as delegate using Unikname or unikid";
 
-    public static examples = [
-        `$ uns delegate:register --network ${getNetworksListListForDescription()} ID
-        --format {json|yaml} --verbose`,
-    ];
+    public static examples = [`$ uns delegate:register @bob -n ${getNetworksListListForDescription()}`];
 
-    public static args = [
-        {
-            name: "id",
-            description: getDelegateIdArgumentDescription("register as delegate"),
-            required: true,
-        },
-    ];
+    public static args = [getDelegateArg("register as delegate")];
 
     public static flags = {
         ...AbstractDelegateCommand.flags,

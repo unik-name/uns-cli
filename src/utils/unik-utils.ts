@@ -3,6 +3,11 @@ import { DidResolution, didResolve, UNS_NFT_PROPERTY_KEY_REGEX } from "@uns/ts-s
 export function isTokenId(tokenId: string) {
     return tokenId && tokenId.length === 64 && tokenId.match(/^[0-9a-f]+$/);
 }
+
+export function isDid(didStr: string) {
+    return didStr && didStr.startsWith("@");
+}
+
 export const checkUnikIdFormat = (unikid: string) => {
     if (!isTokenId(unikid)) {
         throw new Error("Unikid parameter does not match expected format");

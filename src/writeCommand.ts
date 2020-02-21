@@ -16,15 +16,18 @@ import {
 
 export abstract class WriteCommand extends BaseCommand {
     public static flags = WriteCommand.getWriteCommandFlags();
-    protected static getWriteCommandFlags(fees?: number) {
-        return {
+    protected static getWriteCommandFlags(senderAccount: boolean = true, fees?: number) {
+        let flags = {
             ...BaseCommand.baseFlags,
             ...feeFlag(fees),
             ...awaitConfirmationFlag,
-            ...senderAccountFlag(),
             ...passphraseFlag,
             ...secondPassphraseFlag,
         };
+        if (senderAccount) {
+            flags = { ...flags, ...senderAccountFlag() };
+        }
+        return flags;
     }
 
     /**

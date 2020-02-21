@@ -11,7 +11,7 @@ describe(`${commandName} command`, () => {
         jest.spyOn(SDK, "didResolve").mockImplementation(() => {
             return new Promise((resolve, _) => {
                 resolve({
-                    data: wallet.address,
+                    data: { ownerAddress: wallet.address, unikid: "unikid" },
                     chainmeta: meta,
                     confirmations: 12,
                 });

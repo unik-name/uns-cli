@@ -6,7 +6,7 @@ import { fromSatoshi, getNetworkNameByNetHash, getNetworksListListForDescription
 export class StatusCommand extends BaseCommand {
     public static description = "Display blockchain status";
 
-    public static examples = [`$ uns status --network ${getNetworksListListForDescription()}`];
+    public static examples = [`$ uns status -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
         ...BaseCommand.baseFlags,

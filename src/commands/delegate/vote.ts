@@ -1,26 +1,17 @@
 import { AbstractDelegateVoteCreateCommand } from "../../abstract-vote";
 import { BaseCommand } from "../../baseCommand";
-import { getDelegateIdArgumentDescription, getNetworksListListForDescription } from "../../utils";
+import { getDelegateArg, getNetworksListListForDescription } from "../../utils";
 
 export class DelegateVoteCreateCommand extends AbstractDelegateVoteCreateCommand {
-    public static description = "Vote for a delegate with his Unikname or unikid";
+    public static description = "Vote for a delegate with his @unikname or unikid";
 
-    public static examples = [
-        `$ uns delegate:vote --network ${getNetworksListListForDescription()} ID
-        --format {json|yaml} --verbose`,
-    ];
+    public static examples = [`$ uns delegate:vote @bob -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
         ...AbstractDelegateVoteCreateCommand.flags,
     };
 
-    public static args = [
-        {
-            name: "id",
-            description: getDelegateIdArgumentDescription("vote for"),
-            required: true,
-        },
-    ];
+    public static args = [getDelegateArg("vote for")];
 
     protected getCommand(): typeof BaseCommand {
         return DelegateVoteCreateCommand;

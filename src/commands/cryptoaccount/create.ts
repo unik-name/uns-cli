@@ -5,10 +5,7 @@ import { generatePassphrase, getNetworksListListForDescription, getWalletFromPas
 export class CryptoAccountCreateCommand extends BaseCommand {
     public static description = "Create UNS Crypto Account";
 
-    public static examples = [
-        `$ uns cryptoaccount:create --network ${getNetworksListListForDescription()}
-        --format {json|yaml} --verbose`,
-    ];
+    public static examples = [`$ uns cryptoaccount:create -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
         ...BaseCommand.baseFlags,
