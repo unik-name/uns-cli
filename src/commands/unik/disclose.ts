@@ -98,6 +98,7 @@ export class UnikDiscloseCommand extends WriteCommand {
 
         const transactionStruct: Interfaces.ITransactionData = await this.createTransactionStruct(
             flags,
+            unikid,
             explicitValues,
             unikType,
             passphrases.first,
@@ -157,6 +158,7 @@ export class UnikDiscloseCommand extends WriteCommand {
 
     private async createTransactionStruct(
         flags: Record<string, any>,
+        unikid: string,
         explicitValues: string[],
         unikType: DIDType,
         passphrase: string,
@@ -164,7 +166,7 @@ export class UnikDiscloseCommand extends WriteCommand {
     ): Promise<any | string> {
         // Create Disclose Demand
         const discloseDemand: IDiscloseDemand = buildDiscloseDemand(
-            flags.unikid,
+            unikid,
             explicitValues,
             DIDHelpers.fromLabel(unikType),
             passphrase,
