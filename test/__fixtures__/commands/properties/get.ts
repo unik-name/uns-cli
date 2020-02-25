@@ -1,4 +1,4 @@
-import { getMeta } from "../../commons";
+import { getMeta, UNS_CLIENT_FOR_TESTS } from "../../commons";
 
 const commandName: string = "properties:get";
 
@@ -89,6 +89,12 @@ export const shouldExit = [
         mocks: {
             nodeConfigurationCrypto: true,
             blockchain: true,
+            custom: [
+                {
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    cb: (api: any) => api.get(`/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT),
+                },
+            ],
         },
     },
 ];
