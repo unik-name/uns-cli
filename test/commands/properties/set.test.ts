@@ -46,11 +46,22 @@ describe(`${commandName} command`, () => {
                                 },
                             },
                         },
+                        demand: {
+                            payload: {
+                                iss: UNIK_ID,
+                                sub: UNIK_ID,
+                                iat: 1579507453173,
+                                cryptoAccountAddress: walletAddress,
+                            },
+                            signature:
+                                "3045022100fbff7614e5658b692484efccc4a1e2495e655c7fd95287a1ee857c42b789ca50022018d4f23db7b920a1465276cedb63aac3f923556e7bede080792c59638df16ee4",
+                        },
                         certification: {
                             payload: {
                                 iss: "2b9799c35cbe4e8fb93c79c83aebe229f9f9909d7d13138ba837fca932dada76",
                                 sub: "6d8f88a373dbdb704dabdfd1ae4311a35484685ef3885c6e08bf7200648a9884",
                                 iat: 1579507453173,
+                                cost: Utils.BigNumber.ZERO,
                             },
                             signature:
                                 "3045022100fbff7614e5658b692484efccc4a1e2495e655c7fd95287a1ee857c42b789ca50022018d4f23db7b920a1465276cedb63aac3f923556e7bede080792c59638df16ee3",
