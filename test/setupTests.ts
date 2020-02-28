@@ -1,3 +1,4 @@
+import { Utils } from "@uns/ark-crypto";
 import { NftMintDemandCertificationSigner } from "@uns/crypto";
 
 beforeEach(() => {
@@ -15,7 +16,7 @@ afterEach(() => {
 beforeAll(async () => {
     // Handle ECDSA curve init ()
     try {
-        await new NftMintDemandCertificationSigner({ iss: "", sub: "", iat: 123 }).sign(
+        await new NftMintDemandCertificationSigner({ iss: "", sub: "", iat: 123, cost: Utils.BigNumber.ZERO }).sign(
             "path adult harsh access case slice source error protect brave reason okay",
         );
     } catch (_) {

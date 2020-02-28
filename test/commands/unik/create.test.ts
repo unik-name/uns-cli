@@ -101,7 +101,7 @@ describe("create-unik command", () => {
         // Mock function that create transaction id
         jest.spyOn(Transactions.Utils, "getId").mockImplementation(() => TRANSACTION_ID);
 
-        jest.spyOn(SDK, "createCertifiedNnfMintTransaction").mockImplementation(() => {
+        jest.spyOn(SDK, "createCertifiedNftMintTransaction").mockImplementation(() => {
             return new Promise((resolve, _) => {
                 return resolve(transactionFromSDK);
             });

@@ -1,11 +1,7 @@
-import { ChainMeta, DIDHelpers, DIDType } from "@uns/ts-sdk";
+import { ChainMeta, DIDHelpers } from "@uns/ts-sdk";
 
 export const getUnikTypesList = () => {
     return DIDHelpers.labels().map((type: string) => type.toLowerCase());
-};
-
-export const getTypeValue = (tokenType: string): string => {
-    return `${DIDHelpers.fromLabel(tokenType.toUpperCase() as DIDType)}`;
 };
 
 export type WithChainmeta<T> = T & { chainmeta: ChainMeta };

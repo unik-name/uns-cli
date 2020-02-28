@@ -1,10 +1,10 @@
 import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
-import { createCertifiedNnfMintTransaction, DIDType, isError, SdkResult } from "@uns/ts-sdk";
+import { createCertifiedNftMintTransaction, DIDType, isError, SdkResult } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { CryptoAccountPassphrases, getTypeValue, getUnikTypesList } from "../../types";
+import { CryptoAccountPassphrases, getUnikTypesList } from "../../types";
 import { certificationFlag, getNetworksListListForDescription, isDevMode, NFT_NAME } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
@@ -56,8 +56,6 @@ export class UnikCreateCommand extends WriteCommand {
 
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
-        const typeValue: string = getTypeValue(flags.type);
-
         /**
          * Compute Fingerprint
          */
@@ -80,15 +78,14 @@ export class UnikCreateCommand extends WriteCommand {
          * Transaction creation
          */
         this.actionStart("Creating transaction");
-        const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNnfMintTransaction(
+        const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftMintTransaction(
             this.unsClientWrapper.unsClient,
             tokenId,
-            typeValue,
+            `@${NFT_NAME}:${flags.type}:${flags.explicitValue}`,
             flags.fee,
             nonce,
             passphrases.first,
             passphrases.second,
-            NFT_NAME,
             this.getCertificationMode(flags),
         );
         this.actionStop();
