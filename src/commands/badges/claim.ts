@@ -1,7 +1,7 @@
 import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
-import { PropertiesUpdateCommand as UpdatePropertiesCommand } from "../../updatePropertiesCommand";
+import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { getNetworksListListForDescription } from "../../utils";
 
 const BADGE_PREFIX = "Badges/";
@@ -12,7 +12,7 @@ const badges: Record<string, any> = {
     },
 };
 
-export class BadgesClaimCommand extends UpdatePropertiesCommand {
+export class BadgesClaimCommand extends PropertiesUpdateCommand {
     public static description = "Claim a Badge for a UNIK.";
 
     public static examples = [
@@ -20,13 +20,15 @@ export class BadgesClaimCommand extends UpdatePropertiesCommand {
     ];
 
     public static flags = {
-        ...UpdatePropertiesCommand.getUpdateCommandFlags(),
+        ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         badge: flags.string({
             description: `Badge name`,
             char: "b",
             required: true,
         }),
     };
+
+    public static args = PropertiesUpdateCommand.getUpdateCommandArgs();
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];

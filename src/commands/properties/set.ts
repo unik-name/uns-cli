@@ -1,12 +1,12 @@
 import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
-import { PropertiesUpdateCommand as UpdatePropertiesCommand } from "../../updatePropertiesCommand";
+import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { checkUnikPropertyFormat, getNetworksListListForDescription, isDevMode } from "../../utils";
 
 const KEY_VALUE_SEPARATOR = ":";
 
-export class PropertiesSetCommand extends UpdatePropertiesCommand {
+export class PropertiesSetCommand extends PropertiesUpdateCommand {
     public static hidden = !isDevMode();
 
     public static description = "Set (add or update) properties of UNIK token.";
@@ -17,7 +17,7 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
     ];
 
     public static flags = {
-        ...UpdatePropertiesCommand.getUpdateCommandFlags(),
+        ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         properties: flags.string({
             description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2" (key must start with "usr/")`,
             required: true,
@@ -25,7 +25,7 @@ export class PropertiesSetCommand extends UpdatePropertiesCommand {
         }),
     };
 
-    public static args = UpdatePropertiesCommand.getUpdateCommandArgs();
+    public static args = PropertiesUpdateCommand.getUpdateCommandArgs();
 
     protected getAvailableFormats(): Formater[] {
         return [OUTPUT_FORMAT.json, OUTPUT_FORMAT.yaml];
