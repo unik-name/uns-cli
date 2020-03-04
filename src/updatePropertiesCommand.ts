@@ -1,5 +1,5 @@
 import { Interfaces } from "@uns/ark-crypto";
-import { createCertifiedNftUpdateTransaction, isError, SdkResult } from "@uns/ts-sdk";
+import { createCertifiedNftUpdateTransaction, isError, NftFactoryServicesList, SdkResult } from "@uns/ts-sdk";
 import { CryptoAccountPassphrases } from "types";
 import { CommandOutput } from "./formater";
 import { getTargetArg, NFT_NAME } from "./utils";
@@ -13,12 +13,19 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         return [getTargetArg()];
     }
 
-    protected abstract getProperties(flags: Record<string, any>): { [_: string]: string };
+    protected abstract async getProperties(
+        flags: Record<string, any>,
+        targetId: string,
+    ): Promise<{ [_: string]: string }>;
+
+    protected getServiceId(): NftFactoryServicesList | undefined {
+        return undefined;
+    }
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<CommandOutput> {
         const { unikid } = await this.targetResolve(flags, args.target);
 
-        const properties = this.getProperties(flags);
+        const properties = await this.getProperties(flags, unikid);
 
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
@@ -38,6 +45,8 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
             passphrases.first,
             passphrases.second,
             NFT_NAME,
+            this.getServiceId(),
+            // Add unikname here if update service needs it
         );
 
         if (isError(transactionStruct)) {
