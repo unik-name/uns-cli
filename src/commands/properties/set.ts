@@ -35,7 +35,7 @@ export class PropertiesSetCommand extends PropertiesUpdateCommand {
         return PropertiesSetCommand;
     }
 
-    protected getProperties(flags: Record<string, any>): { [_: string]: string } {
+    protected async getProperties(flags: Record<string, any>): Promise<{ [_: string]: string }> {
         const properties: { [_: string]: string } = {};
         for (const prop of flags.properties) {
             const keyValue = prop.split(KEY_VALUE_SEPARATOR);

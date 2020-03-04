@@ -38,7 +38,7 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
         return BadgesClaimCommand;
     }
 
-    protected getProperties(flags: Record<string, any>): { [_: string]: string } {
+    protected async getProperties(flags: Record<string, any>, _: string): Promise<{ [_: string]: string }> {
         if (Object.keys(badges).includes(flags.badge)) {
             return { [badges[flags.badge].coreStr]: "true" };
         } else {
