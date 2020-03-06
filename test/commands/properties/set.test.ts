@@ -95,8 +95,10 @@ describe(`${commandName} command`, () => {
                 "dalinet",
                 "--passphrase",
                 PASSPHRASE,
-                "--properties",
-                `usr/tooLong:${tooLongValue}`,
+                "--key",
+                "usr/tooLong",
+                "--value",
+                tooLongValue,
             ])
             // tslint:disable-next-line:no-empty
             .catch(_ => {})
