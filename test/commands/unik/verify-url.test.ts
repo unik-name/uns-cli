@@ -21,6 +21,7 @@ describe(`${commandName} command`, () => {
             it("without usr property", async () => {
                 jest.spyOn(SDK, "getPropertyValue").mockRejectedValue({});
 
+                // @ts-ignore
                 const propertiesToUpdate = await verifyCommand.getProperties(flags, tokenId);
 
                 expect(propertiesToUpdate).toEqual({
@@ -31,6 +32,7 @@ describe(`${commandName} command`, () => {
             it("with usr property", async () => {
                 jest.spyOn(SDK, "getPropertyValue").mockResolvedValue("http://www.my.url");
 
+                // @ts-ignore
                 const propertiesToUpdate = await verifyCommand.getProperties(flags, tokenId);
 
                 expect(propertiesToUpdate).toEqual({
