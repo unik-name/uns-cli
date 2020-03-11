@@ -14,7 +14,7 @@ export class UnikCreateCommand extends WriteCommand {
     public static examples = [
         `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join(
             "|",
-        )}] -n ${getNetworksListListForDescription()}`,
+        )}] --unik-voucher {unikVoucher} -n ${getNetworksListListForDescription()}`,
     ];
 
     public static flags = {
@@ -29,6 +29,12 @@ export class UnikCreateCommand extends WriteCommand {
                 description: "UNIK nft type",
                 required: true,
                 options: getUnikTypesList(),
+            }),
+            ["unik-voucher"]: flags.string({
+                char: "u",
+                description: "Voucher for @unikname creation",
+                required: false,
+                exclusive: ["fee"],
             }),
         };
 
@@ -86,6 +92,7 @@ export class UnikCreateCommand extends WriteCommand {
             nonce,
             passphrases.first,
             passphrases.second,
+            flags["unik-voucher"],
             this.getCertificationMode(flags),
         );
         this.actionStop();
