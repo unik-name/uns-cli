@@ -3,8 +3,15 @@ import { NftFactoryServicesList, USER_PROPERTY_PREFIX } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
+import { getNetworksListListForDescription } from "../../utils";
 
 export class VerifyUrlCommand extends PropertiesUpdateCommand {
+    public static description = "Set (add or update) URLs of UNIK token.";
+
+    public static examples = [
+        `$ uns unik:verify-url TARGET --url "{Url}" --url-name "{UrlName}" -n ${getNetworksListListForDescription()}`,
+    ];
+
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         url: oFlags.string({
