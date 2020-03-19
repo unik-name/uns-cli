@@ -4,20 +4,16 @@ import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { getNetworksListListForDescription } from "../../utils";
 
-const BADGE_PREFIX = "Badges/";
+// const BADGE_PREFIX = "Badges/";
 
-const badges: Record<string, any> = {
-    "passphrase-backup": {
-        coreStr: BADGE_PREFIX + "Security/Passphrase/Backup",
-    },
-};
+const badges: Record<string, any> = {};
 
 export class BadgesClaimCommand extends PropertiesUpdateCommand {
     public static description = "Claim a Badge for a UNIK.";
 
-    public static examples = [
-        `$ uns badges:claim @bob --badge passphrase-backup -n ${getNetworksListListForDescription()}`,
-    ];
+    public static hidden = true;
+
+    public static examples = [`$ uns badges:claim @bob --badge {badge name} -n ${getNetworksListListForDescription()}`];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
