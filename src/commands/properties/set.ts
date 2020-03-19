@@ -2,11 +2,9 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import { checkUnikPropertyFormat, getNetworksListListForDescription, isDevMode } from "../../utils";
+import { checkUnikPropertyFormat, getNetworksListListForDescription } from "../../utils";
 
 export class PropertiesSetCommand extends PropertiesUpdateCommand {
-    public static hidden = !isDevMode();
-
     public static description = "Set (add or update) properties of UNIK token.";
 
     public static examples = [
