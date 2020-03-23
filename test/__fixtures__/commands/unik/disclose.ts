@@ -99,13 +99,13 @@ export const DISCLOSE_TRANSACTION_ID = "6ab2a7e06ac13f13490cc0e03b6a59e7c11e3063
 export const DISCLOSE_TRANSACTION = {
     id: DISCLOSE_TRANSACTION_ID,
     signature:
-        "96396fa84bffed780c3c1e61c2dd5f4b77bd996d80aeaa2a736e23f05dbda7287720288f2dde8730b3b068770a1080b8ec2876d7e8558f68178f5103cdd4e9d1",
+        "fbe12105d59022d8d4abc618d78e080b029083b801bd93b75955a6ea5ce966dc2888145f5fe856e0c3646e2732247107f7c5bd6014fd67ec7eb8a49597f5b7fa",
     version: 2,
     type: 0,
     fee: "100000000",
     senderPublicKey: WALLET_PUB_KEY,
     typeGroup: 2001,
-    nonce: "2",
+    nonce: "1",
     asset: {
         "disclose-demand": DISCLOSE_DEMAND,
         "disclose-demand-certification": DISCLOSE_DEMAND_CERTIFICATION,

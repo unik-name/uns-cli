@@ -249,12 +249,13 @@ export class UnsClientWrapper {
     }
 
     public async getNonce(cryptoAccountAddress: string): Promise<string> {
+        const COLD_WALLET_NONCE = "0";
         try {
             const data: any = await this.getWallet(cryptoAccountAddress);
             // TODO: add nonce to Wallet type
-            return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : "1";
+            return data.nonce ? Utils.BigNumber.make(data.nonce).toString() : COLD_WALLET_NONCE;
         } catch (ex) {
-            return "1";
+            return COLD_WALLET_NONCE;
         }
     }
 
