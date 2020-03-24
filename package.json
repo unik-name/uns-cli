@@ -18,6 +18,7 @@
         "@oclif/plugin-autocomplete": "^0.1.5",
         "@oclif/plugin-help": "^2.1.6",
         "@oclif/plugin-not-found": "^1.2.3",
+        "@oclif/plugin-update": "^1.3.9",
         "@oclif/plugin-warn-if-update-available": "^1.7.0",
         "@uns/ts-sdk": "^2.3.0",
         "cli-ux": "^5.3.1",
@@ -32,7 +33,7 @@
         "yaml": "^1.6.0"
     },
     "devDependencies": {
-        "@oclif/dev-cli": "^1.21.3",
+        "@oclif/dev-cli": "^1.22.2",
         "@oclif/test": "^1.2.5",
         "@types/bip39": "^3.0.0",
         "@types/flat": "^0.0.28",
@@ -41,6 +42,7 @@
         "@types/papaparse": "^5.0.1",
         "@types/request-promise": "^4.1.44",
         "@types/yaml": "^1.2.0",
+        "aws-sdk": "^2.609.0",
         "husky": "^3.0.7",
         "javascript-obfuscator": "^0.18.1",
         "jest": "^24.9.0",
@@ -91,8 +93,15 @@
             "@oclif/plugin-help",
             "@oclif/plugin-warn-if-update-available",
             "@oclif/plugin-not-found",
-            "@oclif/plugin-autocomplete"
-        ]
+            "@oclif/plugin-autocomplete",
+            "@oclif/plugin-update"
+        ],
+        "update": {
+            "s3": {
+                "host": "https://unikname-cli-assets.s3.fr-par.scw.cloud",
+                "bucket": "unikname-cli-assets"
+            }
+        }
     },
     "scripts": {
         "uns": "./bin/run",
@@ -102,7 +111,7 @@
         "compile": "tsc",
         "build": "yarn clean && yarn compile",
         "build:watch": "yarn clean && yarn compile -w",
-        "clean": "rimraf dist",
+        "clean": "rimraf dist tmp",
         "uglify": "javascript-obfuscator ./dist --output ./lib && rimraf dist && mv ./lib/dist ./dist && rimraf lib",
         "publishLib": "npm login && npm publish",
         "lint": "yarn lint:partial -p . -c ./tslint.json",
@@ -113,7 +122,8 @@
         "prettify": "prettier \"./*.{json,md}\" \"./src/**/*.{ts,json}\"",
         "prettify:check": "yarn prettify --check",
         "prettify:fix": "yarn prettify --write",
-        "test": "jest --runInBand"
+        "test": "jest --runInBand",
+        "oclif-dev": "oclif-dev"
     },
     "publishConfig": {
         "access": "public"
