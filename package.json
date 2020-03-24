@@ -82,9 +82,6 @@
             },
             "delegate": {
                 "description": "Manage UNS delegates (`uns delegate` to display Delegate commands)"
-            },
-            "badges": {
-                "description": "Manage UNS badges (`uns badges` to display Delegate commands)"
             }
         },
         "plugins": [
