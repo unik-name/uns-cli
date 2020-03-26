@@ -9,6 +9,8 @@ import {
     UNSDelegateRegisterBuilder,
     UNSDelegateResignBuilder,
     UNSDiscloseExplicitBuilder,
+    UNSVoteBuilder,
+    VoteTransaction,
 } from "@uns/crypto";
 import { ChainMeta } from "@uns/ts-sdk";
 import cli from "cli-ux";
@@ -181,16 +183,17 @@ export function createDelegateResignTransaction(
 }
 
 export function createVoteTransaction(
-    delegatePublicKeys: string[],
+    delegateVotes: string[],
     fees: number,
     nonce: string,
     passphrase: string,
     secondPassphrase: string,
 ): Interfaces.ITransactionData {
-    const builder = Transactions.BuilderFactory.vote()
+    Transactions.TransactionRegistry.registerTransactionType(VoteTransaction);
+    const builder = new UNSVoteBuilder()
         .fee(`${fees}`)
         .nonce(nonce)
-        .votesAsset(delegatePublicKeys)
+        .votesAsset(delegateVotes)
         .sign(passphrase);
 
     if (secondPassphrase) {
