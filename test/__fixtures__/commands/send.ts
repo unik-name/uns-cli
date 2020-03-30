@@ -70,6 +70,10 @@ export const shouldExit = [
         description: "Should exit with code 1 if recipient is invalid",
         args: ["send", "--network", "dalinet", "10", "toto"],
         exitCode: 1,
+        mocks: {
+            nodeConfigurationCrypto: true,
+            blockchain: true,
+        },
     },
     {
         description: "Should exit with code 2 if no recipient arg",
@@ -82,7 +86,6 @@ export const shouldExit = [
         exitCode: 1,
         mocks: {
             nodeConfigurationCrypto: true,
-
             blockchain: true,
         },
     },
