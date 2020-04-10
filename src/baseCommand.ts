@@ -270,7 +270,7 @@ export abstract class BaseCommand extends Command {
         }
 
         // UNS SDK
-        const networkName: Types.NetworkName = flags.network === "local" ? Network.livenet : flags.network;
+        const networkName: Types.NetworkName = flags.network;
 
         // UNS and Ark Crypto
         Managers.configManager.setFromPreset(networkName);

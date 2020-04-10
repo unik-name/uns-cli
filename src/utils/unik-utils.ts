@@ -26,9 +26,8 @@ export const checkUnikPropertyFormat = (propertyKey: string, toWrite: boolean = 
 };
 
 export async function resolveUnikName(unikName: string, flags: { [x: string]: any }): Promise<DidResolution<any>> {
-    const didResolveNetwork = flags.network === "local" ? "testnet" : flags.network;
     try {
-        return await didResolve(unikName, didResolveNetwork);
+        return await didResolve(unikName, flags.network);
     } catch (error) {
         let resolveError;
         if (error.response?.status === 404) {

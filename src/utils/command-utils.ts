@@ -33,7 +33,7 @@ const getDisableNetworkList = (): string[] => {
 const DISABLED_NETWORK_LIST = getDisableNetworkList();
 
 export const getNetworksList = (): string[] => {
-    return [...Object.keys(Networks).filter(network => !DISABLED_NETWORK_LIST.includes(network)), "local"];
+    return [...Object.keys(Networks).filter(network => !DISABLED_NETWORK_LIST.includes(network))];
 };
 
 export const getNetworksListListForDescription = (): string => {
