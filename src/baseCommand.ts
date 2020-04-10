@@ -18,7 +18,7 @@ export abstract class BaseCommand extends Command {
         network: flags.string({
             char: "n",
             description: "Network used to create UNIK nft token",
-            required: true,
+            default: "livenet",
             options: UTILS.getNetworksList(),
             env: "UNS_NETWORK",
         }),
@@ -270,7 +270,7 @@ export abstract class BaseCommand extends Command {
         }
 
         // UNS SDK
-        const networkName: Types.NetworkName = flags.network === "local" ? Network.dalinet : flags.network;
+        const networkName: Types.NetworkName = flags.network === "local" ? Network.livenet : flags.network;
 
         // UNS and Ark Crypto
         Managers.configManager.setFromPreset(networkName);

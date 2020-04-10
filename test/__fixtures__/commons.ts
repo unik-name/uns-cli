@@ -3,7 +3,7 @@ import { expect, test } from "@oclif/test";
 import { Network, UNSClient } from "@uns/ts-sdk";
 
 export const UNS_CLIENT_FOR_TESTS = new UNSClient();
-UNS_CLIENT_FOR_TESTS.init({ network: Network.default });
+UNS_CLIENT_FOR_TESTS.init({ network: Network.dalinet });
 
 export const applyExitCase = (exitCase: any) => {
     let tester = test;
