@@ -4,14 +4,7 @@ import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import {
-    getNetworksListListForDescription,
-    getTargetArg,
-    getWalletFromPassphrase,
-    isDid,
-    isTokenId,
-    toSatoshi,
-} from "../utils";
+import { getTargetArg, getWalletFromPassphrase, isDid, isTokenId, toSatoshi } from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -19,10 +12,7 @@ const feesIncludedFlagId = "fees-included";
 export class SendCommand extends WriteCommand {
     public static description = "Send owned UNS protocol tokens to another wallet.";
 
-    public static examples = [
-        `$ uns send 1237.77 SNLmWfFkXHcrBHmr8UTWpNGmTrX9WohZH3 -n ${getNetworksListListForDescription()}`,
-        `$ uns send 1237.77 "@bob"`,
-    ];
+    public static examples = [`$ uns send 1237.77 "@bob"`];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),

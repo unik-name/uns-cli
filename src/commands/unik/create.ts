@@ -5,7 +5,7 @@ import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases, getUnikTypesList } from "../../types";
-import { certificationFlag, getNetworksListListForDescription, isDevMode, NFT_NAME } from "../../utils";
+import { certificationFlag, isDevMode, NFT_NAME } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
@@ -14,7 +14,7 @@ export class UnikCreateCommand extends WriteCommand {
     public static examples = [
         `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join(
             "|",
-        )}] --unik-voucher {unikVoucher} -n ${getNetworksListListForDescription()}`,
+        )}] --unik-voucher {unikVoucher}`,
     ];
 
     public static flags = {

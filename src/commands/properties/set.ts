@@ -2,15 +2,12 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import { checkUnikPropertyFormat, getNetworksListListForDescription } from "../../utils";
+import { checkUnikPropertyFormat } from "../../utils";
 
 export class PropertiesSetCommand extends PropertiesUpdateCommand {
     public static description = "Set (add or update) properties of UNIK token.";
 
-    public static examples = [
-        `$ uns properties:set @bob -n ${getNetworksListListForDescription()}
-        --key {key1} --value {value1} --key {key2} --value {value2}`,
-    ];
+    public static examples = ["$ uns properties:set @bob --key {key1} --value {value1} --key {key2} --value {value2}"];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),

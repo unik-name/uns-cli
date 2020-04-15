@@ -1,14 +1,11 @@
 import { BaseCommand } from "../../baseCommand";
 import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { confirmedFlag, getNetworksListListForDescription, getTargetArg } from "../../utils";
+import { confirmedFlag, getTargetArg } from "../../utils";
 
 export class PropertiesListCommand extends BaseCommand {
     public static description = "Get properties of UNIK token.";
 
-    public static examples = [
-        `$ uns properties:list @bob [--confirmed {number of confirmations}]
-        -n ${getNetworksListListForDescription()}`,
-    ];
+    public static examples = ["$ uns properties:list @bob [--confirmed {number of confirmations}]"];
 
     public static flags = {
         ...BaseCommand.baseFlags,

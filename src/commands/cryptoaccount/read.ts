@@ -4,14 +4,12 @@ import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
 import { WithChainmeta } from "../../types";
-import { fromSatoshi, getChainContext, getNetworksListListForDescription } from "../../utils";
+import { fromSatoshi, getChainContext } from "../../utils";
 
 export class CryptoAccountReadCommand extends ReadCommand {
     public static description = "Read current data of a specified crypto account, ic. balance";
 
-    public static examples = [
-        `$ uns cryptoaccount:read {publicKey|address} --listunik -n ${getNetworksListListForDescription()}`,
-    ];
+    public static examples = ["$ uns cryptoaccount:read {publicKey|address} --listunik"];
 
     public static flags = {
         ...ReadCommand.flags,

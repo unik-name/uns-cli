@@ -1,12 +1,12 @@
 import { BlockchainState, INftStatus, NodeConfiguration, NodeStatus, ResponseWithChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
-import { fromSatoshi, getNetworkNameByNetHash, getNetworksListListForDescription } from "../utils";
+import { fromSatoshi, getNetworkNameByNetHash } from "../utils";
 
 export class StatusCommand extends BaseCommand {
     public static description = "Display blockchain status";
 
-    public static examples = [`$ uns status -n ${getNetworksListListForDescription()}`];
+    public static examples = ["$ uns status"];
 
     public static flags = {
         ...BaseCommand.baseFlags,

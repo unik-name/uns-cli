@@ -1,11 +1,11 @@
 import { BaseCommand } from "../../baseCommand";
 import { CommandOutput, Formater, OUTPUT_FORMAT } from "../../formater";
-import { generatePassphrase, getNetworksListListForDescription, getWalletFromPassphrase } from "../../utils";
+import { generatePassphrase, getWalletFromPassphrase } from "../../utils";
 
 export class CryptoAccountCreateCommand extends BaseCommand {
     public static description = "Create UNS Crypto Account";
 
-    public static examples = [`$ uns cryptoaccount:create -n ${getNetworksListListForDescription()}`];
+    public static examples = ["$ uns cryptoaccount:create"];
 
     public static flags = {
         ...BaseCommand.baseFlags,

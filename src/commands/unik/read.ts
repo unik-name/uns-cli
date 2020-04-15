@@ -2,12 +2,12 @@ import { ChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
-import { getChainContext, getNetworksListListForDescription, getTargetArg } from "../../utils";
+import { getChainContext, getTargetArg } from "../../utils";
 
 export class UnikReadCommand extends ReadCommand {
     public static description = "Display UNIK token informations";
 
-    public static examples = [`$ uns unik:read @bob -n ${getNetworksListListForDescription()}`];
+    public static examples = ["$ uns unik:read @bob"];
 
     public static flags = {
         ...ReadCommand.flags,

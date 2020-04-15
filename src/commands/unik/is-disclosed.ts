@@ -2,18 +2,12 @@ import { PropertyValue, ResponseWithChainMeta } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
-import {
-    checkConfirmations,
-    confirmedFlag,
-    getChainContext,
-    getNetworksListListForDescription,
-    getTargetArg,
-} from "../../utils";
+import { checkConfirmations, confirmedFlag, getChainContext, getTargetArg } from "../../utils";
 
 export class UnikIsDisclosedCommand extends ReadCommand {
     public static description = "Check if UNIK has one or more disclosed explicit values.";
 
-    public static examples = [`$ uns unik:is-disclosed @bob -n ${getNetworksListListForDescription()}`];
+    public static examples = ["$ uns unik:is-disclosed @bob"];
 
     public static args = [getTargetArg()];
 
