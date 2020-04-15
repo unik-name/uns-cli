@@ -1,15 +1,12 @@
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import { checkUnikPropertyFormat, getNetworksListListForDescription, propertyKeyFlag } from "../../utils";
+import { checkUnikPropertyFormat, propertyKeyFlag } from "../../utils";
 
 export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
     public static description = "Unset properties of UNIK token.";
 
-    public static examples = [
-        `$ uns properties:unset @bob -n ${getNetworksListListForDescription()}
-        -k prop1 -k prop2`,
-    ];
+    public static examples = ["$ uns properties:unset @bob -k prop1 -k prop2"];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),

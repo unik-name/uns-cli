@@ -36,10 +36,6 @@ export const getNetworksList = (): string[] => {
     return [...Object.keys(Networks).filter(network => !DISABLED_NETWORK_LIST.includes(network))];
 };
 
-export const getNetworksListListForDescription = (): string => {
-    return `[${getNetworksList().join("|")}]`;
-};
-
 export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
     const url = customNodeUrl ? urlModule.resolve(customNodeUrl, "/api/v2") : unsConfig.chain.url;
     return {

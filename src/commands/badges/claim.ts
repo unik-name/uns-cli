@@ -2,7 +2,6 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import { getNetworksListListForDescription } from "../../utils";
 
 // const BADGE_PREFIX = "Badges/";
 
@@ -13,7 +12,7 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
 
     public static hidden = true;
 
-    public static examples = [`$ uns badges:claim @bob --badge {badge name} -n ${getNetworksListListForDescription()}`];
+    public static examples = ["$ uns badges:claim @bob --badge {badge name}"];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),

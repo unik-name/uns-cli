@@ -11,19 +11,13 @@ import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
-import {
-    createDiscloseTransaction,
-    explicitValueFlag,
-    getNetworksListListForDescription,
-    getTargetArg,
-    isDid,
-} from "../../utils";
+import { createDiscloseTransaction, explicitValueFlag, getTargetArg, isDid } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikDiscloseCommand extends WriteCommand {
     public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
 
-    public static examples = [`$ uns unik:disclose @bob -e bob -e b0b -n ${getNetworksListListForDescription()}`];
+    public static examples = ["$ uns unik:disclose @bob -e bob -e b0b"];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(false),

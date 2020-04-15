@@ -3,15 +3,12 @@ import flatten from "flat";
 import { BaseCommand } from "../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../formater";
 import { ReadCommand } from "../readCommand";
-import { confirmedFlag, getChainContext, getNetworksListListForDescription, resolveUnikName } from "../utils";
+import { confirmedFlag, getChainContext, resolveUnikName } from "../utils";
 
 export class ResolveCommand extends ReadCommand {
     public static description = "Resolve a decentralized identifier.";
 
-    public static examples = [
-        `$ uns resolve --confirmed {number of confirmations}
-        -n ${getNetworksListListForDescription()} "@bob?usr/phone"`,
-    ];
+    public static examples = [`$ uns resolve --confirmed {number of confirmations} "@bob?usr/phone"`];
 
     public static flags = {
         ...ReadCommand.flags,
