@@ -135,7 +135,7 @@ export const shouldExit = [
         },
     },
     {
-        description: "Should exit with code 1 recipient is not a valid @unik-name",
+        description: "Should exit with code 1 recipient is not a valid @unikname",
         args: ["send", "--network", "dalinet", "10", "@?*"],
         exitCode: 1,
         mocks: {

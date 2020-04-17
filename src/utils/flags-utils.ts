@@ -83,7 +83,7 @@ export const senderAccountFlag = () => {
         "sender-account": flags.string({
             required: false,
             description:
-                "The @unik-name OR the public address of the wallet of the sender (warning: @unik-name must be surrounded with double quotes)",
+                "The @unikname OR the public address of the wallet of the sender (warning: @unikname must be surrounded with double quotes)",
         }),
     };
 };
@@ -94,6 +94,16 @@ export const certificationFlag = () => {
             default: true,
             allowNo: true,
             hidden: true,
+        }),
+    };
+};
+
+export const checkFlag = (description: string) => {
+    return {
+        check: flags.boolean({
+            description,
+            default: true,
+            allowNo: true,
         }),
     };
 };

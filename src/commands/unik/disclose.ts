@@ -11,17 +11,22 @@ import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
-import { createDiscloseTransaction, explicitValueFlag, getTargetArg, isDid } from "../../utils";
+import { checkFlag, createDiscloseTransaction, explicitValueFlag, getTargetArg, isDid } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikDiscloseCommand extends WriteCommand {
     public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
 
-    public static examples = ["$ uns unik:disclose @bob -e bob -e b0b"];
+    public static usage: string | string[] | undefined = 'unik:disclose TARGET -e "explicitValueToDisclose"';
+
+    public static examples = ["$ uns unik:disclose @bob -e bob"];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(false),
         ...explicitValueFlag("Explicit value to disclose.", true),
+        ...checkFlag(
+            "Check if user knows that his @unikname will be disclosed forever. (--no-check to bypass this check)",
+        ),
     };
 
     public static args = [getTargetArg()];
@@ -75,12 +80,14 @@ export class UnikDiscloseCommand extends WriteCommand {
         const { unikid } = await this.targetResolve(flags, args.target);
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
-        const confirmation = await cli.confirm(
-            "Disclosing a @unik-name to the network can't be cancelled nor revoked. Your ID will be disclosed forever. Do you confirm the disclose demand? [y/n]",
-        );
+        if (flags.check) {
+            const confirmation = await cli.confirm(
+                "Disclosing a @unikname to the network can't be cancelled nor revoked. Your ID will be disclosed forever. Do you confirm the disclose demand? [y/n]",
+            );
 
-        if (!confirmation) {
-            return "Command aborted by user";
+            if (!confirmation) {
+                return "Command aborted by user";
+            }
         }
 
         const unikType = await this.getUnikType(unikid);
