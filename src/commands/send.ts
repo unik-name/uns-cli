@@ -4,7 +4,7 @@ import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import { getTargetArg, getWalletFromPassphrase, isDid, isTokenId, toSatoshi } from "../utils";
+import { checkFlag, getTargetArg, getWalletFromPassphrase, isDid, isTokenId, toSatoshi } from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -16,12 +16,9 @@ export class SendCommand extends WriteCommand {
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),
-        check: flags.boolean({
-            description:
-                "Check if recipient address exists on chain before sending tokens. (--no-check to bypass recipient check)",
-            default: true,
-            allowNo: true,
-        }),
+        ...checkFlag(
+            "Check if recipient address exists on chain before sending tokens. (--no-check to bypass recipient check)",
+        ),
         [feesIncludedFlagId]: flags.boolean({
             description: "Specify that the fees must be deducted from the amount. By default the fees are paid on top.",
             default: false,
