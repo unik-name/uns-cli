@@ -7,6 +7,8 @@ import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 export class VerifyUrlCommand extends PropertiesUpdateCommand {
     public static description = "Set (add or update) URLs of UNIK token.";
 
+    public static usage = `unik:verify-url --url "{Url}" --url-name "{UrlName}"`;
+
     public static examples = [`$ uns unik:verify-url TARGET --url "{Url}" --url-name "{UrlName}"`];
 
     public static flags = {

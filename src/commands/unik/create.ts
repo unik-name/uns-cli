@@ -11,6 +11,8 @@ import { WriteCommand } from "../../writeCommand";
 export class UnikCreateCommand extends WriteCommand {
     public static description = "Create UNIK token";
 
+    public static usage = "unik:create --explicitValue {explicitValue} --type {type}";
+
     public static examples = [
         `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join(
             "|",
