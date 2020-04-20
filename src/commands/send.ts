@@ -4,7 +4,15 @@ import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
 import { Formater, OUTPUT_FORMAT } from "../formater";
-import { checkFlag, getTargetArg, getWalletFromPassphrase, isDid, isTokenId, toSatoshi } from "../utils";
+import {
+    checkFlag,
+    getTargetArg,
+    getWalletAddress,
+    getWalletFromPassphrase,
+    isDid,
+    isTokenId,
+    toSatoshi,
+} from "../utils";
 import { WriteCommand } from "../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
@@ -64,7 +72,7 @@ export class SendCommand extends WriteCommand {
         if (isDid(args.target) || isTokenId(args.target)) {
             recipientAddress = (await this.targetResolve(flags, args.target)).ownerAddress;
         } else {
-            recipientAddress = await cmdHelper.getWalletAddress(args.target);
+            recipientAddress = await getWalletAddress(args.target, this.unsClientWrapper);
         }
 
         // Check recipient wallet existence if needed
@@ -86,7 +94,7 @@ export class SendCommand extends WriteCommand {
             if (isDid(flags.senderAccount) || isTokenId(flags.senderAccount)) {
                 unikNameSenderAddress = (await this.targetResolve(flags, flags.senderAccount)).ownerAddress;
             } else {
-                unikNameSenderAddress = await cmdHelper.getWalletAddress(flags.senderAccount, false);
+                unikNameSenderAddress = await getWalletAddress(flags.senderAccount, this.unsClientWrapper);
             }
 
             if (unikNameSenderAddress !== senderWallet.address) {
