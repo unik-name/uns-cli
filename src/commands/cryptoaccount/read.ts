@@ -4,7 +4,7 @@ import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
 import { WithChainmeta } from "../../types";
-import { fromSatoshi, getChainContext } from "../../utils";
+import { fromSatoshi, getChainContext, getWalletAddress } from "../../utils";
 
 export class CryptoAccountReadCommand extends ReadCommand {
     public static description = "Read current data of a specified crypto account, ic. balance";
@@ -34,7 +34,8 @@ export class CryptoAccountReadCommand extends ReadCommand {
     }
 
     protected async do(flags: Record<string, any>, args?: Record<string, any>): Promise<NestedCommandOutput> {
-        const walletId = args?.cryptoAccountId;
+        const walletId = await getWalletAddress(args?.cryptoAccountId, this.unsClientWrapper);
+
         // 'Destructuring + types' together 🤐
         // Not so pretty
         const [wallet, tokens]: [

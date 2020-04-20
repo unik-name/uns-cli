@@ -1,7 +1,9 @@
+import { Identities } from "@uns/ark-crypto";
 import { didResolve, UNSClient } from "@uns/ts-sdk";
 import { generateMnemonic } from "bip39";
 import { createHash, randomBytes } from "crypto";
 import * as MoreEntropy from "promised-entropy";
+import { UnsClientWrapper } from "sdkWrapper";
 
 export function isPassphrase(passphrase: string) {
     return passphrase && passphrase.split(" ").length === 12;
@@ -36,4 +38,16 @@ export async function getUniknameWalletAddress(id: string, unsClient: UNSClient)
         throw resolveResult.error;
     }
     return resolveResult.data as string;
+}
+
+export async function getWalletAddress(id: string, unsClientWrapper: UnsClientWrapper): Promise<string> {
+    if (!Identities.Address.validate(id, unsClientWrapper.getVersion())) {
+        try {
+            return Identities.Address.fromPublicKey(id);
+        } catch (_) {
+            throw new Error(`Crypto account identifier does not match expected format`);
+        }
+    } else {
+        return id;
+    }
 }

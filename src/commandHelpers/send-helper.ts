@@ -1,4 +1,4 @@
-import { Identities, Interfaces } from "@uns/ark-crypto";
+import { Interfaces } from "@uns/ark-crypto";
 import { cli } from "cli-ux";
 import { SendCommand } from "../commands/send";
 import { createTransferTransaction } from "../utils";
@@ -53,18 +53,6 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         }
 
         return amount;
-    }
-
-    public async getWalletAddress(id: string, isRecipient: boolean = true): Promise<string> {
-        if (!Identities.Address.validate(id, this.cmd.unsClientWrapper.getVersion())) {
-            try {
-                return Identities.Address.fromPublicKey(id);
-            } catch (_) {
-                throw new Error(`${isRecipient ? "Recipient" : "Sender"} address does not match expected format`);
-            }
-        } else {
-            return id;
-        }
     }
 
     public async checkAndConfirmWallet(checkWallet: boolean, address: string) {
