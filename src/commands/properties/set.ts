@@ -15,13 +15,13 @@ export class PropertiesSetCommand extends PropertiesUpdateCommand {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         key: flags.string({
             char: "k",
-            description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2" (key must start with "usr/")`,
+            description: `Key of the property to add to the UNIK: (multiple occurrences, key must start with "usr/")`,
             required: true,
             multiple: true,
         }),
         value: flags.string({
-            char: "v",
-            description: `List of key/value to set as UNIK properties: "key1:value1" "key2:value2" (key must start with "usr/")`,
+            char: "V",
+            description: "Value of the property to add to the UNIK",
             required: true,
             multiple: true,
         }),
