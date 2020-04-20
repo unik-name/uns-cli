@@ -6,6 +6,8 @@ import { checkUnikPropertyFormat, propertyKeyFlag } from "../../utils";
 export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
     public static description = "Unset properties of UNIK token.";
 
+    public static usage = "properties:unset TARGET --propertyKey {propertyKey}";
+
     public static examples = ["$ uns properties:unset @bob -k prop1 -k prop2"];
 
     public static flags = {
