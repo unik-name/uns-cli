@@ -6,28 +6,31 @@ import {
     getChainContext,
     getPassphraseFromUser,
     getWalletFromPassphrase,
+    isDid,
     isPassphrase,
     isTokenId,
+    resolveUnikName,
 } from "../utils";
 import { CommandHelper } from "./command-helper";
 
 export class GetWalletAddressCommandHelper extends CommandHelper<CryptoAccountAddressCommand> {
-    public async getWalletInformations(id: string, format: string, displayChainmeta: boolean) {
+    public async getWalletInformations(
+        id: string,
+        format: string,
+        displayChainmeta: boolean,
+    ): Promise<{ address: string; publicKey: string | undefined; chainMeta: ChainMeta | undefined }> {
         let address: string;
-        let publicKey: string | undefined;
-        let chainMeta: ChainMeta | undefined;
         if (isTokenId(id)) {
             // Get token
             const unik = await this.cmd.unsClientWrapper.getUnikById(id);
             address = unik.ownerId;
-            if (format !== OUTPUT_FORMAT.raw.key) {
-                // Get Wallet
-                const wallet = await this.cmd.unsClientWrapper.getWallet(address);
-                publicKey = wallet.publicKey;
-                if (displayChainmeta) {
-                    chainMeta = wallet.chainmeta;
-                }
+            return await this.getWalletInfosFromAddress(address, displayChainmeta, format);
+        } else if (isDid(id)) {
+            const resolved = await resolveUnikName(id, { network: this.cmd.unsClientWrapper.network.name });
+            if (resolved.error) {
+                throw resolved.error;
             }
+            return this.getWalletInfosFromAddress(resolved?.data.ownerAddress, displayChainmeta, format);
         } else {
             let passphrase;
             if (id && !isPassphrase(id)) {
@@ -42,15 +45,12 @@ export class GetWalletAddressCommandHelper extends CommandHelper<CryptoAccountAd
             checkPassphraseFormat(passphrase);
 
             const wallet = getWalletFromPassphrase(passphrase, this.cmd.unsClientWrapper.network);
-            address = wallet.address;
-            publicKey = wallet.publicKey;
+            return {
+                address: wallet.address,
+                publicKey: wallet.publicKey,
+                chainMeta: undefined,
+            };
         }
-
-        return {
-            address,
-            publicKey,
-            chainMeta,
-        };
     }
 
     public formatOutput(
@@ -78,5 +78,24 @@ export class GetWalletAddressCommandHelper extends CommandHelper<CryptoAccountAd
                 return data;
             }
         }
+    }
+
+    private async getWalletInfosFromAddress(address: string, displayChainmeta: boolean, format: string) {
+        let publicKey;
+        let chainMeta;
+        if (format !== OUTPUT_FORMAT.raw.key) {
+            // Get Wallet
+            const wallet = await this.cmd.unsClientWrapper.getWallet(address);
+            publicKey = wallet.publicKey;
+            if (displayChainmeta) {
+                chainMeta = wallet.chainmeta;
+            }
+        }
+
+        return {
+            address,
+            publicKey,
+            chainMeta,
+        };
     }
 }
