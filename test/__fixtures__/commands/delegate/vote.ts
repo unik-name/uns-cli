@@ -1,3 +1,4 @@
+import { Identities } from "@uns/ark-crypto";
 import { Network, UNSClient, Wallet } from "@uns/ts-sdk";
 
 export const commandName = "delegate:vote";
@@ -12,6 +13,13 @@ export const wallet: Wallet = {
     isDelegate: false,
 };
 
+export const delegatewallet: Wallet = {
+    address: "D59pZ7fH6vtk23mADnbpqyhfMiJzpdixws",
+    publicKey: "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011",
+    balance: 999974660000000,
+    isDelegate: true,
+};
+
 export const meta = {
     height: "33",
     timestamp: {
@@ -22,6 +30,9 @@ export const meta = {
 };
 
 const UNIK_ID_NOT_FOUND = "8f9b5d3e071edc730003be0aaaaaaaaaaf7245ab240e809cc34f974156303b1f";
+
+const passphrase = "reveal front short spend enjoy label element text alert answer select bright";
+const walletAddress = Identities.Address.fromPassphrase(passphrase);
 
 export const shouldExit = [
     {
@@ -67,6 +78,41 @@ export const shouldExit = [
                     cb: (api: any) =>
                         api.get(`/wallets/${wallet.address}`).reply(200, {
                             data: wallet,
+                            chainmeta: meta,
+                        }),
+                },
+            ],
+        },
+    },
+    {
+        description: "Should exit with code 1 if lifecycle status is not Alive",
+        args: [commandName, "-n", "dalinet", "@delegateId", "--passphrase", passphrase],
+        errorMsg: '» :stop: Uniks of cryptoaccount have to be alive ("LifeCycle/Status" = 3) to vote.;\n',
+        mocks: {
+            blockchain: true,
+            nodeConfigurationCrypto: true,
+            custom: [
+                {
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    cb: (api: any) =>
+                        api.get(`/wallets/${wallet.address}`).reply(200, {
+                            data: delegatewallet,
+                            chainmeta: meta,
+                        }),
+                },
+                {
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    cb: (api: any) =>
+                        api.get(`/wallets/${walletAddress}`).reply(200, {
+                            data: wallet,
+                            chainmeta: meta,
+                        }),
+                },
+                {
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    cb: (api: any) =>
+                        api.get(`/wallets/${walletAddress}/uniks`).reply(200, {
+                            data: [{ id: "tokenId" }],
                             chainmeta: meta,
                         }),
                 },

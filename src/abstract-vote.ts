@@ -1,4 +1,5 @@
 import { Interfaces } from "@uns/ark-crypto";
+import { Identities } from "@uns/ark-crypto";
 import { Wallet } from "@uns/ts-sdk";
 import { NestedCommandOutput } from "./formater";
 import { CryptoAccountPassphrases, WithChainmeta } from "./types";
@@ -11,11 +12,14 @@ export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
     };
 
     protected abstract getVotes(delegatePublicKey: string): string[];
+    protected abstract async throwIfNotAllowed(walletAddress: string): Promise<void>;
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
         // Get Delegate public key
         const delegatePublicKey: string = await this.resolveDelegateWalletPublicKey(flags, args.target);
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
+
+        await this.throwIfNotAllowed(Identities.Address.fromPassphrase(passphrases.first));
 
         /**
          * Read emitter's wallet nonce
