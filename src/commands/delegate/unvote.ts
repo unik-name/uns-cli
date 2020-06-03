@@ -20,4 +20,7 @@ export class DelegateUnvoteCreateCommand extends AbstractDelegateVoteCreateComma
     protected getVotes(delegatePublicKey: string): string[] {
         return [`-${delegatePublicKey}`];
     }
+
+    // tslint:disable-next-line:no-empty
+    protected async throwIfNotAllowed(_: string): Promise<void> {}
 }

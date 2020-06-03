@@ -168,7 +168,7 @@ export class UnsClientWrapper {
     public async getUnikProperty(
         unikid: string,
         propertyKey: string,
-        withChainmeta: boolean,
+        withChainmeta: boolean = false,
     ): Promise<string | ResponseWithChainMeta<string>> {
         return getPropertyValue(unikid, propertyKey, this.unsClient, {
             withChainmeta,

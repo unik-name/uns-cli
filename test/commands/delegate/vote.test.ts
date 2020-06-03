@@ -8,14 +8,15 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Exit cases", () => {
-        jest.spyOn(SDK, "didResolve").mockImplementation(() => {
-            return new Promise((resolve, _) => {
-                resolve({
-                    data: { ownerAddress: wallet.address, unikid: "unikid" },
-                    chainmeta: meta,
-                    confirmations: 12,
-                });
-            });
+        jest.spyOn(SDK, "didResolve").mockResolvedValue({
+            data: { ownerAddress: wallet.address, unikid: "unikid" },
+            chainmeta: meta,
+            confirmations: 12,
+        });
+
+        jest.spyOn(SDK, "getPropertyValue").mockResolvedValueOnce({
+            data: "2",
+            chainmeta: meta,
         });
 
         shouldExit.forEach(exitCase => applyExitCase(exitCase));
