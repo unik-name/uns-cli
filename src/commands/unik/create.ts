@@ -14,9 +14,7 @@ export class UnikCreateCommand extends WriteCommand {
     public static usage = "unik:create --explicitValue {explicitValue} --type {type}";
 
     public static examples = [
-        `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join(
-            "|",
-        )}] --unik-voucher {unikVoucher}`,
+        `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join("|")}] --coupon {coupon}`,
     ];
 
     public static flags = {
@@ -38,6 +36,12 @@ export class UnikCreateCommand extends WriteCommand {
                 required: false,
                 exclusive: ["fee"],
             }),
+            coupon: flags.string({
+                char: "c",
+                description: "Coupon code for @unikname creation",
+                required: false,
+                exclusive: ["fee", "unik-voucher"],
+            }),
         };
 
         if (isDevMode()) {
@@ -56,23 +60,20 @@ export class UnikCreateCommand extends WriteCommand {
     }
 
     protected async do(flags: Record<string, any>): Promise<NestedCommandOutput> {
-        if (flags.explicitValue.length > EXPLICIT_VALUE_MAX_LENGTH) {
+        const explicitValue: string = flags.explicitValue;
+        const didType: DIDType = flags.type.toUpperCase();
+        if (explicitValue.length > EXPLICIT_VALUE_MAX_LENGTH) {
             throw new Error(
-                `Error computing  UNIK id. Too long explicitValue ([${flags.explicitValue.length}] max length: 100)`,
+                `Error computing  UNIK id. Too long explicitValue ([${explicitValue.length}] max length: 100)`,
             );
         }
 
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
-
         /**
          * Compute Fingerprint
          */
         this.actionStart("Computing UNIK fingerprint");
-        const tokenId = await this.unsClientWrapper.computeTokenId(
-            flags.explicitValue,
-            flags.type.toUpperCase() as DIDType,
-            "UNIK",
-        );
+        const tokenId = await this.unsClientWrapper.computeTokenId(explicitValue, didType, "UNIK");
         this.actionStop();
 
         this.log(`unikid: ${tokenId}`);
@@ -86,6 +87,11 @@ export class UnikCreateCommand extends WriteCommand {
          * Transaction creation
          */
         this.actionStart("Creating transaction");
+
+        let voucher = flags["unik-voucher"];
+        if (flags.coupon) {
+            voucher = await this.unsClientWrapper.createUnikVoucher(explicitValue, didType, flags.coupon);
+        }
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftMintTransaction(
             this.unsClientWrapper.unsClient,
             tokenId,
@@ -94,7 +100,7 @@ export class UnikCreateCommand extends WriteCommand {
             nonce,
             passphrases.first,
             passphrases.second,
-            flags["unik-voucher"],
+            voucher,
             this.getCertificationMode(flags),
         );
         this.actionStop();

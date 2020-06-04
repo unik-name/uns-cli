@@ -3,6 +3,7 @@ import { Interfaces, Managers, Transactions, Utils } from "@uns/ark-crypto";
 import {
     BlockchainState,
     ChainMeta,
+    DIDHelpers,
     DIDType,
     FingerprintResult,
     getPropertyValue,
@@ -18,6 +19,7 @@ import {
     Token,
     Transaction,
     Unik,
+    UnikVoucherResult,
     UNSClient,
     Wallet,
 } from "@uns/ts-sdk";
@@ -331,6 +333,33 @@ export class UnsClientWrapper {
             throw new Error("Error creating disclose demand certification");
         }
         return discloseDemandCertification.data;
+    }
+
+    /**
+     * Create Unik voucher
+     * @param explicitValue
+     * @param type
+     * @param coupon
+     * @param paymentProof
+     */
+    public async createUnikVoucher(
+        explicitValue: string,
+        type: DIDType,
+        coupon?: string,
+        paymentProof?: string,
+    ): Promise<string> {
+        const createVoucherResponse: Response<UnikVoucherResult> = await this.unsClient.vouchers.create({
+            explicitValue,
+            didType: DIDHelpers.fromLabel(type),
+            coupon,
+            paymentProof,
+        });
+
+        if (createVoucherResponse.error) {
+            throw createVoucherResponse.error;
+        }
+
+        return createVoucherResponse.data?.unikVoucher as string;
     }
 
     /**
