@@ -35,6 +35,15 @@ export class SendCommand extends WriteCommand {
             description: "Specify that the provided amount is in sato-UNS, not in UNS",
             default: false,
         }),
+        text: flags.string({
+            description: "Publicly motivate your tokens sending. This reason will be written on chain ​​forever.",
+        }),
+        "text-check": flags.boolean({
+            description:
+                "Check if user knows that this text will be readable publicly forever. (--no-text-check to bypass this check)",
+            default: true,
+            allowNo: true,
+        }),
     };
 
     public static args = [
@@ -76,7 +85,8 @@ export class SendCommand extends WriteCommand {
         }
 
         // Check recipient wallet existence if needed
-        const canContinue = await cmdHelper.checkAndConfirmWallet(flags.check, recipientAddress);
+        let canContinue: boolean = await cmdHelper.checkAndConfirmWallet(flags.check, recipientAddress);
+        canContinue = canContinue && (await cmdHelper.confirmVendorField(flags["text-check"], flags.text));
         if (!canContinue) {
             return "Command aborted by user";
         }
@@ -112,6 +122,7 @@ export class SendCommand extends WriteCommand {
             recipientAddress,
             // this.networkHash,
             nonce,
+            flags.text,
             passphrases.first,
             passphrases.second,
         );

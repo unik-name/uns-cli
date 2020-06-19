@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+-   add `text` flag on send command (#2834)
+
 ### Changed
 
 ### Removed
@@ -14,8 +16,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
--   add `coupon` flag on `unik:create` command to create unik with a coupon code instead of `unik-voucher`
+-   add `coupon` flag on `unik:create` command to create unik with a coupon code instead of `unik-voucher` (#2774)
 
 ### Changed
 
--   vote for a delegate is now restricted to an `Alive` @unikname
+-   vote for a delegate is now restricted to an `Alive` @unikname (#2725)

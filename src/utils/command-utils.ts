@@ -87,6 +87,7 @@ export function createTransferTransaction(
     fees: number,
     recipientId: string,
     nonce: string,
+    vendorField: string,
     passphrase: string,
     secondPassPhrase?: string,
 ) {
@@ -95,6 +96,7 @@ export function createTransferTransaction(
         .fee(`${fees}`)
         .nonce(nonce)
         .recipientId(recipientId)
+        .vendorField(vendorField)
         .sign(passphrase);
 
     if (secondPassPhrase) {
