@@ -44,7 +44,7 @@
         "@types/yaml": "^1.2.0",
         "aws-sdk": "^2.609.0",
         "husky": "^3.0.7",
-        "javascript-obfuscator": "^0.18.1",
+        "javascript-obfuscator": "^1.1.0",
         "jest": "^24.9.0",
         "jest-extended": "^0.11.2",
         "lint-staged": "^9.4.1",
