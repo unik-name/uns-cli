@@ -12,6 +12,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         to: string,
         // networkHash: number,
         nonce: string,
+        vendorField: string,
         passphrase: string,
         secondPassphrase?: string,
     ): Interfaces.ITransactionData {
@@ -22,6 +23,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
             to,
             // networkHash,
             nonce,
+            vendorField,
             passphrase,
             secondPassphrase,
         );
@@ -64,6 +66,14 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
                 this.cmd.warn("The recipient address does not exist on chain yet");
                 return await cli.confirm(`Do really want to send tokens to this wallet?`);
             }
+        }
+        return true;
+    }
+
+    public async confirmVendorField(checkText: boolean, text: string) {
+        if (checkText && text) {
+            this.cmd.warn(`Message to include in transaction: \"${text}\"`);
+            return await cli.confirm(`Do really want to include this message in this transaction?`);
         }
         return true;
     }
