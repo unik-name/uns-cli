@@ -1,8 +1,9 @@
-import { ChainMeta } from "@uns/ts-sdk";
+import { ChainMeta, NodeConfiguration, Transaction, Wallet } from "@uns/ts-sdk";
+import { WithChainmeta } from "types";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { ReadCommand } from "../../readCommand";
-import { getChainContext, getTargetArg } from "../../utils";
+import { fromSatoshi, getChainContext, getTargetArg } from "../../utils";
 
 export class UnikReadCommand extends ReadCommand {
     public static description = "Display UNIK token informations";
@@ -34,10 +35,27 @@ export class UnikReadCommand extends ReadCommand {
         if (target.transactions === undefined) {
             target.transactions = (await this.unsClientWrapper.getUnikById(target.unikid)).transactions;
         }
-        const creationTransaction = await this.unsClientWrapper.getTransaction(target.transactions.first.id);
+
+        const [owner, creationTransaction, nodeConf]: [
+            WithChainmeta<Wallet> | undefined,
+            WithChainmeta<Transaction> | undefined,
+            NodeConfiguration | undefined,
+        ] = await Promise.all([
+            this.unsClientWrapper.getWallet(target.ownerAddress),
+            this.unsClientWrapper.getTransaction(target.transactions.first.id),
+            this.unsClientWrapper.getNodeConfiguration(),
+        ]);
 
         if (!creationTransaction) {
             throw new Error(`Error fetching transaction ${target.transactions.first.id}`);
+        }
+
+        if (!owner) {
+            throw new Error(`Error fetching unik owner ${target.ownerAddress}`);
+        }
+
+        if (!nodeConf) {
+            throw new Error(`Error fetching node configuration`);
         }
 
         this.checkDataConsistency(
@@ -48,7 +66,11 @@ export class UnikReadCommand extends ReadCommand {
 
         const data = {
             id: target.unikid,
-            ownerAddress: target.ownerAddress,
+            owner: {
+                address: owner.address,
+                balance: fromSatoshi(owner.balance),
+                token: nodeConf.symbol,
+            },
             creationBlock: creationTransaction.blockId,
             creationTransaction: creationTransaction.id,
             creationDate: creationTransaction.timestamp.human,

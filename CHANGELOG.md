@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 -   add `coupon` flag on `unik:create` command to create unik with a coupon code instead of `unik-voucher` (#2774)
+-   add crypto account balance on `unik:read` command (#2800)
 
 ### Changed
 
