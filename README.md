@@ -10,8 +10,8 @@ Universal Name System Command Line Interface. You can create wallets on UNS netw
 
 Please follow our official documentation on
 
--   [how to install UNS CLI](https://docs.uns.network/uns-usethenetwork/cli.html#installation)
--   [how to use commands](https://docs.uns.network/uns-usethenetwork/cli.html#uns-cli-commands)
+-   [how to install UNS CLI](https://docs.uns.network/uns-use-the-network/cli.html#download-and-installation)
+-   [how to use commands](https://docs.uns.network/uns-use-the-network/cli.html#commands)
 
 ## Security
 
