@@ -1,4 +1,4 @@
 {
-    "*.ts": ["yarn lint:partial:fix", "yarn prettify:fix", "git add"],
-    "*.{json,md}": ["yarn prettify:fix", "git add"]
+    "*.ts": ["yarn lint:partial:fix", "yarn prettify:fix"],
+    "*.{json,md}": ["yarn prettify:fix"]
 }

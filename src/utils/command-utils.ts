@@ -33,7 +33,7 @@ const getDisableNetworkList = (): string[] => {
 const DISABLED_NETWORK_LIST = getDisableNetworkList();
 
 export const getNetworksList = (): string[] => {
-    return [...Object.keys(Networks).filter(network => !DISABLED_NETWORK_LIST.includes(network))];
+    return [...Object.keys(Networks).filter((network) => !DISABLED_NETWORK_LIST.includes(network))];
 };
 
 export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
@@ -150,11 +150,7 @@ export function createDelegateRegisterTransaction(
     secondPassphrase: string,
 ): Interfaces.ITransactionData {
     Transactions.TransactionRegistry.registerTransactionType(DelegateRegisterTransaction);
-    const builder = new UNSDelegateRegisterBuilder()
-        .fee(`${fees}`)
-        .nonce(nonce)
-        .usernameAsset(unikId)
-        .sign(passphrase);
+    const builder = new UNSDelegateRegisterBuilder().fee(`${fees}`).nonce(nonce).usernameAsset(unikId).sign(passphrase);
 
     if (secondPassphrase) {
         builder.secondSign(secondPassphrase);
@@ -169,10 +165,7 @@ export function createDelegateResignTransaction(
     secondPassphrase: string,
 ): Interfaces.ITransactionData {
     Transactions.TransactionRegistry.registerTransactionType(DelegateResignTransaction);
-    const builder = new UNSDelegateResignBuilder()
-        .fee(`${fees}`)
-        .nonce(nonce)
-        .sign(passphrase);
+    const builder = new UNSDelegateResignBuilder().fee(`${fees}`).nonce(nonce).sign(passphrase);
 
     if (secondPassphrase) {
         builder.secondSign(secondPassphrase);
@@ -188,11 +181,7 @@ export function createVoteTransaction(
     secondPassphrase: string,
 ): Interfaces.ITransactionData {
     Transactions.TransactionRegistry.registerTransactionType(VoteTransaction);
-    const builder = new UNSVoteBuilder()
-        .fee(`${fees}`)
-        .nonce(nonce)
-        .votesAsset(delegateVotes)
-        .sign(passphrase);
+    const builder = new UNSVoteBuilder().fee(`${fees}`).nonce(nonce).votesAsset(delegateVotes).sign(passphrase);
 
     if (secondPassphrase) {
         builder.secondSign(secondPassphrase);

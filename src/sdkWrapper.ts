@@ -151,13 +151,13 @@ export class UnsClientWrapper {
      *
      * @param unikid Get UNIK token properties
      */
-    public async getUnikProperties(
-        unikid: string,
-    ): Promise<WithChainmeta<{ data: Array<{ [_: string]: PropertyValue }> }>> {
+    public async getUnikProperties(unikid: string): Promise<WithChainmeta<{ data: { [_: string]: PropertyValue }[] }>> {
         try {
-            const propertiesResponse: ResponseWithChainMeta<Array<{
-                [_: string]: PropertyValue;
-            }>> = await this.unsClient.unik.properties(unikid);
+            const propertiesResponse: ResponseWithChainMeta<
+                {
+                    [_: string]: PropertyValue;
+                }[]
+            > = await this.unsClient.unik.properties(unikid);
             return {
                 data: propertiesResponse.data || [],
                 chainmeta: propertiesResponse.chainmeta,

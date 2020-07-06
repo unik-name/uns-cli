@@ -178,7 +178,7 @@ export abstract class BaseCommand extends Command {
 
     public isFlagSet(flagName: string, flagChar?: string): boolean {
         return this.argv.some(
-            arg =>
+            (arg) =>
                 arg === `--${flagName}` ||
                 arg.startsWith(`--${flagName}=`) ||
                 (flagChar && (arg === `-${flagChar}` || arg.startsWith(`-${flagChar}=`))),
@@ -249,7 +249,7 @@ export abstract class BaseCommand extends Command {
      * @param heights
      */
     protected checkDataConsistency(...heights: string[]) {
-        if (!heights.every(v => v === heights[0])) {
+        if (!heights.every((v) => v === heights[0])) {
             throw new Error("Unable to read right now. Please retry.");
         }
     }

@@ -28,7 +28,7 @@ export class UnikReadCommand extends ReadCommand {
         const target = await this.targetResolve(flags, args.target);
 
         const properties: {
-            data: Array<{ [_: string]: string }>;
+            data: { [_: string]: string }[];
             chainmeta: ChainMeta;
         } = await this.unsClientWrapper.getUnikProperties(target.unikid);
 

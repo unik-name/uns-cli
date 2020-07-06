@@ -29,7 +29,7 @@ export class DelegateVoteCreateCommand extends AbstractDelegateVoteCreateCommand
         const promises = tokens.data.map((token: Token) =>
             this.unsClientWrapper.getUnikProperty(token.id, "LifeCycle/Status"),
         );
-        const reducer = (isAllowed: boolean, lifeStatus: any) => isAllowed && parseInt(lifeStatus.data) === 3 /*Alive*/;
+        const reducer = (isAllowed: boolean, lifeStatus: any) => isAllowed && parseInt(lifeStatus.data) === 3; /*Alive*/
         if (!tokens.data.length || !((await Promise.all(promises)) as string[]).reduce(reducer, true)) {
             throw new Error('Uniks of cryptoaccount have to be alive ("LifeCycle/Status" = 3) to vote.');
         }

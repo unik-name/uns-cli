@@ -10,7 +10,11 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+-   dependencies upgrade, use circle-ci node 12 image, force minimum engine version to 12 (#2874)
+
 ### Removed
+
+-   unused dependencies (patch-package, request, request-promise, tslib) and dev dependencies (@types/request-promise) (#2874)
 
 ## [4.0.0] 2020-06-19
 

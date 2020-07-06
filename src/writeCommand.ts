@@ -35,7 +35,7 @@ export abstract class WriteCommand extends BaseCommand {
      */
     public async hasSecondPassphrase(passphrase: string): Promise<boolean> {
         const cryptoAccountAddress: string = Identities.Address.fromPassphrase(passphrase);
-        return this.applyWalletPredicate(cryptoAccountAddress, wallet => wallet && !!wallet.secondPublicKey);
+        return this.applyWalletPredicate(cryptoAccountAddress, (wallet) => wallet && !!wallet.secondPublicKey);
     }
 
     /**
