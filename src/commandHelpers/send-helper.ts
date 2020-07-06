@@ -83,7 +83,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
      * @param walletAddress
      */
     public async checkWalletExistence(walletAddress: string): Promise<boolean> {
-        return this.cmd.applyWalletPredicate(walletAddress, wallet => !!wallet);
+        return this.cmd.applyWalletPredicate(walletAddress, (wallet) => !!wallet);
     }
 
     public formatOutput(transactionFromNetwork: any, transactionId: string) {

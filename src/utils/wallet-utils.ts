@@ -25,7 +25,7 @@ export async function generatePassphrase() {
         .update(seed)
         .digest()
         .slice(0, bytes);
-    return generateMnemonic(nbBits, _ => entropy);
+    return generateMnemonic(nbBits, (_) => entropy);
 }
 
 export async function getUniknameWalletAddress(id: string, unsClient: UNSClient) {

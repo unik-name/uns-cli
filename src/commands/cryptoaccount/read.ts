@@ -71,12 +71,12 @@ export class CryptoAccountReadCommand extends ReadCommand {
              */
             this.log(`\nLIST OF UNIK:${tokens.data.length === 0 ? " none" : ""}`);
             if (tokens.data.length > 0) {
-                tokens.data.forEach(tokenProps => {
+                tokens.data.forEach((tokenProps) => {
                     this.logAttribute("unikid", tokenProps.id);
                 });
             }
             data.tokens = {
-                unik: tokens.data.map(t => t.id),
+                unik: tokens.data.map((t) => t.id),
             };
         }
 
