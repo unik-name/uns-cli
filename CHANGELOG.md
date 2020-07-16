@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+-   add `properties:register` command for url verification jwt generation (#2328)
+-   add `badges:claim` command for pioneer badge (#2430)
 -   add `text` flag on send command (#2834)
 
 ### Changed

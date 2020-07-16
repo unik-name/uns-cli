@@ -1015,10 +1015,10 @@
     "@uns/ark-crypto" "^5.3.1"
     "@uns/core-nft-crypto" "^5.3.1"
 
-"@uns/ts-sdk@^2.6.0-dev":
-  version "2.6.0-dev.20200720094343"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.6.0-dev.20200720094343.tgz#98f1afa8e69e2e71e332ccacb6ee112aacb88865"
-  integrity sha512-DHoiKcgU4Z6XWity4Uz2ANL3wCSywIzr5zCchqtsMicX/EylFDlYsnlU6eCIJ0YwMkGaNQ3OgPxno00brVFK9Q==
+"@uns/ts-sdk@^2.6.0-dev.20200806071615":
+  version "2.6.0-dev.20200806071615"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.6.0-dev.20200806071615.tgz#dc80ceba2033047b44bdfbf11018c3cff181dff7"
+  integrity sha512-VLu/IbzlMeqbrT4HjKZW50+RldpspoSXGldRRxHqAoibj1QAP2GlnjygtWI1BFLAptMwsRQLg9hg2qQDmFjBiQ==
   dependencies:
     "@uns/ark-crypto" "5.3.1"
     "@uns/core-nft-crypto" "5.3.1"
