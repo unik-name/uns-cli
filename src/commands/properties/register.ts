@@ -6,12 +6,12 @@ import { CryptoAccountPassphrases } from "types";
 import { JwtUtils, PropertyVerifierType } from "@uns/ts-sdk";
 import { writeFileSync } from "fs";
 
-export class PropertyVerifyCommand extends BaseCommand {
+export class PropertyRegisterCommand extends BaseCommand {
     public static description = "Initiate ownership verification processus.";
 
     public static usage = "properties:register TARGET --value {propertyValue}";
 
-    public static examples = ['$ uns properties:register @bob --value  "www.myDomain.com"'];
+    public static examples = ['$ uns properties:register @bob --value  "www.mydomain.com"'];
 
     public static getFlags() {
         const cmdFlags: any = {
@@ -20,7 +20,7 @@ export class PropertyVerifyCommand extends BaseCommand {
             type: flags.string({
                 char: "t",
                 description: "type of unik property to register",
-                options: PropertyVerifyCommand.getAvailablePropertyTypes(),
+                options: PropertyRegisterCommand.getAvailablePropertyTypes(),
                 default: "url",
                 required: true,
             }),
@@ -33,7 +33,7 @@ export class PropertyVerifyCommand extends BaseCommand {
         delete cmdFlags.node;
         return cmdFlags;
     }
-    public static flags = PropertyVerifyCommand.getFlags();
+    public static flags = PropertyRegisterCommand.getFlags();
 
     public static args = [getTargetArg()];
 
@@ -46,10 +46,10 @@ export class PropertyVerifyCommand extends BaseCommand {
     }
 
     protected getCommand(): typeof BaseCommand {
-        return PropertyVerifyCommand;
+        return PropertyRegisterCommand;
     }
 
-    private JWT_FILENAME = "uns-verification.txt";
+    public static JWT_FILENAME = "uns-verification.txt";
     private DEFAULT_EXPIRATION_TIME = 259200; // 72h
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
@@ -69,15 +69,19 @@ export class PropertyVerifyCommand extends BaseCommand {
         );
 
         const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, unikid);
-        writeFileSync(this.JWT_FILENAME, rawJwt);
 
-        this.info(`Verification package has been saved into ${this.JWT_FILENAME}`);
+        try {
+            writeFileSync(PropertyRegisterCommand.JWT_FILENAME, rawJwt);
+        } catch (err) {
+            throw new Error(`Unable to write verifier token \"${PropertyRegisterCommand.JWT_FILENAME}\": ${err}`);
+        }
+        this.info(`Verification package has been saved into ${PropertyRegisterCommand.JWT_FILENAME}`);
 
         return {
             data: {
                 type: flags.type,
                 value,
-                filename: this.JWT_FILENAME,
+                filename: PropertyRegisterCommand.JWT_FILENAME,
                 verificationKey: jwtToken.payload.jti,
                 expirationDate: new Date(jwtToken.payload.exp * 1000).toISOString(),
             },

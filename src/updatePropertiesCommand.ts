@@ -15,11 +15,14 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
 
     protected abstract async getProperties(
         flags: Record<string, any>,
-        targetId: string,
+        unikid: string,
     ): Promise<{ [_: string]: string }>;
 
-    protected getServiceId(): NftFactoryServicesList | undefined {
-        return undefined;
+    protected getServiceId(_: Record<string, any>): NftFactoryServicesList | undefined {
+        return;
+    }
+    protected async generatePackage(_: string, __: string, ___: Record<string, any>): Promise<any> {
+        return;
     }
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<CommandOutput> {
@@ -45,7 +48,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
             passphrases.first,
             passphrases.second,
             NFT_NAME,
-            this.getServiceId(),
+            this.getServiceId(flags),
             // Add unikname here if update service needs it
         );
 
