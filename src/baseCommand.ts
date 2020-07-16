@@ -1,16 +1,23 @@
 import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
-import { Managers, Types, Utils } from "@uns/ark-crypto";
-import { ChainMeta, Network, Transaction } from "@uns/ts-sdk";
+import { Managers, Types, Utils, Identities } from "@uns/ark-crypto";
+import { ChainMeta, Network, Transaction, Wallet } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
-import { UnikInfos } from "types";
+import { UnikInfos, CryptoAccountPassphrases } from "types";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
 import * as LOGGER from "./logger";
 import { UnsClientWrapper } from "./sdkWrapper";
 import * as UTILS from "./utils";
-import { getWalletFromPassphrase, isDid } from "./utils";
+import {
+    getWalletFromPassphrase,
+    isDid,
+    checkPassphraseFormat,
+    getSecondPassphraseFromUser,
+    getPassphraseFromUser,
+} from "./utils";
 import { isTokenId, resolveUnikName } from "./utils";
+import { HttpNotFoundError } from "./errorHandler";
 
 export abstract class BaseCommand extends Command {
     public static baseFlags = {
@@ -283,5 +290,55 @@ export abstract class BaseCommand extends Command {
 
         Managers.configManager.setConfig(configurationCrypto);
         Managers.configManager.setHeight(height);
+    }
+
+    /**
+     * Get wallet with recipientId, apply predicate and returns result
+     * @param recipientId
+     * @param predicate
+     */
+    public async applyWalletPredicate(recipientId: string, predicate: (wallet: Wallet) => boolean) {
+        try {
+            const wallet: Wallet & { chainmeta: ChainMeta } = await this.unsClientWrapper.getWallet(recipientId);
+            return predicate(wallet);
+        } catch (e) {
+            if (e instanceof HttpNotFoundError) {
+                this.info(`Wallet ${recipientId} not found.`);
+                return false;
+            }
+            throw e;
+        }
+    }
+
+    /**
+     * Return true if a second wallet passphrase is needed
+     */
+    public async hasSecondPassphrase(passphrase: string): Promise<boolean> {
+        const cryptoAccountAddress: string = Identities.Address.fromPassphrase(passphrase);
+        return this.applyWalletPredicate(cryptoAccountAddress, (wallet) => wallet && !!wallet.secondPublicKey);
+    }
+
+    public async askForPassphrases(
+        flags: Record<string, any>,
+        checkSecondPassphrase = true,
+    ): Promise<CryptoAccountPassphrases> {
+        let passphrase: string = flags.passphrase;
+        let secondPassphrase: string = flags["second-passphrase"];
+
+        if (!passphrase) {
+            passphrase = await getPassphraseFromUser();
+        }
+        checkPassphraseFormat(passphrase);
+
+        if (checkSecondPassphrase) {
+            if (!secondPassphrase && (await this.hasSecondPassphrase(passphrase))) {
+                secondPassphrase = await getSecondPassphraseFromUser();
+            }
+            if (secondPassphrase) {
+                checkPassphraseFormat(secondPassphrase);
+            }
+        }
+
+        return { first: passphrase, second: secondPassphrase };
     }
 }

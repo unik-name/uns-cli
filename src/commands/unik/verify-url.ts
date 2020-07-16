@@ -14,11 +14,11 @@ export class VerifyUrlCommand extends PropertiesUpdateCommand {
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         url: oFlags.string({
-            description: "url to verify then set as UNIK properties",
+            description: "url to verify. Set as UNIK properties value",
             required: true,
         }),
         ["url-name"]: oFlags.string({
-            description: "url name to to verify then use as key for UNIK properties",
+            description: "url name to verify. Used as key for UNIK property",
             required: true,
         }),
     };
