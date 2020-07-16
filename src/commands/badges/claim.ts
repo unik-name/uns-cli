@@ -41,7 +41,7 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
         return BadgesClaimCommand;
     }
 
-    protected getServiceId(): NftFactoryServicesList | undefined {
+    protected getServiceId(_: Record<string, any>): NftFactoryServicesList | undefined {
         return NftFactoryServicesList.NFT_FACTORY_BADGE_PIONEER;
     }
 
