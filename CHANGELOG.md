@@ -8,6 +8,15 @@ All notable changes to this project will be documented in this file.
 
 -   add `properties:register` command for url verification jwt generation (#2328)
 -   add `badges:claim` command for pioneer badge (#2430)
+
+### Changed
+
+### Removed
+
+## [4.1.0] 2020-07-15
+
+### Added
+
 -   add `text` flag on send command (#2834)
 
 ### Changed
