@@ -245,9 +245,9 @@
     regenerator-runtime "^0.13.4"
 
 "@babel/runtime@^7.10.2":
-  version "7.10.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.10.4.tgz#a6724f1a6b8d2f6ea5236dbfe58c7d7ea9c5eb99"
-  integrity sha512-UpTN5yUJr9b4EX2CnGNWIvER7Ab83ibv0pcvvHc4UOdrBI5jb8bj+32cCwPX6xu0mt2daFNjYhoi+X7beH0RSw==
+  version "7.11.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
+  integrity sha512-TeWkU52so0mPtDcaCTxNBI/IHiz0pZgr8VEFqXFtZWpYD08ZB6FaSwVAS8MKRQAP3bYKiVjwysOJgMFY28o6Tw==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -974,7 +974,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uns/ark-crypto@5.3.1", "@uns/ark-crypto@^5.3.1":
+"@uns/ark-crypto@5.3.1":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-5.3.1.tgz#89e3725237f1f5be7c3285abdc928515a7927870"
   integrity sha512-P7BtKX0u0XiQFZ4cxg82EzomQXdVELLE5oAX+uF4ssMfQoPO4XguzXZqL/Dii8togMORthr8lz1lDNZlJ66Gsg==
@@ -1000,12 +1000,45 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/core-nft-crypto@5.3.1", "@uns/core-nft-crypto@^5.3.1":
+"@uns/ark-crypto@^5.3.1", "@uns/ark-crypto@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-5.3.2.tgz#70a1ea724bbc17058270466e48e0d2783cabba36"
+  integrity sha512-qxaEgnTXx+2smijx7bjq/D7IOZ8clvzCsBRq5c514OaKFytMUMruMhP93Y7n+BBP+t6Gm+yLF9qRPpcSTMfe7A==
+  dependencies:
+    "@arkecosystem/utils" "0.8.3"
+    ajv "^6.10.2"
+    ajv-keywords "^3.4.1"
+    bcrypto "^4.1.0"
+    bip32 "^2.0.3"
+    bip39 "^3.0.2"
+    browserify-aes "^1.2.0"
+    bstring "^0.3.9"
+    buffer-xor "^2.0.2"
+    bytebuffer "^5.0.1"
+    dayjs "^1.8.15"
+    deepmerge "^4.0.0"
+    fast-memoize "^2.5.1"
+    ipaddr.js "^1.9.0"
+    lodash.get "^4.4.2"
+    lodash.set "^4.3.2"
+    lodash.sumby "^4.6.0"
+    long "~3"
+    tiny-glob "^0.2.6"
+    wif "^2.0.6"
+
+"@uns/core-nft-crypto@5.3.1":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-5.3.1.tgz#fd0930c8d91223efcc88ae6da2aba0c271d623d1"
   integrity sha512-ceXBP0JZMSgFE25/l/J/cuzh6LK6qVaMZiqxpfRRjk0VOvw3zTEaNoURy4MMolsaJaiafCzH2/a34srRq8vctA==
   dependencies:
     "@uns/ark-crypto" "^5.3.1"
+
+"@uns/core-nft-crypto@^5.3.1":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-5.3.2.tgz#487c058e686549536f9ccc0d89e2db4a254058f5"
+  integrity sha512-i/cKF2ZrQu1B/4/eLy18hwLZ55/cM2pLl9cmBn5hhd9HjFUv53bO+bqSDA0WldydPR4P5cQyG5AU5nmU4inP6g==
+  dependencies:
+    "@uns/ark-crypto" "^5.3.2"
 
 "@uns/crypto@5.3.1":
   version "5.3.1"
@@ -1015,10 +1048,10 @@
     "@uns/ark-crypto" "^5.3.1"
     "@uns/core-nft-crypto" "^5.3.1"
 
-"@uns/ts-sdk@^2.6.0-dev":
-  version "2.6.0-dev.20200806161842"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.6.0-dev.20200806161842.tgz#24fe03c2124f724ff4981a59f720a36b7c033337"
-  integrity sha512-7tyVTCEmhJl4VetLElGp9P6ToLVVusnOncV4lFrChKMo36dBnswL3M5G7YVrjNEHXpHa9EJ01ZChxv0uQ6k0yQ==
+"@uns/ts-sdk@^2.7.0-dev":
+  version "2.7.0-dev.20200812085839"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.7.0-dev.20200812085839.tgz#12ee55d6f2fd8e22886ba90f3e2a7933b1533f87"
+  integrity sha512-ygorvWbCTcY6nYk3c8rlHKWAWz8DXWlp9rI83Iny3df9/cx2jrD8Sdax4/CgYvtMVN8zjaEbG6iGUGoWenmJuw==
   dependencies:
     "@uns/ark-crypto" "5.3.1"
     "@uns/core-nft-crypto" "5.3.1"
@@ -1070,9 +1103,9 @@ aggregate-error@^3.0.0:
     indent-string "^4.0.0"
 
 ajv-keywords@^3.4.1:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.5.1.tgz#b83ca89c5d42d69031f424cad49aada0236c6957"
-  integrity sha512-KWcq3xN8fDjSB+IMoh2VaXVhRI0BBGxoYp3rx7Pkb6z0cFjYR9Q9l4yZqqals0/zsioCmocC5H6UvsGD4MoIBA==
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
+  integrity sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==
 
 ajv@^6.10.2, ajv@^6.5.5:
   version "6.12.3"
@@ -2053,9 +2086,9 @@ data-urls@^2.0.0:
     whatwg-url "^8.0.0"
 
 dayjs@^1.8.15:
-  version "1.8.29"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.29.tgz#5d23e341de6bfbd206c01136d2fb0f01877820f5"
-  integrity sha512-Vm6teig8ZWK7rH/lxzVGxZJCljPdmUr6q/3f4fr5F0VWNGVkZEjZOQJsAN8hUHUqn+NK4XHNEpJZS1MwLyDcLw==
+  version "1.8.33"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.33.tgz#18bc4a2b6c1c6f4d67b4c4f2536c0b97e5b766f7"
+  integrity sha512-881TDLZCdpJFKbraWRHcUG8zfMLLX400ENf9rFZDuWc5zYMss6xifo2PhlDX0ftOmR2NRmaIY47bAa4gKQfXqw==
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
@@ -4033,9 +4066,9 @@ load-json-file@^6.2.0:
     type-fest "^0.6.0"
 
 loady@~0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/loady/-/loady-0.0.1.tgz#24a99c14cfed9cd0bffed365b1836035303f7e5d"
-  integrity sha512-PW5Z13Jd0v6ZcA1P6ZVUc3EV8BJwQuAiwUvvT6VQGHoaZ1d/tu7r1QZctuKfQqwy9SFBWeAGfcIdLxhp7ZW3Rw==
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/loady/-/loady-0.0.5.tgz#b17adb52d2fb7e743f107b0928ba0b591da5d881"
+  integrity sha512-uxKD2HIj042/HBx77NBcmEPsD+hxCgAtjEWlYNScuUjIsh/62Uyu39GOR68TBR68v+jqDL9zfftCWoUo4y03sQ==
 
 locate-path@^5.0.0:
   version "5.0.0"
@@ -5579,9 +5612,9 @@ tiny-secp256k1@^1.1.3:
     nan "^2.13.2"
 
 tlds@^1.203.0:
-  version "1.207.0"
-  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.207.0.tgz#459264e644cf63ddc0965fece3898913286b1afd"
-  integrity sha512-k7d7Q1LqjtAvhtEOs3yN14EabsNO8ZCoY6RESSJDB9lst3bTx3as/m1UuAeCKzYxiyhR1qq72ZPhpSf+qlqiwg==
+  version "1.208.0"
+  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.208.0.tgz#f9a85c272aa500e56c92e7d342fbfdfbddaa9757"
+  integrity sha512-6kbY7GJpRQXwBddSOAbVUZXjObbCGFXliWWN+kOSEoRWIOyRWLB6zdeKC/Tguwwenl/KsUx016XR50EdHYsxZw==
 
 tmp@^0.1.0:
   version "0.1.0"

@@ -1,7 +1,7 @@
 {
     "name": "@uns/cli",
     "description": "UNS.network CLI",
-    "version": "4.1.0",
+    "version": "4.2.0",
     "author": "Space Elephant",
     "contributors": [
         "Fabien Tréguer <fabien@spacelephant.org>",
@@ -20,7 +20,7 @@
         "@oclif/plugin-not-found": "^1.2.4",
         "@oclif/plugin-update": "^1.3.10",
         "@oclif/plugin-warn-if-update-available": "^1.7.0",
-        "@uns/ts-sdk": "^2.6.0-dev",
+        "@uns/ts-sdk": "^2.7.0-dev",
         "cli-ux": "^5.4.9",
         "delay": "^4.1.0",
         "flat": "^5.0.0",
