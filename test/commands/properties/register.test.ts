@@ -47,9 +47,13 @@ describe(`${commandName} command`, () => {
             .command([commandName, UNIK_ID, "-n", "dalinet", "-V", URL, "--passphrase", PASSPHRASE])
             .it("Should generate JWT token", (ctx) => {
                 const parsed = JSON.parse(ctx.stdout);
-                expect(parsed.data).to.have.property("type", "url");
+                expect(parsed.data).to.have.property("unik", UNIK_ID);
+                expect(parsed.data).to.have.property("action", "uns:urlchecker-verification");
                 expect(parsed.data).to.have.property("value", URL);
-                expect(parsed.data).to.have.property("filename", PropertyRegisterCommand.JWT_FILENAME);
+                expect(parsed.data).to.have.property(
+                    "filepath",
+                    `${process.cwd()}/${PropertyRegisterCommand.JWT_FILENAME}`,
+                );
                 expect(parsed.data).to.have.property("verificationKey");
                 expect(parsed.data).to.have.property("expirationDate");
             });

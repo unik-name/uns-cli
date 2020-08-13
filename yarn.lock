@@ -1000,10 +1000,10 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/ark-crypto@^5.3.1", "@uns/ark-crypto@^5.3.2":
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-5.3.2.tgz#70a1ea724bbc17058270466e48e0d2783cabba36"
-  integrity sha512-qxaEgnTXx+2smijx7bjq/D7IOZ8clvzCsBRq5c514OaKFytMUMruMhP93Y7n+BBP+t6Gm+yLF9qRPpcSTMfe7A==
+"@uns/ark-crypto@^5.3.1", "@uns/ark-crypto@^5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-5.3.3.tgz#5b28bd6a48e5a8b8a0667cc51f6d5ca707a1e340"
+  integrity sha512-TSmcjrjtx4r47fLoWRRvCANRWLe3u+EJF3wSwvUbWoNx8Ao7NEzvLCoBupeirJvv1IK38ilBNNyyMYBCD5tuXw==
   dependencies:
     "@arkecosystem/utils" "0.8.3"
     ajv "^6.10.2"
@@ -1034,11 +1034,11 @@
     "@uns/ark-crypto" "^5.3.1"
 
 "@uns/core-nft-crypto@^5.3.1":
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-5.3.2.tgz#487c058e686549536f9ccc0d89e2db4a254058f5"
-  integrity sha512-i/cKF2ZrQu1B/4/eLy18hwLZ55/cM2pLl9cmBn5hhd9HjFUv53bO+bqSDA0WldydPR4P5cQyG5AU5nmU4inP6g==
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-5.3.3.tgz#c3466137885b3968f108557ba7a5374741a31891"
+  integrity sha512-wsht0k9PKIkOQNkeYVk8WjFa3OJU4akjAY7s3YQvCsbIZ5XV0YbYtSwaLAV32QcEvCPd8HDSINlD1d+v9qzFKw==
   dependencies:
-    "@uns/ark-crypto" "^5.3.2"
+    "@uns/ark-crypto" "^5.3.3"
 
 "@uns/crypto@5.3.1":
   version "5.3.1"
@@ -1049,9 +1049,9 @@
     "@uns/core-nft-crypto" "^5.3.1"
 
 "@uns/ts-sdk@^2.7.0-dev":
-  version "2.7.0-dev.20200812085839"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.7.0-dev.20200812085839.tgz#12ee55d6f2fd8e22886ba90f3e2a7933b1533f87"
-  integrity sha512-ygorvWbCTcY6nYk3c8rlHKWAWz8DXWlp9rI83Iny3df9/cx2jrD8Sdax4/CgYvtMVN8zjaEbG6iGUGoWenmJuw==
+  version "2.7.0-dev.20200814140105"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.7.0-dev.20200814140105.tgz#6af84535937b00712fe9c92f53f7297a28b8b485"
+  integrity sha512-4tc4AxEaOG4UMEOKY8GTkQ4JIfJBwiLd60fHLGUrKPZCXx1scHn9iHD9Mm2byquPgRVxXNuYsy3uRStouFUcfA==
   dependencies:
     "@uns/ark-crypto" "5.3.1"
     "@uns/core-nft-crypto" "5.3.1"

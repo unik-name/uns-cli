@@ -49,6 +49,12 @@ export class PropertyRegisterCommand extends BaseCommand {
         return PropertyRegisterCommand;
     }
 
+    protected getServiceProviderUNID(): string {
+        // returns the UNID of UNS forge factory
+        // will be configurable in case of multiple service providers available on UNS network
+        return this.unsClientWrapper.network.forgeFactory.unikidWhiteList[0];
+    }
+
     public static JWT_FILENAME = "uns-verification.txt";
     private DEFAULT_EXPIRATION_TIME = 259200; // 72h
 
@@ -58,17 +64,21 @@ export class PropertyRegisterCommand extends BaseCommand {
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags, false);
 
         const value = flags.value.trim();
+        const providerUNID = this.getServiceProviderUNID();
 
         const rawJwt: string = await JwtUtils.createPropertyVerifierToken(
             unikid,
-            unikid,
+            providerUNID,
             passphrases.first,
             this.DEFAULT_EXPIRATION_TIME,
             flags.type as PropertyVerifierType,
             value,
         );
 
-        const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, unikid);
+        const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(
+            rawJwt,
+            providerUNID,
+        );
 
         try {
             writeFileSync(PropertyRegisterCommand.JWT_FILENAME, rawJwt);
@@ -79,9 +89,10 @@ export class PropertyRegisterCommand extends BaseCommand {
 
         return {
             data: {
-                type: flags.type,
+                unik: args.target,
+                action: "uns:urlchecker-verification",
                 value,
-                filename: PropertyRegisterCommand.JWT_FILENAME,
+                filepath: `${process.cwd()}/${PropertyRegisterCommand.JWT_FILENAME}`,
                 verificationKey: jwtToken.payload.jti,
                 expirationDate: new Date(jwtToken.payload.exp * 1000).toISOString(),
             },
