@@ -49,12 +49,6 @@ export class PropertyRegisterCommand extends BaseCommand {
         return PropertyRegisterCommand;
     }
 
-    protected getServiceProviderUNID(): string {
-        // returns the UNID of UNS forge factory
-        // will be configurable in case of multiple service providers available on UNS network
-        return this.unsClientWrapper.network.forgeFactory.unikidWhiteList[0];
-    }
-
     public static JWT_FILENAME = "uns-verification.txt";
     private DEFAULT_EXPIRATION_TIME = 259200; // 72h
 

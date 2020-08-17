@@ -45,7 +45,7 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
         return NftFactoryServicesList.NFT_FACTORY_BADGE_PIONEER;
     }
 
-    protected async getProperties(flags: Record<string, any>, _: string): Promise<{ [_: string]: string }> {
+    protected async getProperties(flags: Record<string, any>): Promise<{ [_: string]: string }> {
         if (Object.keys(badges).includes(flags.badge)) {
             const value = await this.getBadgeValue(flags.badge);
             if (value) {

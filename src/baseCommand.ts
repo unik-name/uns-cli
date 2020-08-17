@@ -341,4 +341,10 @@ export abstract class BaseCommand extends Command {
 
         return { first: passphrase, second: secondPassphrase };
     }
+
+    public getServiceProviderUNID(): string {
+        // returns the UNID of UNS forge factory
+        // will be configurable in case of multiple service providers available on UNS network
+        return this.unsClientWrapper.network.forgeFactory.unikidWhiteList[0];
+    }
 }

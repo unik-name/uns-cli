@@ -25,7 +25,7 @@ export class PropertiesUnsetCommand extends PropertiesUpdateCommand {
         return PropertiesUnsetCommand;
     }
 
-    protected async getProperties(flags: Record<string, any>, _: string): Promise<{ [_: string]: string }> {
+    protected async getProperties(flags: Record<string, any>): Promise<{ [_: string]: string }> {
         const properties: { [_: string]: string } = {};
 
         flags.propertyKey.forEach((prop: string) => {
