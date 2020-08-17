@@ -74,7 +74,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         return;
     }
 
-    protected async getProperties(flags: Record<string, any>, unikid: string): Promise<{ [_: string]: string }> {
+    protected async getProperties(flags: Record<string, any>, _: string): Promise<{ [_: string]: string }> {
         const properties: { [_: string]: string } = {};
         const verifiedPropertyKey = `${VERIFIED_URL_KEY_PREFIX}${flags["url-name"]}`;
 
@@ -91,8 +91,11 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
                 `Unable to read verifier token \"${PropertyRegisterCommand.JWT_FILENAME}\". You can generate it from properties:register command`,
             );
         }
-
-        const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, unikid);
+        const providerUNID = this.getServiceProviderUNID();
+        const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(
+            rawJwt,
+            providerUNID,
+        );
 
         properties[verifiedPropertyKey] = `https://${jwtToken.payload.value}`;
         properties[`${verifiedPropertyKey}/proof`] = rawJwt;
