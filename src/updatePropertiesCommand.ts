@@ -15,7 +15,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
 
     protected abstract async getProperties(
         flags: Record<string, any>,
-        unikid: string,
+        unikid?: string,
     ): Promise<{ [_: string]: string }>;
 
     protected getServiceId(_: Record<string, any>): NftFactoryServicesList | undefined {
