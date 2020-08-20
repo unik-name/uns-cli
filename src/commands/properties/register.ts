@@ -3,7 +3,7 @@ import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { getTargetArg, passphraseFlag } from "../../utils";
 import { flags } from "@oclif/command";
 import { CryptoAccountPassphrases } from "types";
-import { JwtUtils, PropertyVerifierType } from "@uns/ts-sdk";
+import { PropertyVerifierType, createPropertyVerifierToken, JWTVerifier } from "@uns/ts-sdk";
 import { writeFileSync } from "fs";
 
 export class PropertyRegisterCommand extends BaseCommand {
@@ -60,7 +60,7 @@ export class PropertyRegisterCommand extends BaseCommand {
         const value = flags.value.trim();
         const providerUNID = this.getServiceProviderUNID();
 
-        const rawJwt: string = await JwtUtils.createPropertyVerifierToken(
+        const rawJwt: string = await createPropertyVerifierToken(
             unikid,
             providerUNID,
             passphrases.first,
@@ -69,10 +69,7 @@ export class PropertyRegisterCommand extends BaseCommand {
             value,
         );
 
-        const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(
-            rawJwt,
-            providerUNID,
-        );
+        const jwtToken = await new JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, providerUNID);
 
         try {
             writeFileSync(PropertyRegisterCommand.JWT_FILENAME, rawJwt);

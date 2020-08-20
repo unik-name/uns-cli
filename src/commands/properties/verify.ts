@@ -2,7 +2,7 @@ import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { getTargetArg } from "../../utils";
 import { flags as oFlags } from "@oclif/command";
-import { NftFactoryServicesList, VERIFIED_URL_KEY_PREFIX, JwtUtils } from "@uns/ts-sdk";
+import { NftFactoryServicesList, VERIFIED_URL_KEY_PREFIX, JWTVerifier } from "@uns/ts-sdk";
 import { readFileSync } from "fs";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { PropertyRegisterCommand } from "./register";
@@ -92,10 +92,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
             );
         }
         const providerUNID = this.getServiceProviderUNID();
-        const jwtToken = await new JwtUtils.JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(
-            rawJwt,
-            providerUNID,
-        );
+        const jwtToken = await new JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, providerUNID);
 
         properties[verifiedPropertyKey] = `https://${jwtToken.payload.value}`;
         properties[`${verifiedPropertyKey}/proof`] = rawJwt;
