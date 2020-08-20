@@ -974,33 +974,7 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@uns/ark-crypto@5.3.1":
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-5.3.1.tgz#89e3725237f1f5be7c3285abdc928515a7927870"
-  integrity sha512-P7BtKX0u0XiQFZ4cxg82EzomQXdVELLE5oAX+uF4ssMfQoPO4XguzXZqL/Dii8togMORthr8lz1lDNZlJ66Gsg==
-  dependencies:
-    "@arkecosystem/utils" "0.8.3"
-    ajv "^6.10.2"
-    ajv-keywords "^3.4.1"
-    bcrypto "^4.1.0"
-    bip32 "^2.0.3"
-    bip39 "^3.0.2"
-    browserify-aes "^1.2.0"
-    bstring "^0.3.9"
-    buffer-xor "^2.0.2"
-    bytebuffer "^5.0.1"
-    dayjs "^1.8.15"
-    deepmerge "^4.0.0"
-    fast-memoize "^2.5.1"
-    ipaddr.js "^1.9.0"
-    lodash.get "^4.4.2"
-    lodash.set "^4.3.2"
-    lodash.sumby "^4.6.0"
-    long "~3"
-    tiny-glob "^0.2.6"
-    wif "^2.0.6"
-
-"@uns/ark-crypto@^5.3.1", "@uns/ark-crypto@^5.3.3":
+"@uns/ark-crypto@^5.3.3":
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/@uns/ark-crypto/-/ark-crypto-5.3.3.tgz#5b28bd6a48e5a8b8a0667cc51f6d5ca707a1e340"
   integrity sha512-TSmcjrjtx4r47fLoWRRvCANRWLe3u+EJF3wSwvUbWoNx8Ao7NEzvLCoBupeirJvv1IK38ilBNNyyMYBCD5tuXw==
@@ -1026,36 +1000,29 @@
     tiny-glob "^0.2.6"
     wif "^2.0.6"
 
-"@uns/core-nft-crypto@5.3.1":
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-5.3.1.tgz#fd0930c8d91223efcc88ae6da2aba0c271d623d1"
-  integrity sha512-ceXBP0JZMSgFE25/l/J/cuzh6LK6qVaMZiqxpfRRjk0VOvw3zTEaNoURy4MMolsaJaiafCzH2/a34srRq8vctA==
-  dependencies:
-    "@uns/ark-crypto" "^5.3.1"
-
-"@uns/core-nft-crypto@^5.3.1":
+"@uns/core-nft-crypto@^5.3.3":
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/@uns/core-nft-crypto/-/core-nft-crypto-5.3.3.tgz#c3466137885b3968f108557ba7a5374741a31891"
   integrity sha512-wsht0k9PKIkOQNkeYVk8WjFa3OJU4akjAY7s3YQvCsbIZ5XV0YbYtSwaLAV32QcEvCPd8HDSINlD1d+v9qzFKw==
   dependencies:
     "@uns/ark-crypto" "^5.3.3"
 
-"@uns/crypto@5.3.1":
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-5.3.1.tgz#efd522c7c7a1bbed25427b954598d342b6349fe2"
-  integrity sha512-RFrkbwN/lfafCXIGNwWavt2s9i1VxUvfDEIfawPE1T+WBbs5+RfQPi3IO/XyrRXWuAWZ2QGJNAOd6wYLsRpzqQ==
+"@uns/crypto@^5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@uns/crypto/-/crypto-5.3.3.tgz#36c4f4d97b1ccb9f340881dc67cfa87ee5a16842"
+  integrity sha512-8HAmrOsI0xsKhNKyfu/vL4ELofTphAuQltUEUcSpQgA/tSwkCvkKlSG9/b5mGEBJD/cdJPO7LDEPi+GOG5Jx+A==
   dependencies:
-    "@uns/ark-crypto" "^5.3.1"
-    "@uns/core-nft-crypto" "^5.3.1"
+    "@uns/ark-crypto" "^5.3.3"
+    "@uns/core-nft-crypto" "^5.3.3"
 
-"@uns/ts-sdk@^2.7.0-dev":
-  version "2.7.0-dev.20200820133651"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-2.7.0-dev.20200820133651.tgz#48281090ee862c1f3dca01d2d44da9dd7d1eb776"
-  integrity sha512-eBJs/0uyRy5E82pnsDVT+158OC3u1MyksQFCbWxIBRsLldkUOeFQAhXbpj3EK9ErwW57ac7PUbuSbMbA6NGaRw==
+"@uns/ts-sdk@^3.1.0-dev":
+  version "3.1.0-dev.20200820153834"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-3.1.0-dev.20200820153834.tgz#2356f3be4b06a8caef08b9053ee9b24ce61596aa"
+  integrity sha512-2bslR+s0c3kmlE+Hz/zaoHDTqCUOuj6YqmaUO+u9wfpjqtW+cktZYMUNf2bleeXyyZRGeK83ZXIHKIy9QX8fWg==
   dependencies:
-    "@uns/ark-crypto" "5.3.1"
-    "@uns/core-nft-crypto" "5.3.1"
-    "@uns/crypto" "5.3.1"
+    "@uns/ark-crypto" "^5.3.3"
+    "@uns/core-nft-crypto" "^5.3.3"
+    "@uns/crypto" "^5.3.3"
     deepmerge "^4.0.0"
     did-jwt "^4.0.0"
     elliptic "^6.5.2"
