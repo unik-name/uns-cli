@@ -40,7 +40,6 @@ export const UNIK_RESULT = {
     confirmations: 20,
 };
 
-const rawJwt = "totojwt";
 export const URL_VERIFY_TRANSACTION = {
     id: "7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0",
     signature:
@@ -59,7 +58,7 @@ export const URL_VERIFY_TRANSACTION = {
                 tokenId: UNIK_ID,
                 properties: {
                     [`${VERIFIED_URL_KEY_PREFIX}myUrl`]: "https://www.lmao.lol",
-                    [`${VERIFIED_URL_KEY_PREFIX}myUrl/proof`]: rawJwt,
+                    [`${VERIFIED_URL_KEY_PREFIX}myUrl/proof`]: "verificationKey",
                 },
             },
         },
