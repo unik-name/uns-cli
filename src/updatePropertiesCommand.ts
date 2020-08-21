@@ -18,7 +18,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
         unikid?: string,
     ): Promise<{ [_: string]: string }>;
 
-    protected getServiceId(_: Record<string, any>): NftFactoryServicesList | undefined {
+    protected async getServiceId(_: Record<string, any>, __: string): Promise<NftFactoryServicesList | undefined> {
         return;
     }
     protected async generatePackage(_: string, __: string, ___: Record<string, any>): Promise<any> {
@@ -48,7 +48,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
             passphrases.first,
             passphrases.second,
             NFT_NAME,
-            this.getServiceId(flags),
+            await this.getServiceId(flags, unikid),
             // Add unikname here if update service needs it
         );
 

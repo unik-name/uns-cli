@@ -1,12 +1,5 @@
 import { Interfaces } from "@uns/ark-crypto";
-import {
-    buildDiscloseDemand,
-    DIDHelpers,
-    DIDType,
-    IDiscloseDemand,
-    IDiscloseDemandCertification,
-    ResponseWithChainMeta,
-} from "@uns/ts-sdk";
+import { buildDiscloseDemand, DIDHelpers, DIDType, IDiscloseDemand, IDiscloseDemandCertification } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
@@ -112,32 +105,6 @@ export class UnikDiscloseCommand extends WriteCommand {
         );
 
         return await this.formatResult(transactionFromNetwork, transactionStruct.id as string);
-    }
-
-    private async getUnikType(unikId: string): Promise<DIDType> {
-        // get unik type
-        const unikTypeResponse: ResponseWithChainMeta<string> = (await this.unsClientWrapper.getUnikProperty(
-            unikId,
-            "type",
-            false,
-        )) as ResponseWithChainMeta<string>;
-        let unikType: string;
-
-        if (unikTypeResponse.error) {
-            throw new Error(`Unable to get UNIK type (id: ${unikId}). Caused by ${unikTypeResponse.error?.message}`);
-        } else {
-            unikType = unikTypeResponse.data as string;
-        }
-
-        const type: number = Number.parseInt(unikType);
-
-        const didType = DIDHelpers.fromCode(type);
-
-        if (!didType) {
-            throw new Error("Unknown UNIK type");
-        }
-
-        return didType;
     }
 
     private async checkExplicitValues(unikId: string, unikType: DIDType, listOfExplicitValues: string[]) {

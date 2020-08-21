@@ -2,7 +2,7 @@ import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
 import { Managers, Types, Utils, Identities } from "@uns/ark-crypto";
-import { ChainMeta, Network, Transaction, Wallet } from "@uns/ts-sdk";
+import { ChainMeta, Network, Transaction, Wallet, ResponseWithChainMeta, DIDType, DIDHelpers } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { UnikInfos, CryptoAccountPassphrases } from "types";
 import { Formater, getFormatFlag, OUTPUT_FORMAT } from "./formater";
@@ -346,5 +346,31 @@ export abstract class BaseCommand extends Command {
         // returns the UNID of UNS forge factory
         // will be configurable in case of multiple service providers available on UNS network
         return this.unsClientWrapper.network.forgeFactory.unikidWhiteList[0];
+    }
+
+    public async getUnikType(unikId: string): Promise<DIDType> {
+        // get unik type
+        const unikTypeResponse: ResponseWithChainMeta<string> = (await this.unsClientWrapper.getUnikProperty(
+            unikId,
+            "type",
+            false,
+        )) as ResponseWithChainMeta<string>;
+        let unikType: string;
+
+        if (unikTypeResponse.error) {
+            throw new Error(`Unable to get UNIK type (id: ${unikId}). Caused by ${unikTypeResponse.error?.message}`);
+        } else {
+            unikType = unikTypeResponse.data as string;
+        }
+
+        const type: number = Number.parseInt(unikType);
+
+        const didType = DIDHelpers.fromCode(type);
+
+        if (!didType) {
+            throw new Error("Unknown UNIK type");
+        }
+
+        return didType;
     }
 }
