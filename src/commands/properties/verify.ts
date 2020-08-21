@@ -62,7 +62,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         return ["url"];
     }
 
-    protected getServiceId(flags: Record<string, any>): NftFactoryServicesList | undefined {
+    protected async getServiceId(flags: Record<string, any>): Promise<NftFactoryServicesList | undefined> {
         switch (flags["url-channel"]) {
             case "html":
                 return NftFactoryServicesList.URL_CHECKER_TXT;

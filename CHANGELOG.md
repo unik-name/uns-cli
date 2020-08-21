@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+-   add `unik:everlasting` command (#2902)
 -   add `properties:verify` command for property verification (#2866)
 -   add `properties:register` command for url verification jwt generation (#2328)
 -   add `badges:claim` command for pioneer badge (#2430)
