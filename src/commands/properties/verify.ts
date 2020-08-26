@@ -94,8 +94,14 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         const providerUNID = this.getServiceProviderUNID();
         const jwtToken = await new JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, providerUNID);
 
+        const proof = JSON.stringify({
+            iat: jwtToken.payload.iat,
+            exp: jwtToken.payload.exp,
+            jti: jwtToken.payload.jti,
+            sig: rawJwt.split(".")[2],
+        });
         properties[verifiedPropertyKey] = `https://${jwtToken.payload.value}`;
-        properties[`${verifiedPropertyKey}/proof`] = jwtToken.payload.jti;
+        properties[`${verifiedPropertyKey}/proof`] = proof;
 
         return properties;
     }

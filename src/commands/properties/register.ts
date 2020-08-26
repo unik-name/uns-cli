@@ -78,13 +78,15 @@ export class PropertyRegisterCommand extends BaseCommand {
         }
         this.info(`Verification package has been saved into ${PropertyRegisterCommand.JWT_FILENAME}`);
 
+        // get JWT signature
+        const verificationKey = rawJwt.split(".")[2];
         return {
             data: {
                 unik: args.target,
                 action: "uns:urlchecker-verification",
                 value,
                 filepath: `${process.cwd()}/${PropertyRegisterCommand.JWT_FILENAME}`,
-                verificationKey: jwtToken.payload.jti,
+                verificationKey,
                 expirationDate: new Date(jwtToken.payload.exp * 1000).toISOString(),
             },
         };
