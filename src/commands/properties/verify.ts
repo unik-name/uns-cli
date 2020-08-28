@@ -37,6 +37,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         value: oFlags.string({
             char: "V",
             description: "Value of the Unik property to verify. To use with whitelist verification mode",
+            hidden: true,
         }),
     };
 
@@ -78,7 +79,10 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         const properties: { [_: string]: string } = {};
         const verifiedPropertyKey = `${VERIFIED_URL_KEY_PREFIX}${flags["url-name"]}`;
 
-        if (flags["url-channel"] === "whitelist" && flags.value) {
+        if (flags["url-channel"] === "whitelist") {
+            if (!flags.value) {
+                throw new Error(`For whitelist mode please set the --value flag`);
+            }
             properties[verifiedPropertyKey] = flags.value;
             return properties;
         }
