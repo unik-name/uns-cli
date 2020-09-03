@@ -759,10 +759,58 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@stablelib/binary@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@stablelib/binary/-/binary-1.0.0.tgz#fa216f8b2d2f7153878e2bc45e91dddee72c4749"
+  integrity sha512-W01QhOw1tWL51Du1c5JZphJs7toRbfra1C2DBlhT0mRHZWGWB1hpFbqiZUFY7QNIMUpmmHLrlZs3YsSCB/giUg==
+  dependencies:
+    "@stablelib/int" "^1.0.0"
+
+"@stablelib/ed25519@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/ed25519/-/ed25519-1.0.1.tgz#359ca5f59428e9fde9efef9a8f4040ff0a256d67"
+  integrity sha512-kvC98vkJeertRj37yqTcjOwUVYWQ0jcywxxWpeuTal5ZNgH7EcbljtQYECA2Pi2N0zNG0a0AjSD2Q2DFcUxRjQ==
+  dependencies:
+    "@stablelib/random" "^1.0.0"
+    "@stablelib/sha512" "^1.0.0"
+    "@stablelib/wipe" "^1.0.0"
+
+"@stablelib/hash@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@stablelib/hash/-/hash-1.0.0.tgz#28626ddc64cb84db9370f279c5a78cdc96f493ee"
+  integrity sha512-wBvSIIx4Y8799BRD4TBhezS1P9+irGAKdsNgbZMeU5ndMbw7BtZALdCm0FcJIRFxJ2giPLPS9YCgrwWAhzSRLQ==
+
+"@stablelib/int@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@stablelib/int/-/int-1.0.0.tgz#2432569169cc5640fe5e65b7f79f722ed9cacc59"
+  integrity sha512-MRigEQCO7xM93nZqW4CbIBjhANGw3jJxGVSUZH3PQ6HWL1IGrFWVDBzIclWxl4l5aRRpqoM+76ellQNdUJPnsA==
+
+"@stablelib/random@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@stablelib/random/-/random-1.0.0.tgz#f441495075cdeaa45de16d7ddcc269c0b8edb16b"
+  integrity sha512-G9vwwKrNCGMI/uHL6XeWe2Nk4BuxkYyWZagGaDU9wrsuV+9hUwNI1lok2WVo8uJDa2zx7ahNwN7Ij983hOUFEw==
+  dependencies:
+    "@stablelib/binary" "^1.0.0"
+    "@stablelib/wipe" "^1.0.0"
+
+"@stablelib/sha512@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@stablelib/sha512/-/sha512-1.0.0.tgz#91057cfcc15bdda96081ecfb6536b159510a05f6"
+  integrity sha512-qvUu5SraAdGa8HAkAasfMyD9C+MwlRnFVRJ6cRxAEIekmDsU3tfGLnUm3wb9ao4t0FkihGrj8GKlV82TTR4Phw==
+  dependencies:
+    "@stablelib/binary" "^1.0.0"
+    "@stablelib/hash" "^1.0.0"
+    "@stablelib/wipe" "^1.0.0"
+
 "@stablelib/utf8@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@stablelib/utf8/-/utf8-1.0.0.tgz#7c0c039b6d154da50326003ea92777ddc8f5db2c"
   integrity sha512-Y8QWrK4T0yW0HMFfSI3ZaMHKV37q27hX5ilsmKV358x01mzYfj5fwIf2LjzTlF+UIemHEXSlSN9XJnv1ML4znQ==
+
+"@stablelib/wipe@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-1.0.0.tgz#8ed028a10bb7527357b2655c360383b5f07c16ac"
+  integrity sha512-0Fd4MQCbEh8OFSO+gG7wBXok7yRC3w+xe/wWM8KNye7EGoHr4BTFZNWV/1xAn2r8/gyFKxPXT8uxXRzDzGq6rg==
 
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.7":
   version "7.1.9"
@@ -1015,10 +1063,10 @@
     "@uns/ark-crypto" "^5.3.3"
     "@uns/core-nft-crypto" "^5.3.3"
 
-"@uns/ts-sdk@^3.1.0-dev":
-  version "3.1.0-dev.20200825101854"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-3.1.0-dev.20200825101854.tgz#006f85d8ee36f4ba54a25e404b5949121fc5e36a"
-  integrity sha512-tIRIxdqJD2CK7V7PGxBkGBOsaoMxSuaePnPVFrmaIJ9Mrsc4cqw7n6yL+LXKltVRtkMba9BRVyArus4lE1Hjjw==
+"@uns/ts-sdk@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-3.1.1.tgz#4c73935162af7f9816c0c9b23eb62905fa573c5b"
+  integrity sha512-9YXl4FDeEVLKjAVQ2Sdp700CKN5Sj4WfXSASvjprrlym0a2ecV8l5clxZcszfYj24D6dg7PDLDnreJ53OcUB0w==
   dependencies:
     "@uns/ark-crypto" "^5.3.3"
     "@uns/core-nft-crypto" "^5.3.3"
@@ -2063,9 +2111,9 @@ data-urls@^2.0.0:
     whatwg-url "^8.0.0"
 
 dayjs@^1.8.15:
-  version "1.8.34"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.34.tgz#d3ad33cc43d6b0f24cb8686b90aad2c653708069"
-  integrity sha512-Olb+E6EoMvdPmAMq2QoucuyZycKHjTlBXmRx8Ada+wGtq4SIXuDCdtoaX4KkK0yjf1fJLnwXQURr8gQKWKaybw==
+  version "1.8.35"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.35.tgz#67118378f15d31623f3ee2992f5244b887606888"
+  integrity sha512-isAbIEenO4ilm6f8cpqvgjZCsuerDAz2Kb7ri201AiNn58aqXuaLJEnCtfIMdCvERZHNGRY5lDMTr/jdAnKSWQ==
 
 debug@^2.2.0, debug@^2.3.3:
   version "2.6.9"
@@ -2168,18 +2216,18 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^4.0.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-4.5.0.tgz#9dfb1490d0c497cb86b5a1ee601b7d072e77a948"
-  integrity sha512-5duVhz8d9Af9ZoBYEGGfaGdM1RM2VDawbjs6FUg8gjNCfkKd9R6RNYdAma/pZAuHY1lGXnFQBKzBZhib0y5Y3g==
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-4.5.1.tgz#174690070a808713b2e7ce296591d1e49c2043b6"
+  integrity sha512-wgp9zKlCtNC8l8ZNfWiTq01myXlMe+n1LUWGJuYpmqPPv38ZB3pf16HGQr96OZOXaNLq+izRGytzX/VDMwZWlg==
   dependencies:
     "@babel/runtime" "^7.11.2"
+    "@stablelib/ed25519" "^1.0.1"
     "@stablelib/utf8" "^1.0.0"
     buffer "^5.6.0"
     did-resolver "^2.1.0"
     elliptic "^6.5.3"
     js-sha256 "^0.9.0"
     js-sha3 "^0.8.0"
-    tweetnacl "^1.0.3"
     uport-base64url "3.0.2-alpha.0"
 
 did-resolver@^2.1.0:
@@ -5589,9 +5637,9 @@ tiny-secp256k1@^1.1.3:
     nan "^2.13.2"
 
 tlds@^1.203.0:
-  version "1.208.0"
-  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.208.0.tgz#f9a85c272aa500e56c92e7d342fbfdfbddaa9757"
-  integrity sha512-6kbY7GJpRQXwBddSOAbVUZXjObbCGFXliWWN+kOSEoRWIOyRWLB6zdeKC/Tguwwenl/KsUx016XR50EdHYsxZw==
+  version "1.209.0"
+  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.209.0.tgz#13cfdc039331d49730ca7bfa9526fc9b319e2cec"
+  integrity sha512-KVsZ1NSpBodpo42/JIwTyau7SqUxV/qQMp2epSDPa99885LpHWLaVCCt8CWzGe4X5YIVNr+b6bUys9e9eEb5OA==
 
 tmp@^0.1.0:
   version "0.1.0"
@@ -5755,11 +5803,6 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
-
-tweetnacl@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
-  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@~0.3.2:
   version "0.3.2"
