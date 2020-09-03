@@ -6,16 +6,20 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+### Changed
+
+### Removed
+
+## 4.2.0 - 2020-09-03
+
+### Added
+
 -   add `unik:everlasting` command (#2902)
 -   add `properties:verify` command for property verification (#2866)
 -   add `properties:register` command for url verification jwt generation (#2328)
 -   add `badges:claim` command for pioneer badge (#2430)
 
-### Changed
-
-### Removed
-
-## [4.1.0] 2020-07-15
+## 4.1.0 - 2020-07-15
 
 ### Added
 
@@ -29,7 +33,7 @@ All notable changes to this project will be documented in this file.
 
 -   unused dependencies (patch-package, request, request-promise, tslib) and dev dependencies (@types/request-promise) (#2874)
 
-## [4.0.0] 2020-06-19
+## 4.0.0 - 2020-06-19
 
 ### Added
 
