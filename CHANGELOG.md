@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+-   choose corresponding issuer for URL checker service (#2915)
+
 ### Removed
 
 ## 4.2.0 - 2020-09-03

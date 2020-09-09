@@ -95,7 +95,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
                 `Unable to read verifier token \"${PropertyRegisterCommand.JWT_FILENAME}\". You can generate it from properties:register command`,
             );
         }
-        const providerUNID = this.getServiceProviderUNID();
+        const providerUNID = this.getServiceProviderUNID(flags);
         const jwtToken = await new JWTVerifier(this.unsClientWrapper.unsClient).verifyUnsJWT(rawJwt, providerUNID);
 
         const proof = JSON.stringify({

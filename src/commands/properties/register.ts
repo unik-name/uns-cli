@@ -58,7 +58,7 @@ export class PropertyRegisterCommand extends BaseCommand {
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags, false);
 
         const value = flags.value.trim();
-        const providerUNID = this.getServiceProviderUNID();
+        const providerUNID = this.getServiceProviderUNID(flags);
 
         const rawJwt: string = await createPropertyVerifierToken(
             unikid,

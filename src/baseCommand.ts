@@ -342,9 +342,14 @@ export abstract class BaseCommand extends Command {
         return { first: passphrase, second: secondPassphrase };
     }
 
-    public getServiceProviderUNID(): string {
-        // returns the UNID of UNS forge factory
-        // will be configurable in case of multiple service providers available on UNS network
+    /**
+     * Return the UNID of this service provider depending on command flags
+     */
+    public getServiceProviderUNID(flags: Record<string, any>): string {
+        const urlCheckers: string[] = Managers.configManager.get("network.urlCheckers") || [];
+        if (flags.type === "url" && urlCheckers.length) {
+            return Managers.configManager.get("network.urlCheckers")[0];
+        }
         return this.unsClientWrapper.network.forgeFactory.unikidWhiteList[0];
     }
 
