@@ -1,11 +1,11 @@
 import { flags } from "@oclif/command";
-import { Interfaces } from "@uns/ark-crypto";
+import { Interfaces, Managers } from "@uns/ark-crypto";
 import { createCertifiedNftMintTransaction, DIDType, isError, SdkResult } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases, getUnikTypesList } from "../../types";
-import { certificationFlag, isDevMode, NFT_NAME } from "../../utils";
+import { certificationFlag, isDevMode, NFT_NAME, DEFAULT_COMMAND_FEES } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
@@ -23,7 +23,7 @@ export class UnikCreateCommand extends WriteCommand {
 
     protected static getFlags() {
         const unikFlags = {
-            ...WriteCommand.flags,
+            ...WriteCommand.flags, // TODO: update mint default fee after milestone
             explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
             type: flags.string({
                 description: "UNIK nft type",
@@ -92,11 +92,26 @@ export class UnikCreateCommand extends WriteCommand {
         if (flags.coupon) {
             voucher = await this.unsClientWrapper.createUnikVoucher(explicitValue, didType, flags.coupon);
         }
+
+        const defaultFees: number =
+            Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
+
+        let fee: number = defaultFees;
+        if (flags.fee !== DEFAULT_COMMAND_FEES) {
+            if (flags.fee < defaultFees || (voucher && flags.fee > defaultFees)) {
+                throw new Error(
+                    `Specified fee \"${flags.fee}\" does not respect fees policy. Default fees for unik:create is \"${defaultFees}\"`,
+                );
+            } else {
+                fee = flags.fee;
+            }
+        }
+
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftMintTransaction(
             this.unsClientWrapper.unsClient,
             tokenId,
             `@${NFT_NAME}:${flags.type}:${flags.explicitValue}`,
-            flags.fee,
+            fee,
             nonce,
             passphrases.first,
             passphrases.second,
