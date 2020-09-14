@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+-   get nft mint fee from milestone (#2978)
 -   choose corresponding issuer for URL checker service (#2915)
 
 ### Removed
