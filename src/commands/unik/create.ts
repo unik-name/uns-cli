@@ -34,6 +34,7 @@ export class UnikCreateCommand extends WriteCommand {
                 char: "u",
                 description: "Voucher for @unikname creation",
                 required: false,
+                exclusive: ["fee"],
             }),
             coupon: flags.string({
                 char: "c",
