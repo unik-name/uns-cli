@@ -40,7 +40,7 @@ export class UnikCreateCommand extends WriteCommand {
                 char: "c",
                 description: "Coupon code for @unikname creation",
                 required: false,
-                exclusive: ["fee", "unik-voucher"],
+                exclusive: ["unik-voucher"],
             }),
         };
 
