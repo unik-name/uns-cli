@@ -346,9 +346,9 @@ export abstract class BaseCommand extends Command {
      * Return the UNID of this service provider depending on command flags
      */
     public getServiceProviderUNID(flags: Record<string, any>): string {
-        const urlCheckers: string[] = Managers.configManager.get("network.urlCheckers") || [];
+        const urlCheckers: string[] = Managers.configManager.getMilestone().urlCheckers || [];
         if (flags.type === "url" && urlCheckers.length) {
-            return Managers.configManager.get("network.urlCheckers")[0];
+            return urlCheckers[0]; // The 1st is official Unikname URL Checker
         }
         return this.unsClientWrapper.network.forgeFactory.unikidWhiteList[0];
     }
