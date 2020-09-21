@@ -33,7 +33,7 @@ export_date_week: &export_date_week
         date +%Y-%V >> .circle-week
 
 yarn_cache_key: &yarn_cache_key
-  v1-yarn-packages-{{ checksum "./yarn.lock" }}-{{ checksum ".circle-week" }}
+  v2-yarn-packages-{{ checksum "./yarn.lock" }}-{{ checksum ".circle-week" }}
 
 restore_yarn_cache: &restore_yarn_cache
   restore_cache:
