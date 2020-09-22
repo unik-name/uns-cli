@@ -43,7 +43,7 @@ export class PropertiesListCommand extends BaseCommand {
 
         this.checkDataConsistency(target.chainmeta.height, lastUpdateHeight, properties.chainmeta.height);
 
-        if (lastTransaction.confirmations < flags.confirmed) {
+        if (lastTransaction.confirmations && lastTransaction.confirmations < flags.confirmed) {
             throw new Error(
                 `Not enough confirmations (expected: ${flags.confirmed}, actual: ${lastTransaction.confirmations})`,
             );

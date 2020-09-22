@@ -169,9 +169,9 @@ export abstract class BaseCommand extends Command {
         transactionId: string,
         numberOfRetry: number = 0,
         expectedConfirmations: number = 0,
-    ): Promise<(Transaction & { chainmeta: ChainMeta; confirmations: number }) | undefined> {
+    ): Promise<(Transaction & { chainmeta: ChainMeta }) | undefined> {
         const transactionFromNetwork = await this.unsClientWrapper.getTransaction(transactionId, blockTime * 1000);
-        const confirmations = transactionFromNetwork ? transactionFromNetwork.confirmations : 0;
+        const confirmations = transactionFromNetwork?.confirmations ? transactionFromNetwork.confirmations : 0;
         if (confirmations < expectedConfirmations && numberOfRetry > 0) {
             return await this.waitTransactionConfirmations(
                 blockTime,
