@@ -1,5 +1,5 @@
 import Config from "@oclif/config";
-import { Interfaces, Managers, Transactions, Utils } from "@uns/ark-crypto";
+import { Interfaces, Managers, Utils } from "@uns/ark-crypto";
 import {
     BlockchainState,
     ChainMeta,
@@ -37,10 +37,11 @@ export class UnsClientWrapper {
         this.unsClient = new UNSClient();
     }
 
-    public init(network: Network, customNodeUrl?: string): UnsClientWrapper {
+    public init(network: Network, customNodeUrl?: string, customServices?: string): UnsClientWrapper {
         this.unsClient.init({
             network,
             customNode: customNodeUrl,
+            customServices,
             headers: {
                 "User-Agent": this.commandConfig.userAgent,
             },
@@ -60,11 +61,6 @@ export class UnsClientWrapper {
      * @param transaction
      */
     public async sendTransaction(transaction: Interfaces.ITransactionData): Promise<any> {
-        const { error } = Transactions.Verifier.verifySchema(transaction);
-        if (error) {
-            throw new Error(error);
-        }
-
         const transactionResult: IProcessorResult = await this.unsClient.transaction.send(transaction);
 
         if (transactionResult?.errors) {

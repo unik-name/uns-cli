@@ -37,6 +37,10 @@ export abstract class BaseCommand extends Command {
             description: "URL of custom node representing blockchain endpoint",
             env: "UNS_NODE",
         }),
+        nftfactory: flags.string({
+            description: "URL of custom UNS service provider",
+            env: "UNS_SERVICES",
+        }),
     };
 
     public unsClientWrapper: UnsClientWrapper;
@@ -281,7 +285,7 @@ export abstract class BaseCommand extends Command {
 
         // UNS and Ark Crypto
         Managers.configManager.setFromPreset(networkName);
-        this.unsClientWrapper.init(networkName as Network, flags.node);
+        this.unsClientWrapper.init(networkName as Network, flags.node, flags.nftfactory);
 
         const [configurationCrypto, height] = await Promise.all([
             this.unsClientWrapper.getConfigurationForCrypto(),
