@@ -1079,9 +1079,9 @@
     "@uns/core-nft-crypto" "^5.5.0-dev.19634.5811+c70491fd4"
 
 "@uns/ts-sdk@^3.4.0-dev":
-  version "3.4.0-dev.20201008135540"
-  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-3.4.0-dev.20201008135540.tgz#f01ffede5af10a785018001e69beec07152ae0a6"
-  integrity sha512-Z+dcInoPIHWb7Y2Z/19aQWy32lsFQeoA/O+JpMtEFOZEhPv9P1MRMfxK1V38JxPMOgi2g+kez3VAqpNhi+N1aw==
+  version "3.4.0-dev.20201020130525"
+  resolved "https://registry.yarnpkg.com/@uns/ts-sdk/-/ts-sdk-3.4.0-dev.20201020130525.tgz#f47f4633060d165b553d83593bf70e4eb9c304d6"
+  integrity sha512-kCsLx6E3Q070TBk2miViw6IgRVhKrU9cMkajY4JxlrLZnLNi4ImA1wZsLwpdaA9MB5aHeJDjwcVvHeWthXgAfQ==
   dependencies:
     "@uns/ark-crypto" "^5.5.0-dev"
     "@uns/core-nft-crypto" "^5.5.0-dev"

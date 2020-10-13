@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+-   add --nftFactory flag to help development with local services instance (#3023)
+
+### Removed
+
+-   transaction schema check. Moved to sdk (#3023)
+
 ### Changed
 
 -   get nft mint fee from milestone (#2978)
