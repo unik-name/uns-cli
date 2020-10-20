@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+-   allow 0 fee for mint without voucher (#3052)
 -   get nft mint fee from milestone (#2978)
 -   choose corresponding issuer for URL checker service (#2915)
 
