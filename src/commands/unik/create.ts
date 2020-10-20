@@ -93,18 +93,18 @@ export class UnikCreateCommand extends WriteCommand {
             voucher = await this.unsClientWrapper.createUnikVoucher(explicitValue, didType, flags.coupon);
         }
 
-        const defaultFees: number =
-            Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
+        const defaultFees: number = Managers.configManager.getMilestone().unsTokenEcoV2
+            ? 0
+            : Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
 
         let fee: number = defaultFees;
         if (flags.fee !== DEFAULT_COMMAND_FEES) {
-            if (flags.fee < defaultFees || (voucher && flags.fee > defaultFees)) {
+            if (voucher) {
                 throw new Error(
-                    `Specified fee \"${flags.fee}\" does not respect fees policy. Default fees for unik:create is \"${defaultFees}\"`,
+                    `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
                 );
-            } else {
-                fee = flags.fee;
             }
+            fee = flags.fee;
         }
 
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftMintTransaction(
