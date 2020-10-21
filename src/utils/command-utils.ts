@@ -46,11 +46,12 @@ export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
 
 /**
  * Create NFTUpdate transaction structure
- * @param client
  * @param tokenId
  * @param properties
  * @param fees
+ * @param nonce
  * @param passphrase
+ * @param secondPassPhrase
  */
 export const createNFTUpdateTransaction = (
     tokenId: string,
@@ -74,11 +75,12 @@ export const createNFTUpdateTransaction = (
 };
 
 /**
- *
- * @param client Create transfer transaction structure
+ * Create transfer transaction structure
  * @param amount
  * @param fees
  * @param recipientId
+ * @param nonce
+ * @param vendorField
  * @param passphrase
  * @param secondPassPhrase
  */

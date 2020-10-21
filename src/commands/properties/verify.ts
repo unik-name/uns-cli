@@ -8,7 +8,7 @@ import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { PropertyRegisterCommand } from "./register";
 
 export class PropertyVerifyCommand extends PropertiesUpdateCommand {
-    public static description = "Conclud ownership verification processus.";
+    public static description = "Conclude ownership verification processus.";
 
     public static usage = "properties:verify TARGET --type {url} --url-channel {html,file} --url-name {label}";
 
