@@ -6,7 +6,7 @@ import { ReadCommand } from "../../readCommand";
 import { fromSatoshi, getChainContext, getTargetArg } from "../../utils";
 
 export class UnikReadCommand extends ReadCommand {
-    public static description = "Display UNIK token informations";
+    public static description = "Display UNIK token information";
 
     public static examples = ["$ uns unik:read @bob"];
 

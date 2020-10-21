@@ -31,7 +31,7 @@ export const handleErrors = (errorObject: any): any => {
 
 /**
  * Replaces all mapped errors in the string representing array or errors
- * @param errorsArrayString
+ * @param errorsAsStringArray
  */
 const getMappedError = (errorsAsStringArray: string): string => {
     if (errorsAsStringArray) {

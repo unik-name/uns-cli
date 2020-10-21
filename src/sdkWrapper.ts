@@ -102,9 +102,9 @@ export class UnsClientWrapper {
 
     /**
      * Provides UNIK nft fingerprint from type and explicit value
-     * @param networkName
      * @param explicitValue
      * @param type
+     * @param nftName
      */
     public async computeTokenId(explicitValue: string, type: DIDType, nftName: string): Promise<string> {
         try {

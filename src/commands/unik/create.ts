@@ -64,7 +64,7 @@ export class UnikCreateCommand extends WriteCommand {
         const didType: DIDType = flags.type.toUpperCase();
         if (explicitValue.length > EXPLICIT_VALUE_MAX_LENGTH) {
             throw new Error(
-                `Error computing  UNIK id. Too long explicitValue ([${explicitValue.length}] max length: 100)`,
+                `Error computing  UNIK id. Too long explicitValue ([${explicitValue.length}] max length: ${EXPLICIT_VALUE_MAX_LENGTH})`,
             );
         }
 
