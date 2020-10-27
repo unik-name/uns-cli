@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 4.3.0 - 2020-10-27
+
 ### Added
 
 -   add --nftFactory flag to help development with local services instance (#3023)
