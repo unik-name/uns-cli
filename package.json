@@ -120,6 +120,7 @@
         "prettify:fix": "yarn prettify --write",
         "test": "jest --runInBand",
         "oclif-dev": "oclif-dev",
+        "oclif-pack": "yarn clean && yarn build && oclif-dev pack",
         "publish:binaries": "./scripts/build_and_publish_s3_assets.sh"
     },
     "publishConfig": {
