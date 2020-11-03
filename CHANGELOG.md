@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 4.3.1 - 2020-11-03
+
+### Fix
+
+-   macos build (caused by bcrypto 5.2, broken native implementation and no js fallback )
+
 ## 4.3.0 - 2020-10-27
 
 ### Added
