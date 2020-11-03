@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
+process.env.NODE_BACKEND = "js";
 
 // Rewrite argument --help to display format flag in help
-process.argv = process.argv.map(arg => arg === "--help" ? "-h" : arg);
+process.argv = process.argv.map((arg) => (arg === "--help" ? "-h" : arg));
 // substitute command help by help flag
-if(process.argv[2] == 'help') {
-  process.argv[2] = "-h";
+if (process.argv[2] == "help") {
+    process.argv[2] = "-h";
 }
 
-require('@oclif/command').run()
-.then(require('@oclif/command/flush'))
-.catch(require('@oclif/errors/handle'))
+require("@oclif/command").run().then(require("@oclif/command/flush")).catch(require("@oclif/errors/handle"));
