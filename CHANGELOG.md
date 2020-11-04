@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+-   get Pioneer badge value from sdk (#3094)
+
 ## 4.3.0 - 2020-10-27
 
 ### Added
