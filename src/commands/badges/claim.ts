@@ -2,15 +2,7 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import {
-    BADGE_PIONEER_KEY,
-    PioneerBadgeGrades,
-    INftStatus,
-    ResponseWithChainMeta,
-    PIONEER_INNOVATOR,
-    PIONEER_EARLY_ADOPTER,
-    NftFactoryServicesList,
-} from "@uns/ts-sdk";
+import { BADGE_PIONEER_KEY, NftFactoryServicesList, getCurrentPioneerBadge } from "@uns/ts-sdk";
 
 const badges: Record<string, any> = {
     pioneer: { key: BADGE_PIONEER_KEY },
@@ -61,25 +53,9 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
     private async getBadgeValue(badge: string): Promise<string | undefined> {
         switch (badge) {
             case "pioneer":
-                return this.getPioneerBadge();
+                return getCurrentPioneerBadge(this.unsClientWrapper.unsClient);
             default:
                 return;
         }
-    }
-
-    private async getPioneerBadge(): Promise<string | undefined> {
-        const nftStatus: ResponseWithChainMeta<INftStatus[]> = await this.unsClientWrapper.unsClient.nft.status();
-        const nbUniks = nftStatus.data?.find((status) => status.nftName === "UNIK");
-        if (nbUniks) {
-            const totalUniks =
-                parseInt(nbUniks.individual) + parseInt(nbUniks.organization) + parseInt(nbUniks.network);
-            if (totalUniks <= PIONEER_INNOVATOR) {
-                return PioneerBadgeGrades.INNOVATOR.toString();
-            }
-            if (totalUniks <= PIONEER_EARLY_ADOPTER) {
-                return PioneerBadgeGrades.EARLY_ADOPTER.toString();
-            }
-        }
-        return;
     }
 }
