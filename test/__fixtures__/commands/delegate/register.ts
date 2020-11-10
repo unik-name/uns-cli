@@ -19,7 +19,7 @@ export const shouldExit = [
             blockchain: true,
             custom: [
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) => api.get(`/uniks/${UNIK_ID}`).reply(404),
                 },
             ],

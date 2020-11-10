@@ -13,13 +13,13 @@ export const applyExitCase = (exitCase: any) => {
     }
 
     if (exitCase?.mocks?.nodeConfigurationCrypto) {
-        tester = tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        tester = tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         );
     }
 
     if (exitCase?.mocks?.blockchain) {
-        tester = tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        tester = tester.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/blockchain`).reply(200, BLOCKCHAIN),
         );
     }
@@ -34,13 +34,13 @@ export const applyExitCase = (exitCase: any) => {
     if (exitCase.errorMsg) {
         tester
             // tslint:disable-next-line:no-empty
-            .catch(_ => {})
+            .catch((_) => {})
             .it(exitCase.description, (ctx: any) => {
                 expect(ctx.stderr).to.equal(exitCase.errorMsg);
             });
     } else {
         // tslint:disable-next-line:no-empty
-        tester.exit(exitCase.exitCode).it(exitCase.description, _ => {});
+        tester.exit(exitCase.exitCode).it(exitCase.description, (_) => {});
     }
 };
 

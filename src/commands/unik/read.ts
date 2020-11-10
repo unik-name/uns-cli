@@ -82,7 +82,7 @@ export class UnikReadCommand extends ReadCommand {
             ...(flags.chainmeta
                 ? getChainContext(
                       target.chainmeta,
-                      this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
+                      this.unsClientWrapper.unsClient.configuration.network,
                       this.unsClientWrapper.getCurrentNode(),
                   )
                 : {}),

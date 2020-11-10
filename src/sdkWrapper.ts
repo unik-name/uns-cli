@@ -7,8 +7,6 @@ import {
     DIDType,
     FingerprintResult,
     getPropertyValue,
-    IDiscloseDemand,
-    IDiscloseDemandCertification,
     IProcessorResult,
     Network,
     NodeConfiguration,
@@ -21,7 +19,10 @@ import {
     Unik,
     UnikVoucherResult,
     UNSClient,
+    UNSEndpoint,
     Wallet,
+    IDiscloseDemandCertification,
+    IDiscloseDemand,
 } from "@uns/ts-sdk";
 import delay from "delay";
 import { handleErrors, handleFetchError } from "./errorHandler";
@@ -40,12 +41,13 @@ export class UnsClientWrapper {
     public init(network: Network, customNodeUrl?: string, customServices?: string): UnsClientWrapper {
         this.unsClient.init({
             network,
-            customNode: customNodeUrl,
-            customServices,
-            headers: {
+            defaultHeaders: {
                 "User-Agent": this.commandConfig.userAgent,
             },
         });
+
+        if (customNodeUrl) this.unsClient.http.setCustomEndpoint(UNSEndpoint.network, customNodeUrl);
+        if (customServices) this.unsClient.http.setCustomEndpoint(UNSEndpoint.services, customServices);
 
         const networkPreset = Managers.configManager.getPreset(network);
         this.network = {
@@ -110,7 +112,7 @@ export class UnsClientWrapper {
         try {
             const fingerPrintResponse: Response<FingerprintResult> = await this.unsClient.fingerprint.compute(
                 explicitValue,
-                type,
+                DIDHelpers.fromLabel(type),
                 nftName,
             );
             if (fingerPrintResponse.error) {

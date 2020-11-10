@@ -24,16 +24,16 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Run cases", () => {
-        test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+        test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/uniks/${UNIK_ID}`).twice().reply(200, UNIK_RESULT),
         )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/wallets/${WALLET}`).reply(200, WALLET_RESULT),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get("/blockchain").reply(200, {
                     data: {
                         supply: 2119999400000000,

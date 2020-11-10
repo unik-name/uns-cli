@@ -18,14 +18,14 @@ import {
 import { applyExitCase, NODE_CONFIGURATION_CRYPTO, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
+    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.services, (api) =>
         api.post("/unik-name-fingerprint", { explicitValue: "bob", type: "individual", nftName: "UNIK" }).reply(200, {
             data: {
                 fingerprint: UNIK_ID,
             },
         }),
     )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api
                 .post("/transactions", {
                     transactions: [transaction],
@@ -39,13 +39,13 @@ const applyTestCase = (testCase: any) => {
                     },
                 }),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get("/wallets/020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011").reply(200, {
                 data: WALLET,
                 ...WALLET_CHAINMETA,
             }),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/transactions/${TRANSACTION_ID}`).reply(200, {
                 data: {
                     id: TRANSACTION_ID,
@@ -54,16 +54,16 @@ const applyTestCase = (testCase: any) => {
                 chainmeta: meta,
             }),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/wallets/${WALLET_ID}`).reply(200, {
                 data: WALLET,
                 ...WALLET_CHAINMETA,
             }),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get("/blockchain").reply(200, {
                 data: {
                     supply: 2119999400000000,
@@ -73,14 +73,14 @@ const applyTestCase = (testCase: any) => {
                 },
             }),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/wallets/${WALLET_ID}/uniks`).reply(200, {
                 data: [],
             }),
         )
         .stdout()
         .command(testCase.args)
-        .it(testCase.description, ctx => {
+        .it(testCase.description, (ctx) => {
             expect(ctx.stdout).to.equal(testCase.expected);
         });
 };
@@ -91,7 +91,7 @@ describe("create-unik command", () => {
     });
 
     describe("Exit cases", () => {
-        shouldExit.forEach(exitCase => applyExitCase(exitCase));
+        shouldExit.forEach((exitCase) => applyExitCase(exitCase));
     });
 
     describe.skip("Run cases", () => {
@@ -111,6 +111,6 @@ describe("create-unik command", () => {
         afterEach(() => {
             Transactions.TransactionRegistry.deregisterTransactionType(CertifiedNftMintTransaction);
         });
-        outputCases.forEach(testCase => applyTestCase(testCase));
+        outputCases.forEach((testCase) => applyTestCase(testCase));
     });
 });

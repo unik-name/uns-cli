@@ -17,7 +17,7 @@ export const WALLET_CHAINMETA = {
 
 export const OUTPUT_CHAINMETA = {
     network: "dalinet",
-    node: getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url),
+    node: getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network),
     date: WALLET_CHAINMETA.timestamp.human,
     height: WALLET_CHAINMETA.height,
 };
@@ -37,7 +37,7 @@ export const shouldExit = [
             blockchain: true,
             custom: [
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) => api.get(`/uniks/${NOT_FOUND_UNIK_ID}`).reply(404),
                 },
             ],

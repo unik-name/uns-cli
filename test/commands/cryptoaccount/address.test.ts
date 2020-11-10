@@ -10,7 +10,7 @@ import {
 } from "../../__fixtures__/commands/cryptoaccount/address";
 import { applyExitCase, EMPTY_COMMAND_CONFIG, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
-const currentNode = getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url);
+const currentNode = getUrlOrigin(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network);
 
 describe("get-wallet-address command", () => {
     beforeEach(() => {
@@ -18,7 +18,7 @@ describe("get-wallet-address command", () => {
     });
 
     describe("Exit cases", () => {
-        shouldExit.forEach(exitCase => applyExitCase(exitCase));
+        shouldExit.forEach((exitCase) => applyExitCase(exitCase));
     });
 
     describe("formatOutput", () => {
