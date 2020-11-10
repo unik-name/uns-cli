@@ -59,7 +59,7 @@ export const shouldExit = [
             blockchain: true,
             custom: [
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) => api.get(`/uniks/${UNIK_ID_NOT_FOUND}`).reply(404),
                 },
             ],
@@ -74,7 +74,7 @@ export const shouldExit = [
             nodeConfigurationCrypto: true,
             custom: [
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) =>
                         api.get(`/wallets/${wallet.address}`).reply(200, {
                             data: wallet,
@@ -93,7 +93,7 @@ export const shouldExit = [
             nodeConfigurationCrypto: true,
             custom: [
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) =>
                         api.get(`/wallets/${wallet.address}`).reply(200, {
                             data: delegatewallet,
@@ -101,7 +101,7 @@ export const shouldExit = [
                         }),
                 },
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) =>
                         api.get(`/wallets/${walletAddress}`).reply(200, {
                             data: wallet,
@@ -109,7 +109,7 @@ export const shouldExit = [
                         }),
                 },
                 {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url,
+                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
                     cb: (api: any) =>
                         api.get(`/wallets/${walletAddress}/uniks`).reply(200, {
                             data: [{ id: "tokenId" }],

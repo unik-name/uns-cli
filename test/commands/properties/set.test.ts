@@ -72,20 +72,20 @@ describe(`${commandName} command`, () => {
         });
 
         test.stderr()
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/uniks/${UNIK_ID}`).reply(200, UNIK_RESULT),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api => {
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) => {
                 api.get(`/wallets/${walletAddress}`).reply(200, {
                     data: {
                         nonce: "1",
                     },
                 });
             })
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/blockchain`).reply(200, BLOCKCHAIN),
             )
             .command([
@@ -101,8 +101,8 @@ describe(`${commandName} command`, () => {
                 tooLongValue,
             ])
             // tslint:disable-next-line:no-empty
-            .catch(_ => {})
-            .it("Should throw too long property", ctx => {
+            .catch((_) => {})
+            .it("Should throw too long property", (ctx) => {
                 expect(ctx.stderr).to.equal(
                     "» :stop: data.asset.nft['unik'].properties['usr/tooLong'] should NOT be longer than 255 characters;\n",
                 );

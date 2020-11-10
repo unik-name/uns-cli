@@ -85,7 +85,7 @@ export class CryptoAccountReadCommand extends ReadCommand {
             ...(flags.chainmeta
                 ? getChainContext(
                       wallet.chainmeta,
-                      this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
+                      this.unsClientWrapper.unsClient.configuration.network,
                       this.unsClientWrapper.getCurrentNode(),
                   )
                 : {}),

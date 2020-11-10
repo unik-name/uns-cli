@@ -8,7 +8,7 @@ import {
 } from "../__fixtures__/commons";
 
 const applyTestCase = (testCase: any) => {
-    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+    test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
         api
             .get("/blockchain")
             .twice()
@@ -21,16 +21,16 @@ const applyTestCase = (testCase: any) => {
                 },
             }),
     )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/node/configuration`).reply(200, NODE_CONFIGURATION),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/node/status`).reply(200, NODE_STATUS),
         )
-        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+        .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get("/nfts/status").reply(200, {
                 data: [
                     {
@@ -45,7 +45,7 @@ const applyTestCase = (testCase: any) => {
         .env({ UNS_NETWORK: testCase.UNS_NETWORK })
         .stdout()
         .command(testCase.args)
-        .it(testCase.description, ctx => {
+        .it(testCase.description, (ctx) => {
             expect(ctx.stdout).to.equal(testCase.expected);
         });
 };
@@ -54,5 +54,5 @@ describe("status command", () => {
     beforeEach(() => {
         process.env.DEV_MODE = "true";
     });
-    outputCases.forEach(testCase => applyTestCase(testCase));
+    outputCases.forEach((testCase) => applyTestCase(testCase));
 });

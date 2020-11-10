@@ -29,19 +29,19 @@ describe(`${commandName} command`, () => {
     describe("Run cases", () => {
         jest.spyOn(SDK, "createCertifiedNftUpdateTransaction").mockResolvedValueOnce(URL_VERIFY_TRANSACTION);
 
-        test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+        test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/uniks/${UNIK_ID}`).twice().reply(200, UNIK_RESULT),
         )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/wallets/${WALLET}`).twice().reply(200, WALLET_RESULT),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get("/blockchain").reply(200, BLOCKCHAIN),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, (api) =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.post(/transactions/).reply(200, {
                     data: {
                         accept: [],

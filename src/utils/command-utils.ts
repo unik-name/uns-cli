@@ -37,10 +37,10 @@ export const getNetworksList = (): string[] => {
 };
 
 export const getNetwork = (unsConfig: any, customNodeUrl?: string): any => {
-    const url = customNodeUrl ? urlModule.resolve(customNodeUrl, "/api/v2") : unsConfig.chain.url;
+    const url = customNodeUrl ? urlModule.resolve(customNodeUrl, "/api/v2") : unsConfig.network;
     return {
         url,
-        backend: unsConfig.service.url,
+        backend: unsConfig.services,
     };
 };
 

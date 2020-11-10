@@ -14,7 +14,7 @@ describe(`${commandName} command`, () => {
             .stub(cli, "prompt", () => async () =>
                 "cactus cute please spirit reveal raw goose emotion latin subject forum panic",
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get("/wallets/DMBbnpPRge4NprMxNDyLkBa1bRq7QjvqRc").reply(200, {
                     data: {
                         address: "DMBbnpPRge4NprMxNDyLkBa1bRq7QjvqRc",
@@ -25,10 +25,10 @@ describe(`${commandName} command`, () => {
                     },
                 }),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api
                     .get("/blockchain")
                     .once()
@@ -43,8 +43,8 @@ describe(`${commandName} command`, () => {
             )
             .command([commandName, "-n", "dalinet"])
             // tslint:disable-next-line:no-empty
-            .catch(_ => {})
-            .it("on existing second passphrase", ctx => {
+            .catch((_) => {})
+            .it("on existing second passphrase", (ctx) => {
                 expect(ctx.stderr).to.equal(
                     "» :stop: A second passphrase already exists. Not possible to change it.;\n",
                 );

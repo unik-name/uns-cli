@@ -59,7 +59,7 @@ export class PropertiesGetCommand extends ReadCommand {
             ...(flags.chainmeta
                 ? getChainContext(
                       property.chainmeta,
-                      this.unsClientWrapper.unsClient.currentEndpointsConfig.network,
+                      this.unsClientWrapper.unsClient.configuration.network,
                       this.unsClientWrapper.getCurrentNode(),
                   )
                 : {}),

@@ -31,7 +31,7 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Exit cases", () => {
-        shouldExit.forEach(exitCase => applyExitCase(exitCase));
+        shouldExit.forEach((exitCase) => applyExitCase(exitCase));
     });
 
     describe("Success", () => {
@@ -39,7 +39,7 @@ describe(`${commandName} command`, () => {
         jest.spyOn(SDK, "buildDiscloseDemand").mockImplementation(() => DISCLOSE_DEMAND);
         jest.spyOn(Transactions.Utils, "getId").mockImplementation(() => DISCLOSE_TRANSACTION_ID);
 
-        test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
+        test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.services, (api) =>
             api
                 .post("/unik-name-fingerprint", {
                     explicitValue: "captain-obvious",
@@ -52,7 +52,7 @@ describe(`${commandName} command`, () => {
                     },
                 }),
         )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.services, (api) =>
                 api
                     .post("/unik-name-fingerprint", {
                         explicitValue: "captain0bvious",
@@ -65,13 +65,13 @@ describe(`${commandName} command`, () => {
                         },
                     }),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.service.url, api => {
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.services, (api) => {
                 api.post("/disclose-demand-certification", DISCLOSE_DEMAND, {
                     reqheaders: { "uns-network": "dalinet" },
                 }).reply(200, { data: DISCLOSE_DEMAND_CERTIFICATION });
             })
 
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api
                     .post("/transactions", {
                         transactions: [DISCLOSE_TRANSACTION],
@@ -85,7 +85,7 @@ describe(`${commandName} command`, () => {
                         },
                     }),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/transactions/${TRANSACTION_ID}`).reply(200, {
                     data: {
                         id: TRANSACTION_ID,
@@ -94,7 +94,7 @@ describe(`${commandName} command`, () => {
                     chainmeta: CHAINMETA,
                 }),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/transactions/${DISCLOSE_TRANSACTION_ID}`).reply(200, {
                     data: {
                         id: DISCLOSE_TRANSACTION_ID,
@@ -103,24 +103,22 @@ describe(`${commandName} command`, () => {
                     chainmeta: CHAINMETA,
                 }),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/wallets/${WALLET_ADDRESS}`).reply(200, {
                     data: WALLET,
                     chainmeta: CHAINMETA,
                 }),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api => {
-                api.get(`/uniks/${UNIK_ID}`)
-                    .twice()
-                    .reply(200, { data: UNIK, chainmeta: CHAINMETA });
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) => {
+                api.get(`/uniks/${UNIK_ID}`).twice().reply(200, { data: UNIK, chainmeta: CHAINMETA });
             })
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api => {
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) => {
                 api.get(`/uniks/${UNIK_ID}/properties/type`).reply(200, { data: "1", chainmeta: CHAINMETA });
             })
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get(`/node/configuration/crypto`).reply(200, NODE_CONFIGURATION_CRYPTO),
             )
-            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.chain.url, api =>
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
                 api.get("/blockchain").reply(200, {
                     data: {
                         supply: 2119999400000000,
@@ -144,7 +142,7 @@ describe(`${commandName} command`, () => {
                 "--explicitValue",
                 "captain0bvious",
             ])
-            .it("Should disclose captain-obvious without error", ctx => {
+            .it("Should disclose captain-obvious without error", (ctx) => {
                 oclifExpect(ctx.stdout).to.equal(DISCLOSE_OUTPUT);
             });
     });
@@ -177,7 +175,7 @@ describe(`${commandName} command`, () => {
                 const infoFunction = jest.spyOn(command, "info");
                 const errorFunction = jest.spyOn(command, "error");
 
-                jest.spyOn(command, "getTransactionUrl").mockImplementation(_ => "URL");
+                jest.spyOn(command, "getTransactionUrl").mockImplementation((_) => "URL");
 
                 try {
                     await command.formatResult(undefined, transaction.id);
