@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+-   move lifecycle check for vote to @uns/ts-sdk (#3096)
 -   get Pioneer badge value from sdk (#3094)
 
 ## 4.3.0 - 2020-10-27

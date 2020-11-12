@@ -14,11 +14,8 @@ describe(`${commandName} command`, () => {
             confirmations: 12,
         });
 
-        jest.spyOn(SDK, "getPropertyValue").mockResolvedValueOnce({
-            data: "2",
-            chainmeta: meta,
-        });
+        jest.spyOn(SDK, "throwIfNotAllowedToVote").mockResolvedValueOnce();
 
-        shouldExit.forEach(exitCase => applyExitCase(exitCase));
+        shouldExit.forEach((exitCase) => applyExitCase(exitCase));
     });
 });

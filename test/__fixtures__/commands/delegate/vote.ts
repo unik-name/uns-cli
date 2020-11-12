@@ -1,4 +1,3 @@
-import { Identities } from "@uns/ark-crypto";
 import { Network, UNSClient, Wallet } from "@uns/ts-sdk";
 
 export const commandName = "delegate:vote";
@@ -30,9 +29,6 @@ export const meta = {
 };
 
 const UNIK_ID_NOT_FOUND = "8f9b5d3e071edc730003be0aaaaaaaaaaf7245ab240e809cc34f974156303b1f";
-
-const passphrase = "reveal front short spend enjoy label element text alert answer select bright";
-const walletAddress = Identities.Address.fromPassphrase(passphrase);
 
 export const shouldExit = [
     {
@@ -78,41 +74,6 @@ export const shouldExit = [
                     cb: (api: any) =>
                         api.get(`/wallets/${wallet.address}`).reply(200, {
                             data: wallet,
-                            chainmeta: meta,
-                        }),
-                },
-            ],
-        },
-    },
-    {
-        description: "Should exit with code 1 if lifecycle status is not Alive",
-        args: [commandName, "-n", "dalinet", "@delegateId", "--passphrase", passphrase],
-        errorMsg: '» :stop: Uniks of cryptoaccount have to be alive ("LifeCycle/Status" = 3) to vote.;\n',
-        mocks: {
-            blockchain: true,
-            nodeConfigurationCrypto: true,
-            custom: [
-                {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
-                    cb: (api: any) =>
-                        api.get(`/wallets/${wallet.address}`).reply(200, {
-                            data: delegatewallet,
-                            chainmeta: meta,
-                        }),
-                },
-                {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
-                    cb: (api: any) =>
-                        api.get(`/wallets/${walletAddress}`).reply(200, {
-                            data: wallet,
-                            chainmeta: meta,
-                        }),
-                },
-                {
-                    url: UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network,
-                    cb: (api: any) =>
-                        api.get(`/wallets/${walletAddress}/uniks`).reply(200, {
-                            data: [{ id: "tokenId" }],
                             chainmeta: meta,
                         }),
                 },
