@@ -1,6 +1,6 @@
 import { flags } from "@oclif/command";
 import { Interfaces, Managers } from "@uns/ark-crypto";
-import { createCertifiedNftMintTransaction, DIDType, isError, SdkResult } from "@uns/ts-sdk";
+import { createCertifiedNftMintTransaction, DIDHelpers, DIDType, DIDTypes, isError, SdkResult } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
@@ -93,9 +93,10 @@ export class UnikCreateCommand extends WriteCommand {
             voucher = await this.unsClientWrapper.createUnikVoucher(explicitValue, didType, flags.coupon);
         }
 
-        const defaultFees: number = Managers.configManager.getMilestone().unsTokenEcoV2
-            ? 0
-            : Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
+        const defaultFees: number =
+            DIDHelpers.fromLabel(didType) === DIDTypes.INDIVIDUAL && Managers.configManager.getMilestone().unsTokenEcoV2
+                ? 0
+                : Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
 
         let fee: number = defaultFees;
         if (flags.fee !== DEFAULT_COMMAND_FEES) {
