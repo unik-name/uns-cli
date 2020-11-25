@@ -23,7 +23,7 @@ export class UnikCreateCommand extends WriteCommand {
 
     protected static getFlags() {
         const unikFlags = {
-            ...WriteCommand.flags, // TODO: update mint default fee after milestone
+            ...WriteCommand.getWriteCommandFlags(true, 0),
             explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
             type: flags.string({
                 description: "UNIK nft type",
