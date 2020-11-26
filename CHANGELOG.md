@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 4.4.0 - 2020-11-26
+
 ### Changed
 
 -   move lifecycle check for vote to @uns/ts-sdk (#3096)
