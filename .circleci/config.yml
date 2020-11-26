@@ -32,8 +32,14 @@ export_date_week: &export_date_week
       command: |
         date +%Y-%V >> .circle-week
 
+export_cli_checksum: &export_cli_checksum
+    run:
+      name: Create a cache key based on week of year
+      command: |
+        npm show @uns/cli@dev | grep shasum | cut -d " " -f2 >> .uns-cli-checksum
+
 yarn_cache_key: &yarn_cache_key
-  v2-yarn-packages-{{ checksum "./yarn.lock" }}-{{ checksum ".circle-week" }}
+  v2-yarn-packages-{{ checksum ".uns-cli-checksum" }}-{{ checksum ".circle-week" }}
 
 restore_yarn_cache: &restore_yarn_cache
   restore_cache:
@@ -45,7 +51,7 @@ save_yarn_cache: &save_yarn_cache
     name: Save Yarn packages
     key: *yarn_cache_key
     paths:
-      - ./node_modules
+      - ./uns
 
 persist_repo_to_workspace: &persist_repo_to_workspace
   persist_to_workspace:
@@ -55,7 +61,7 @@ persist_repo_to_workspace: &persist_repo_to_workspace
 slack_notification: &slack_notification
     slack/status:
       fail_only: true
-      only_for_branches: 'master,develop'
+      only_for_branches: 'master'
       failure_message: "😭 build failed > $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BRANCH:$CIRCLE_SHA1 ( 🤖 $CIRCLE_WORKFLOW_ID/$CIRCLE_JOB)"
 
 ####################################
@@ -69,6 +75,7 @@ jobs:
       - checkout
       - *attach_workspace
       - *export_date_week
+      - *export_cli_checksum
       - *restore_yarn_cache
       - run: yarn
       - *save_yarn_cache
