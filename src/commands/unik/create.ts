@@ -99,7 +99,7 @@ export class UnikCreateCommand extends WriteCommand {
                 : Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
 
         let fee: number = defaultFees;
-        if (flags.fee !== DEFAULT_COMMAND_FEES) {
+        if (flags.fee !== defaultFees) {
             if (voucher) {
                 throw new Error(
                     `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
