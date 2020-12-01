@@ -100,12 +100,14 @@ export class UnikCreateCommand extends WriteCommand {
 
         let fee: number = defaultFees;
         if (flags.fee !== defaultFees) {
-            if (voucher) {
-                throw new Error(
-                    `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
-                );
+            if (this.isFlagSet("fee") && DIDHelpers.fromLabel(didType) !== DIDTypes.INDIVIDUAL) {
+                if (voucher) {
+                    throw new Error(
+                        `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
+                    );
+                }
+                fee = flags.fee;
             }
-            fee = flags.fee;
         }
 
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftMintTransaction(
