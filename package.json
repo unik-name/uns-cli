@@ -98,6 +98,9 @@
                 "host": "https://unikname-cli-assets.s3.fr-par.scw.cloud",
                 "bucket": "unikname-cli-assets"
             }
+        },
+        "macos": {
+            "identifier": "com.unikname.uns-cli"
         }
     },
     "scripts": {
