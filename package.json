@@ -122,7 +122,8 @@
         "test": "jest --runInBand",
         "oclif-dev": "oclif-dev",
         "oclif-pack": "yarn clean && yarn build && yarn oclif-dev pack",
-        "publish:binaries": "./scripts/build_and_publish_s3_assets.sh"
+        "publish:binaries": "./scripts/build_and_publish_s3_assets.sh",
+        "publish:binaries:macos": "./scripts/build_and_publish_s3_assets_macos.sh"
     },
     "publishConfig": {
         "access": "public"
