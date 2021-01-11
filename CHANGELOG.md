@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   unik:transfer command (#3216)
+
 ## 4.8.0 - 2021-04-29
 
 ### New
