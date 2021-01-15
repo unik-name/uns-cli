@@ -94,7 +94,7 @@ export class UnikCreateCommand extends WriteCommand {
         }
 
         const defaultFees: number =
-            DIDHelpers.fromLabel(didType) === DIDTypes.INDIVIDUAL && Managers.configManager.getMilestone().unsTokenEcoV2
+            DIDHelpers.fromLabel(didType) === DIDTypes.INDIVIDUAL
                 ? 0
                 : Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
 
