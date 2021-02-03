@@ -45,7 +45,7 @@ describe(`${commandName} command`, () => {
                     explicitValue: "captain-obvious",
                     type: "individual",
                     nftName: "UNIK",
-                    addComputingInformationsToResponse: false,
+                    addComputingInformationsToResponse: true,
                 })
                 .reply(200, {
                     data: {
@@ -59,7 +59,7 @@ describe(`${commandName} command`, () => {
                         explicitValue: "captain0bvious",
                         type: "individual",
                         nftName: "UNIK",
-                        addComputingInformationsToResponse: false,
+                        addComputingInformationsToResponse: true,
                     })
                     .reply(200, {
                         data: {

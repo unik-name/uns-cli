@@ -122,11 +122,17 @@ export abstract class BaseCommand extends Command {
                 }
             }
         } catch (globalCatchException) {
-            this.stop(globalCatchException.message);
-            if (this.verbose) {
-                this.stop(globalCatchException.stack);
+            if (globalCatchException?.oclif?.exit === 0) {
+                // Just exit normally, exit called by commands
+                this.info("Command aborted by user");
+                this.exit(0);
+            } else {
+                this.stop(globalCatchException.message);
+                if (this.verbose) {
+                    this.stop(globalCatchException.stack);
+                }
+                this.exit(1);
             }
-            this.exit(1);
         }
     }
 

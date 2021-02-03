@@ -108,22 +108,28 @@ export class UnsClientWrapper {
      * @param type
      * @param nftName
      */
-    public async computeTokenId(explicitValue: string, type: DIDType, nftName: string): Promise<string> {
+    public async computeTokenId(
+        explicitValue: string,
+        type: DIDType,
+        nftName: string,
+        addComputingInformationsToResponse: boolean = false,
+    ): Promise<FingerprintResult> {
         try {
             const fingerPrintResponse: Response<FingerprintResult> = await this.unsClient.fingerprint.compute(
                 explicitValue,
                 DIDHelpers.fromLabel(type),
                 nftName,
+                addComputingInformationsToResponse,
             );
             if (fingerPrintResponse.error) {
                 throw fingerPrintResponse.error;
             }
 
-            const id: string | undefined = fingerPrintResponse.data?.fingerprint;
-            if (!id) {
+            if (!fingerPrintResponse.data || !fingerPrintResponse.data?.fingerprint) {
                 throw new Error("Computed token id is invalid");
             }
-            return id;
+
+            return fingerPrintResponse.data;
         } catch (e) {
             throw new Error(`Error computing  UNIK id. Caused by ${e.message}`);
         }

@@ -1,6 +1,14 @@
 import { flags } from "@oclif/command";
 import { Interfaces, Managers } from "@uns/ark-crypto";
-import { createCertifiedNftMintTransaction, DIDHelpers, DIDType, DIDTypes, isError, SdkResult } from "@uns/ts-sdk";
+import {
+    createCertifiedNftMintTransaction,
+    DIDHelpers,
+    DIDType,
+    DIDTypes,
+    FingerprintResult,
+    isError,
+    SdkResult,
+} from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
@@ -68,15 +76,31 @@ export class UnikCreateCommand extends WriteCommand {
             );
         }
 
-        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
         /**
          * Compute Fingerprint
          */
         this.actionStart("Computing UNIK fingerprint");
-        const tokenId = await this.unsClientWrapper.computeTokenId(explicitValue, didType, "UNIK");
+        const computeFingerprintResult: FingerprintResult = await this.unsClientWrapper.computeTokenId(
+            explicitValue,
+            didType,
+            "UNIK",
+            true,
+        );
         this.actionStop();
 
+        const tokenId: string = computeFingerprintResult.fingerprint;
         this.log(`unikid: ${tokenId}`);
+
+        if (didType !== "INDIVIDUAL" && computeFingerprintResult.computingInformations?.isEndingWithTLD) {
+            const userConsent: boolean = await this.warnUserAndGetConsent(
+                "This @uniknameID seems to look like a domain name. We recommend to create @unikname without extension.",
+            );
+            if (!userConsent) {
+                this.exit(0); // Normal exit
+            }
+        }
+
+        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         /**
          * Read emitter's wallet nonce
