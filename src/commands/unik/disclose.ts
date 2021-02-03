@@ -1,9 +1,16 @@
 import { Interfaces } from "@uns/ark-crypto";
-import { buildDiscloseDemand, DIDHelpers, DIDType, IDiscloseDemand, IDiscloseDemandCertification } from "@uns/ts-sdk";
+import {
+    buildDiscloseDemand,
+    DIDHelpers,
+    DIDType,
+    FingerprintResult,
+    IDiscloseDemand,
+    IDiscloseDemandCertification,
+} from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../../formater";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { checkFlag, createDiscloseTransaction, explicitValueFlag, getTargetArg, isDid } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
@@ -59,7 +66,7 @@ export class UnikDiscloseCommand extends WriteCommand {
         return UnikDiscloseCommand;
     }
 
-    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
         let explicitValues: string[] = flags.explicitValue;
         if (!explicitValues) {
             if (isDid(args.target)) {
@@ -71,7 +78,6 @@ export class UnikDiscloseCommand extends WriteCommand {
         }
 
         const { unikid } = await this.targetResolve(flags, args.target);
-        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         if (flags.check) {
             const confirmation = await cli.confirm(
@@ -79,7 +85,7 @@ export class UnikDiscloseCommand extends WriteCommand {
             );
 
             if (!confirmation) {
-                return "Command aborted by user";
+                this.exit(0); // Normal exit
             }
         }
 
@@ -89,6 +95,8 @@ export class UnikDiscloseCommand extends WriteCommand {
         explicitValues = [...new Set(explicitValues)] as string[];
 
         await this.checkExplicitValues(unikid, unikType, explicitValues);
+
+        const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
 
         const transactionStruct: Interfaces.ITransactionData = await this.createTransactionStruct(
             flags,
@@ -107,17 +115,42 @@ export class UnikDiscloseCommand extends WriteCommand {
         return await this.formatResult(transactionFromNetwork, transactionStruct.id as string);
     }
 
-    private async checkExplicitValues(unikId: string, unikType: DIDType, listOfExplicitValues: string[]) {
+    private async checkExplicitValues(
+        unikId: string,
+        unikType: DIDType,
+        listOfExplicitValues: string[],
+    ): Promise<void> {
         // Check explicit values
+        let hasTDLExplicitValue: boolean = false;
         for (const explicit of listOfExplicitValues) {
             try {
-                const fingerPrintResult = await this.unsClientWrapper.computeTokenId(explicit, unikType, "UNIK");
-                if (fingerPrintResult !== unikId) {
+                const fingerPrintResult: FingerprintResult = await this.unsClientWrapper.computeTokenId(
+                    explicit,
+                    unikType,
+                    "UNIK",
+                    true,
+                );
+                if (fingerPrintResult.fingerprint !== unikId) {
                     throw new Error("At least one expliciteValue is not valid for this unikid");
+                }
+                if (fingerPrintResult.computingInformations?.isEndingWithTLDWithDot) {
+                    hasTDLExplicitValue = true;
                 }
             } catch (e) {
                 this.debug(`disclose-explicit-values - ${e.message}`);
                 throw new Error("At least one expliciteValue does not match expected format");
+            }
+        }
+
+        if (hasTDLExplicitValue && unikType !== "INDIVIDUAL") {
+            const userConsent: boolean = await this.warnUserAndGetConsent(
+                `${
+                    listOfExplicitValues.length > 1 ? "At least one @uniknameID of your list" : "This @uniknameID"
+                } seems to look like a domain name. We recommend to create @unikname without extension`,
+            );
+
+            if (!userConsent) {
+                this.exit(0); // Normal exit
             }
         }
 

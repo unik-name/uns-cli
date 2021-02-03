@@ -1,5 +1,6 @@
 import { Interfaces } from "@uns/ark-crypto";
 import { ChainMeta, Transaction } from "@uns/ts-sdk";
+import { cli } from "cli-ux";
 import { BaseCommand } from "./baseCommand";
 import { awaitConfirmationFlag, feeFlag, passphraseFlag, secondPassphraseFlag, senderAccountFlag } from "./utils";
 
@@ -85,5 +86,11 @@ export abstract class WriteCommand extends BaseCommand {
         };
 
         await this.withAction<Interfaces.ITransactionData>("Sending transaction", sendAction);
+    }
+
+    public async warnUserAndGetConsent(warningText: string): Promise<boolean> {
+        this.warn(warningText);
+        const userConsent: boolean = await cli.confirm("Are you sure you want to proceed? (y/n)");
+        return userConsent;
     }
 }

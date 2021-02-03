@@ -3,7 +3,7 @@ import { Interfaces } from "@uns/ark-crypto";
 import { CryptoAccountPassphrases } from "types";
 import { BaseCommand } from "../baseCommand";
 import { SendCommandHelper } from "../commandHelpers/send-helper";
-import { Formater, OUTPUT_FORMAT } from "../formater";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
 import {
     checkFlag,
     getTargetArg,
@@ -63,7 +63,7 @@ export class SendCommand extends WriteCommand {
         return SendCommand;
     }
 
-    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<any> {
+    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
         const cmdHelper = new SendCommandHelper(this);
 
         // Check and get amount
@@ -74,7 +74,7 @@ export class SendCommand extends WriteCommand {
 
         if (transactionSatoAmount <= 0) {
             this.stop("Insufficient transferred amount to pay transaction fees.");
-            return undefined;
+            this.exit(0);
         }
 
         let recipientAddress: string;
@@ -88,7 +88,7 @@ export class SendCommand extends WriteCommand {
         let canContinue: boolean = await cmdHelper.checkAndConfirmWallet(flags.check, recipientAddress);
         canContinue = canContinue && (await cmdHelper.confirmVendorField(flags["text-check"], flags.text));
         if (!canContinue) {
-            return "Command aborted by user";
+            this.exit(0); // Normal exit
         }
 
         const passphrases: CryptoAccountPassphrases = await this.askForPassphrases(flags);
