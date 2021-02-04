@@ -1524,7 +1524,7 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bcrypto@^5.2.0:
+bcrypto@5.3.0, bcrypto@^5.2.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/bcrypto/-/bcrypto-5.3.0.tgz#d2d7d8a808b5efeb09fe529034a30bd772902d84"
   integrity sha512-SP48cpoc4BkEPNOErdsZ1VjbtdXY/C0f5wAywWniLne/Fd/5oOBqLbC6ZavngLvk4oik76g4I7PO5KduJoqECQ==
