@@ -20,7 +20,7 @@ import {
 import { applyExitCase, EMPTY_COMMAND_CONFIG, NODE_CONFIGURATION_CRYPTO } from "../../__fixtures__/commons";
 import { UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 
-import { Transactions } from "@uns/ark-crypto";
+import { Managers, Transactions } from "@uns/ark-crypto";
 import * as SDK from "@uns/ts-sdk";
 
 const commandName: string = "unik:disclose";
@@ -28,6 +28,17 @@ const commandName: string = "unik:disclose";
 describe(`${commandName} command`, () => {
     beforeEach(() => {
         process.env.DEV_MODE = "true";
+        const preset = Managers.configManager.getPreset("dalinet");
+
+        // Mock blocktime to remove waiting time before transaction polling in `waitTransactionConfirmations` function
+        jest.spyOn(Managers.configManager, "getPreset").mockImplementationOnce((_) => {
+            (preset.network as any).blocktime = 0;
+            preset.milestones = preset.milestones.map((m) => {
+                m.blocktime = 0;
+                return m;
+            });
+            return preset;
+        });
     });
 
     describe("Exit cases", () => {
@@ -35,7 +46,6 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Success", () => {
-        jest.setTimeout(10000);
         jest.spyOn(SDK, "buildDiscloseDemand").mockImplementation(() => DISCLOSE_DEMAND);
         jest.spyOn(Transactions.Utils, "getId").mockImplementation(() => DISCLOSE_TRANSACTION_ID);
 
