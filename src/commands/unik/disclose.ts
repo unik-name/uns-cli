@@ -107,10 +107,7 @@ export class UnikDiscloseCommand extends WriteCommand {
             passphrases.second,
         );
 
-        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(
-            transactionStruct,
-            flags["await-confirmation"],
-        );
+        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(transactionStruct, flags);
 
         return await this.formatResult(transactionFromNetwork, transactionStruct.id as string);
     }
