@@ -124,6 +124,7 @@
         "prettify:check": "yarn prettify --check",
         "prettify:fix": "yarn prettify --write",
         "test": "jest --runInBand",
+        "test:coverage": "yarn test --coverage --coveragePathIgnorePatterns='/(index.ts)$'",
         "oclif-dev": "oclif-dev",
         "oclif-pack": "yarn clean && yarn build && yarn oclif-dev pack",
         "publish:binaries": "./scripts/build_and_publish_s3_assets.sh"
@@ -159,6 +160,11 @@
         "setupFilesAfterEnv": [
             "jest-extended",
             "<rootDir>/test/setupTests.ts"
+        ],
+        "coverageDirectory": "<rootDir>/.coverage",
+        "collectCoverageFrom": [
+            "./src/**/*.ts",
+            "!**/node_modules/**"
         ]
     }
 }
