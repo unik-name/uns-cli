@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+-   update @uns/ts-sdk to enable event badges
+
 ## 4.4.0 - 2020-11-26
 
 ### Changed
