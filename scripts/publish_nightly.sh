@@ -19,7 +19,7 @@ fi
 echo "Bump package version."
 DATE=$(date -u +%Y%m%d%H%M%S)
 dev="-dev.$DATE"
-sed  -i.bak '/version/s/[^0-9]*$/'"$dev\",/" package.json
+sed  -i.bak '/\"version/s/[^0-9]*$/'"$dev\",/" package.json
 
 if [[ -n "$CI" ]];then
     echo "Authenticate with registry."

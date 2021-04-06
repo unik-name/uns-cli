@@ -11,7 +11,7 @@ fi
 
 echo "Bump package version."
 tag="-next.$CIRCLE_BUILD_NUM"
-sed  -i.bak '/version/s/[^0-9]*$/'"$tag\",/" package.json
+sed  -i.bak '/\"version/s/[^0-9]*$/'"$tag\",/" package.json
 
 if [[ -n "$CI" ]];then
     echo "Authenticate with registry."
