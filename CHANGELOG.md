@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+
+-   Improve update message when the CLI can be update
+-   Decrease delay between new CLI version checks to 7 days
+
 ## 4.7.0 - 2021-04-02
 
 ### Changed

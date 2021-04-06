@@ -102,6 +102,10 @@
                 "host": "https://unikname-cli-assets.s3.fr-par.scw.cloud",
                 "bucket": "unikname-cli-assets"
             }
+        },
+        "warn-if-update-available": {
+            "timeoutInDays": 7,
+            "message": "UNS CLI update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>.\nPlease run 'uns update' to update it."
         }
     },
     "scripts": {
