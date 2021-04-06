@@ -6,9 +6,21 @@ All notable changes to this project will be documented in this file.
 
 ## 4.7.0 - 2021-04-02
 
-### Added
+### Changed
 
 -   update @uns/ts-sdk to enable event badges
+
+## 4.6.0 - 2021-02-12
+
+### New
+
+-   Warn user for unikname TLD like creation and disclose
+
+## 4.5.0 - 2020-11-26
+
+### Changed
+
+-   update @uns/ts-sdk
 
 ## 4.4.0 - 2020-11-26
 
