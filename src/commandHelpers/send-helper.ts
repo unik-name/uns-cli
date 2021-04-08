@@ -1,12 +1,13 @@
 import { Interfaces } from "@uns/ark-crypto";
 import { cli } from "cli-ux";
 import { SendCommand } from "../commands/send";
+import { SwapCommand } from "commands/swap";
 import { createTransferTransaction } from "../utils";
 import { CommandHelper } from "./command-helper";
 
-export class SendCommandHelper extends CommandHelper<SendCommand> {
+export class SendCommandHelper<T extends SendCommand | SwapCommand> extends CommandHelper<T> {
     public createTransactionStruct(
-        cmd: SendCommand,
+        cmd: T,
         satoAmount: number,
         satoFees: number,
         to: string,
