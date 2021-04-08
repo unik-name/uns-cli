@@ -1,6 +1,5 @@
 import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
-import { Network } from "@uns/ts-sdk";
 import { CryptoAccountPassphrases } from "types";
 import { cli } from "cli-ux";
 
@@ -26,15 +25,19 @@ const ethAddressRegex = /^0x[a-fA-F0-9]{40}$/;
  *
  * This is just for showing a preview message as it is the bridge-core that will do the wUNS minting and substract the fee!
  */
-const getSwapCost = async () => 100_00000000;
+const getSwapCost = async () => 1_0000;
 
 // FIXME: Put the bridge wallet addresses in the UNS SDK
-const getBridgeWalletAddress = (network: Network) => {
-    switch (network) {
+const getBridgeWalletAddress = (flags: Record<string, any>) => {
+    switch (flags.network) {
         case "livenet":
             throw new Error("Livenet swap is not supported yet");
         case "sandbox":
-            return "Sc68Hu6hRTCy9z4b7ppoeD24AX227fZ5UX";
+            if (flags.dev) {
+                return "Sc68Hu6hRTCy9z4b7ppoeD24AX227fZ5UX";
+            } else {
+                return "SSL88CE3Ftb7dbdRwCFmNYgYdD2RrXkNZr";
+            }
         // @ts-ignore
         case "dalinet":
             if (process.env.NODE_ENV === "test") return "Sc68Hu6hRTCy9z4b7ppoeD24AX227fZ5UX";
@@ -63,6 +66,10 @@ export class SwapCommand extends WriteCommand {
             description: "Specify that the provided amount is in sato-UNS, not in UNS",
             default: false,
         }),
+        dev: flags.boolean({
+            description: "If true, send token to dev token vault",
+            default: false,
+        }),
     };
 
     public static args = [
@@ -89,7 +96,7 @@ export class SwapCommand extends WriteCommand {
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
         const cmdHelper = new SendCommandHelper(this);
 
-        const bridgeWalletAddress: string = getBridgeWalletAddress(flags.network);
+        const bridgeWalletAddress: string = getBridgeWalletAddress(flags);
 
         // Check and get amount
         const amount: number = cmdHelper.checkAndGetAmount(args.amount, flags.sato);
