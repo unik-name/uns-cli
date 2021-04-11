@@ -2,11 +2,34 @@ import { flags } from "@oclif/parser";
 import { BaseCommand } from "../../baseCommand";
 import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
-import { BADGE_PIONEER_KEY, NftFactoryServicesList, getCurrentPioneerBadge } from "@uns/ts-sdk";
+import {
+    BADGE_PIONEER_KEY,
+    NftFactoryServicesList,
+    getCurrentPioneerBadge,
+    UNSClient,
+    BADGES_PREFIX,
+} from "@uns/ts-sdk";
 
-const badges: Record<string, any> = {
-    pioneer: { key: BADGE_PIONEER_KEY },
+type BadgeConfig = {
+    key: (input: string) => string;
+    value: (client: UNSClient) => Promise<string | undefined>;
+    input: RegExp;
+    serviceId: number;
 };
+const badgesConfig: BadgeConfig[] = [
+    {
+        key: () => BADGE_PIONEER_KEY,
+        value: (client) => getCurrentPioneerBadge(client),
+        input: /pioneer/,
+        serviceId: NftFactoryServicesList.NFT_FACTORY_BADGE_PIONEER,
+    },
+    {
+        key: (input: string): string => `${BADGES_PREFIX}${input}`,
+        value: () => Promise.resolve("true"),
+        input: new RegExp(`^Event\/`, "ig"),
+        serviceId: NftFactoryServicesList.NFT_FACTORY_EVENT_BADGE,
+    },
+];
 
 export class BadgesClaimCommand extends PropertiesUpdateCommand {
     public static description = "Claim a Badge for a UNIK.";
@@ -19,7 +42,6 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
             description: `Badge name`,
             char: "b",
             required: true,
-            options: Object.keys(badges),
         }),
     };
 
@@ -33,29 +55,30 @@ export class BadgesClaimCommand extends PropertiesUpdateCommand {
         return BadgesClaimCommand;
     }
 
-    protected async getServiceId(_: Record<string, any>): Promise<NftFactoryServicesList | undefined> {
-        return NftFactoryServicesList.NFT_FACTORY_BADGE_PIONEER;
+    protected getServiceId(flags: Record<string, any>): Promise<NftFactoryServicesList | undefined> {
+        const config = this.getBadgeConfig(flags.badge);
+        let serviceId: NftFactoryServicesList | undefined;
+        if (config) {
+            serviceId = config.serviceId;
+        }
+        return Promise.resolve(serviceId);
     }
 
-    protected async getProperties(flags: Record<string, any>): Promise<{ [_: string]: string }> {
-        if (Object.keys(badges).includes(flags.badge)) {
-            const value = await this.getBadgeValue(flags.badge);
+    private getBadgeConfig(input: string): BadgeConfig | undefined {
+        return badgesConfig.filter((c) => input.match(c.input))[0];
+    }
+
+    protected async getProperties({ badge }: Record<string, any>): Promise<{ [_: string]: string }> {
+        const config = this.getBadgeConfig(badge);
+        if (config) {
+            const value = await config.value(this.unsClientWrapper.unsClient);
             if (value) {
-                return { [badges[flags.badge].key]: value };
+                return { [config.key(badge)]: value };
             } else {
-                throw new Error(`Badge ${flags.badge} is not available`);
+                throw new Error(`Badge ${badge} is not available`);
             }
         } else {
-            throw new Error(`Unknown badge ${flags.badge}`);
-        }
-    }
-
-    private async getBadgeValue(badge: string): Promise<string | undefined> {
-        switch (badge) {
-            case "pioneer":
-                return getCurrentPioneerBadge(this.unsClientWrapper.unsClient);
-            default:
-                return;
+            throw new Error(`Unknown badge ${badge}`);
         }
     }
 }
