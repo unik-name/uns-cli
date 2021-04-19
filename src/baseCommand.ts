@@ -1,3 +1,4 @@
+import "global-agent/bootstrap";
 import { Command, flags } from "@oclif/command";
 import Config from "@oclif/config";
 import { FlagInvalidOptionError } from "@oclif/parser/lib/errors";
