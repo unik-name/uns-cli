@@ -15,17 +15,11 @@ import {
     isTokenId,
     fromSatoshi,
     toSatoshi,
+    getErcMintCost,
+    eth2Uns,
 } from "../utils";
 
 const ethAddressRegex = /^0x[a-fA-F0-9]{40}$/;
-
-// TODO: Include real ETH transaction fees in the swap (amount of wUNS tokens to not mint, as a fee)
-/**
- * Keep 100 uns as fee now for testing
- *
- * This is just for showing a preview message as it is the bridge-core that will do the wUNS minting and substract the fee!
- */
-const getSwapCost = async () => 1_0000;
 
 // FIXME: Put the bridge wallet addresses in the UNS SDK
 const getBridgeWalletAddress = (flags: Record<string, any>) => {
@@ -102,7 +96,8 @@ export class SwapCommand extends WriteCommand {
         const amount: number = cmdHelper.checkAndGetAmount(args.amount, flags.sato);
         const satoAmount = flags.sato ? amount : toSatoshi(amount);
 
-        const swapCost = await getSwapCost();
+        const mintCostEth = await getErcMintCost(flags);
+        const mintCostUns = await eth2Uns(flags, mintCostEth.toString());
 
         const ethRecipientAddress: string = args.target;
         if (!ethRecipientAddress.match(ethAddressRegex)) {
@@ -116,10 +111,10 @@ export class SwapCommand extends WriteCommand {
             this.exit(0);
         }
 
-        if (transactionSatoAmount - swapCost <= 0) {
+        if (transactionSatoAmount - +mintCostUns <= 0) {
             this.stop(
                 "Insufficient swapped amount to compensate for Ethereum transaction fees. " +
-                    `Swapping costs ${swapCost} UNS.`,
+                    `Swapping costs ${fromSatoshi(+mintCostUns)} UNS.`,
             );
             this.exit(0);
         }
@@ -132,9 +127,9 @@ export class SwapCommand extends WriteCommand {
         // Confirm swap fee
         canContinue = await cli.confirm(
             `Swapping will cost you ${fromSatoshi(
-                swapCost,
+                +mintCostUns,
             )} UNS right now to compensate for Ethereum transaction fees.\n` +
-                `You will receive ${fromSatoshi(transactionSatoAmount) - fromSatoshi(swapCost)} wUNS. Do you confirm?`,
+                `You will receive ${fromSatoshi(transactionSatoAmount - +mintCostUns)} wUNS. Do you confirm?`,
         );
 
         if (!canContinue) {
