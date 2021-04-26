@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### New
+
+-   Ask confirmation before overriding verified url
+
 ### Changed
 
 -   Improve update message when the CLI can be update
