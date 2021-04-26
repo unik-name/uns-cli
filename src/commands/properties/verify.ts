@@ -6,6 +6,7 @@ import { NftFactoryServicesList, VERIFIED_URL_KEY_PREFIX, JWTVerifier } from "@u
 import { readFileSync } from "fs";
 import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { PropertyRegisterCommand } from "./register";
+import { cli } from "cli-ux";
 
 export class PropertyVerifyCommand extends PropertiesUpdateCommand {
     public static description = "Conclude ownership verification processus.";
@@ -19,7 +20,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         type: oFlags.string({
             char: "t",
             description: "Type of unik property to verify",
-            options: PropertyVerifyCommand.getAllowedPropertyTypes(),
+            options: PropertyVerifyCommand.getAvailablePropertyTypes(),
             required: true,
             default: "url",
         }),
@@ -59,10 +60,6 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         return ["html", "file", "whitelist"];
     }
 
-    public static getAllowedPropertyTypes(): string[] {
-        return ["url"];
-    }
-
     protected async getServiceId(flags: Record<string, any>): Promise<NftFactoryServicesList | undefined> {
         switch (flags["url-channel"]) {
             case "html":
@@ -75,9 +72,28 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
         return;
     }
 
-    protected async getProperties(flags: Record<string, any>): Promise<{ [_: string]: string }> {
+    protected async getProperties(flags: Record<string, any>, unikId: string): Promise<{ [_: string]: string }> {
         const properties: { [_: string]: string } = {};
         const verifiedPropertyKey = `${VERIFIED_URL_KEY_PREFIX}${flags["url-name"]}`;
+
+        try {
+            // Should throw if key does not exists
+            await this.unsClientWrapper.getUnikProperty(unikId, verifiedPropertyKey, false);
+
+            const canContinue = await cli.confirm(
+                `This verified url name is already used (${verifiedPropertyKey}). You can change it using the --url-name option
+See properties in the explorer: https://explorer.uns.network/uniks/${unikId}
+Are you sure you want to override this verified URL?`,
+            );
+
+            if (!canContinue) {
+                this.exit(0); // Normal exit
+            }
+        } catch (error) {
+            if (error.response.status !== 404) {
+                throw error;
+            }
+        }
 
         if (flags["url-channel"] === "whitelist") {
             if (!flags.value) {

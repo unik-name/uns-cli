@@ -15,6 +15,8 @@ import {
 
 import { PropertyRegisterCommand } from "../../../src/commands/properties/register";
 import * as fs from "fs";
+import { VERIFIED_URL_KEY_PREFIX } from "@uns/ts-sdk";
+import { escapeSlashes } from "@uns/ts-sdk/dist/clients/repositories/unik/utils";
 
 const commandName: string = "properties:verify";
 describe(`${commandName} command`, () => {
@@ -50,6 +52,11 @@ describe(`${commandName} command`, () => {
                         excess: [],
                     },
                 }),
+            )
+            .nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
+                api
+                    .get(`/uniks/${UNIK_ID}/properties/${escapeSlashes(VERIFIED_URL_KEY_PREFIX + "0")}`)
+                    .reply(404, { response: { status: 404 } }),
             )
             .stdout()
             .command([
