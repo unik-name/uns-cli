@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## 4.8.0 - 2021-04-29
+
 ### New
 
 -   Ask confirmation before overriding verified url
