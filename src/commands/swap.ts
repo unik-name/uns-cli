@@ -17,6 +17,7 @@ import {
     toSatoshi,
     getErcMintCost,
     eth2Uns,
+    getErcSymbol,
 } from "../utils";
 
 const ethAddressRegex = /^0x[a-fA-F0-9]{40}$/;
@@ -156,7 +157,8 @@ export class SwapCommand extends WriteCommand {
         }
 
         const nonce = await this.getNextWalletNonceFromPassphrase(passphrases.first);
-        const vendorField = `eth:${ethRecipientAddress}`;
+        const symbol = getErcSymbol(flags);
+        const vendorField = `${symbol}:${ethRecipientAddress}`;
 
         const transaction: Interfaces.ITransactionData = cmdHelper.createTransactionStruct(
             this,

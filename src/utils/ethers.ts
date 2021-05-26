@@ -62,3 +62,5 @@ const getUNSETHPrice = async (flags: Record<string, any>, invert: boolean = fals
 
 const getChainId = (flags: Record<string, any>): ChainId =>
     flags.network === Network.sandbox ? ChainId.ROPSTEN : ChainId.MAINNET;
+
+export const getErcSymbol = (flags: Record<string, any>): string => (flags.dev ? "PIZ" : "wUNS");
