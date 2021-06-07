@@ -151,6 +151,15 @@ export class UnsClientWrapper {
         }
     }
 
+    public async getUniks(unikIds: string[]): Promise<Unik[]> {
+        try {
+            const unikResponse: Response<Unik[]> = await this.unsClient.unik.getUniks(unikIds);
+            return unikResponse.data as Unik[];
+        } catch (e) {
+            return handleFetchError("UNIKs", unikIds.join(","))(e);
+        }
+    }
+
     /**
      *
      * @param unikid Get UNIK token properties

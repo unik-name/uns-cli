@@ -207,6 +207,7 @@ export abstract class BaseCommand extends Command {
         let unikid: string;
         let chainmeta: ChainMeta;
         let transactions;
+        let type: string | undefined;
 
         if (isTokenId(target)) {
             unikid = target;
@@ -214,6 +215,7 @@ export abstract class BaseCommand extends Command {
             ownerAddress = unikInfos.ownerId;
             chainmeta = unikInfos.chainmeta;
             transactions = unikInfos.transactions;
+            type = unikInfos.type;
         } else if (isDid(target)) {
             const resolved = await resolveUnikName(target, flags);
             if (resolved.error) {
@@ -222,11 +224,12 @@ export abstract class BaseCommand extends Command {
             unikid = resolved?.data.unikid;
             ownerAddress = resolved?.data.ownerAddress;
             chainmeta = resolved?.chainmeta as ChainMeta;
+            type = resolved?.data.type;
         } else {
             throw new Error(`Unik target argument does not match expected format.`);
         }
 
-        return { unikid, ownerAddress, chainmeta, transactions };
+        return { unikid, ownerAddress, chainmeta, transactions, type };
     }
 
     protected async withAction<T>(actionDescription: string, callback: () => any): Promise<T> {
@@ -331,9 +334,11 @@ export abstract class BaseCommand extends Command {
     public async askForPassphrases(
         flags: Record<string, any>,
         checkSecondPassphrase = true,
+        firstPassphraseFlagName: string = "passphrase",
+        secondPassphraseFlagName: string = "second-passphrase",
     ): Promise<CryptoAccountPassphrases> {
-        let passphrase: string = flags.passphrase;
-        let secondPassphrase: string = flags["second-passphrase"];
+        let passphrase: string = flags[firstPassphraseFlagName];
+        let secondPassphrase: string = flags[secondPassphraseFlagName];
 
         if (!passphrase) {
             passphrase = await getPassphraseFromUser();
@@ -350,6 +355,13 @@ export abstract class BaseCommand extends Command {
         }
 
         return { first: passphrase, second: secondPassphrase };
+    }
+
+    public async askForNewPassphrases(
+        flags: Record<string, any>,
+        checkSecondPassphrase = true,
+    ): Promise<CryptoAccountPassphrases> {
+        return this.askForPassphrases(flags, checkSecondPassphrase, "new-passphrase", "new-second-passphrase");
     }
 
     /**

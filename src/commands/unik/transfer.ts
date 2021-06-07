@@ -1,18 +1,13 @@
 import { flags } from "@oclif/command";
-import { Interfaces } from "@uns/ark-crypto";
-import {
-    isError,
-    SdkResult,
-    createCertifiedNftTransferTransaction,
-    UnikTransferCertifiedTransactionBuildOptions,
-} from "@uns/ts-sdk";
+import { UnikTransferCertifiedTransactionBuildOptions } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
+import { Formater, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases } from "../../types";
 import { WriteCommand } from "../../writeCommand";
 import { getTargetArg } from "../../utils";
+import { TransferCommand } from "../../abstract-transfer";
 
-export class UnikTransferCommand extends WriteCommand {
+export class UnikTransferCommand extends TransferCommand {
     public static description = "Transfer UNIK token";
 
     public static usage = "unik:transfer TARGET --to {recipient}";
@@ -38,7 +33,10 @@ export class UnikTransferCommand extends WriteCommand {
         return UnikTransferCommand;
     }
 
-    protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
+    protected async getUnikTransferCertifiedTransactionBuildOptions(
+        flags: Record<string, any>,
+        args: Record<string, any>,
+    ): Promise<UnikTransferCertifiedTransactionBuildOptions> {
         const recipientAddress: string = flags.to;
 
         const unikId = (await this.targetResolve(flags, args.target)).unikid;
@@ -53,8 +51,7 @@ export class UnikTransferCommand extends WriteCommand {
         /**
          * Transaction creation
          */
-        this.actionStart("Creating transaction");
-        const options: UnikTransferCertifiedTransactionBuildOptions = {
+        return {
             httpClient: this.unsClientWrapper.unsClient.http,
             unikId,
             recipientAddress,
@@ -62,49 +59,6 @@ export class UnikTransferCommand extends WriteCommand {
             nonce,
             passphrase: passphrases.first,
             secondPassPhrase: passphrases.second,
-        };
-
-        const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftTransferTransaction(options);
-
-        this.actionStop();
-
-        if (isError(result)) {
-            throw new Error(`${result.message} ${result.code ? ` (${result.code})` : ""}`);
-        }
-
-        if (!result.id) {
-            throw new Error("Transaction id can't be undefined");
-        }
-
-        this.log(`Transaction id: ${result.id}`);
-        const transactionUrl = `${this.unsClientWrapper.getExplorerUrl()}/transaction/${result.id}`;
-        this.log(`Transaction in explorer: ${transactionUrl}`);
-
-        const transactionFromNetwork = await this.sendAndWaitConfirmationsIfNeeded(result, flags);
-
-        /**
-         * Result prompt
-         */
-        if (transactionFromNetwork) {
-            this.log(
-                `UNIK nft transfered:  ${transactionFromNetwork.confirmations} confirmation${
-                    transactionFromNetwork.confirmations > 0 ? "s" : ""
-                }`,
-            );
-
-            const tokenUrl = `${this.unsClientWrapper.getExplorerUrl()}/uniks/${unikId}`;
-            this.log(`UNIK nft in UNS explorer: ${tokenUrl}`);
-        } else {
-            this.error(
-                `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,
-            );
-        }
-        return {
-            data: {
-                id: unikId,
-                transaction: result.id,
-                confirmations: transactionFromNetwork.confirmations,
-            },
         };
     }
 }

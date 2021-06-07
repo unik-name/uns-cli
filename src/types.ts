@@ -16,4 +16,5 @@ export interface UnikInfos {
     ownerAddress: string;
     chainmeta: ChainMeta;
     transactions?: any;
+    type?: string;
 }

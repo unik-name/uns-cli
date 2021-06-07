@@ -33,7 +33,7 @@ export const feeFlag = (defaultFee: number = DEFAULT_COMMAND_FEES): { [_: string
     };
 };
 
-export const unikidFlag = (description?: string) => {
+export const unikidFlag = (description: string = "") => {
     return {
         unikid: flags.string({
             description,
