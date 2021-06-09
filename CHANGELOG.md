@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-## 4.8.0 - 2021-04-29
+## 4.10.0 - 2021-06-07
+
+-   unik:activation command (#3440)
+
+### Added
+
+-   unik:transfer command (#3216)
+
+## 4.9.0 - 2021-05-26
 
 ### Added
 
