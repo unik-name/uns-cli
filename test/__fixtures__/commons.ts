@@ -288,6 +288,7 @@ export const NODE_CONFIGURATION_CRYPTO = {
                 ignoreExpiredTransactions: false,
                 multiPaymentLimit: 128,
                 aip11: true,
+                urlCheckers: ["88f19a6b1d0d2ca16d385f7f76ba343234fd87498a723439a3b6cf79b38431bc"],
             },
         ],
         network: {

@@ -13,7 +13,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
 
     public static usage = "properties:verify TARGET --type {url} --url-channel {html,file} --url-name {label}";
 
-    public static examples = ["$ uns properties:verify @bob -V --url-channel html "];
+    public static examples = ["$ uns properties:verify @bob --url-channel html "];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
