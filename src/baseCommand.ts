@@ -336,18 +336,20 @@ export abstract class BaseCommand extends Command {
         checkSecondPassphrase = true,
         firstPassphraseFlagName: string = "passphrase",
         secondPassphraseFlagName: string = "second-passphrase",
+        passphraseQuestion?: string,
+        secondPassphraseQuestion?: string,
     ): Promise<CryptoAccountPassphrases> {
         let passphrase: string = flags[firstPassphraseFlagName];
         let secondPassphrase: string = flags[secondPassphraseFlagName];
 
         if (!passphrase) {
-            passphrase = await getPassphraseFromUser();
+            passphrase = await getPassphraseFromUser(passphraseQuestion);
         }
         checkPassphraseFormat(passphrase);
 
         if (checkSecondPassphrase) {
             if (!secondPassphrase && (await this.hasSecondPassphrase(passphrase))) {
-                secondPassphrase = await getSecondPassphraseFromUser();
+                secondPassphrase = await getSecondPassphraseFromUser(secondPassphraseQuestion);
             }
             if (secondPassphrase) {
                 checkPassphraseFormat(secondPassphrase);
@@ -361,7 +363,14 @@ export abstract class BaseCommand extends Command {
         flags: Record<string, any>,
         checkSecondPassphrase = true,
     ): Promise<CryptoAccountPassphrases> {
-        return this.askForPassphrases(flags, checkSecondPassphrase, "new-passphrase", "new-second-passphrase");
+        return this.askForPassphrases(
+            flags,
+            checkSecondPassphrase,
+            "new-passphrase",
+            "new-second-passphrase",
+            "Enter your NEW (to) crypto account passphrase (12 words phrase)",
+            "You have associated a second passphrase to your new crypto account. This second passphrase is needed to validate this transaction.\nPlease, enter it (12 words phrase)",
+        );
     }
 
     /**

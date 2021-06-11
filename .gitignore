@@ -8,3 +8,7 @@ yarn-error.log
 
 uns-verification.txt
 .coverage
+
+# IDE - VSCode
+.vscode/*
+!.vscode/launch.json

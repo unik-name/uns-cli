@@ -25,7 +25,7 @@ import {
     IDiscloseDemand,
 } from "@uns/ts-sdk";
 import delay from "delay";
-import { handleErrors, handleFetchError } from "./errorHandler";
+import { handleErrors, handleFetchError, HttpNotFoundError } from "./errorHandler";
 import { WithChainmeta } from "./types";
 import * as UTILS from "./utils";
 import { getUrlOrigin } from "./utils";
@@ -205,6 +205,17 @@ export class UnsClientWrapper {
             };
         } catch (e) {
             return handleFetchError("wallet", cryptoAccountAddress)(e);
+        }
+    }
+
+    public async getSafeWallet(cryptoAccountAddress: string): Promise<WithChainmeta<Wallet> | undefined> {
+        try {
+            return await this.getWallet(cryptoAccountAddress);
+        } catch (e) {
+            if (e instanceof HttpNotFoundError) {
+                return undefined;
+            }
+            throw e;
         }
     }
 

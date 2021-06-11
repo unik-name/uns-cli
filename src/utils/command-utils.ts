@@ -195,14 +195,16 @@ function promptHidden(text: string): Promise<string> {
     return cli.prompt(text, { type: "hide" });
 }
 
-export const getPassphraseFromUser = (): Promise<string> => {
-    return promptHidden("Enter your crypto account passphrase (12 words phrase)");
+export const getPassphraseFromUser = (
+    question: string = "Enter your crypto account passphrase (12 words phrase)",
+): Promise<string> => {
+    return promptHidden(question);
 };
 
-export const getSecondPassphraseFromUser = (): Promise<string> => {
-    return promptHidden(
-        "You have associated a second passphrase to your crypto account. This second passphrase is needed to validate this transaction.\nPlease, enter it (12 words phrase)",
-    );
+export const getSecondPassphraseFromUser = (
+    question: string = "You have associated a second passphrase to your crypto account. This second passphrase is needed to validate this transaction.\nPlease, enter it (12 words phrase)",
+): Promise<string> => {
+    return promptHidden(question);
 };
 
 export function fromSatoshi(value: number): number {

@@ -7,6 +7,7 @@ import {
 } from "@uns/ts-sdk";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "./formater";
 import { WriteCommand } from "./writeCommand";
+import { Identities } from "@uns/ark-crypto";
 
 export abstract class TransferCommand extends WriteCommand {
     protected abstract getUnikTransferCertifiedTransactionBuildOptions(
@@ -19,15 +20,15 @@ export abstract class TransferCommand extends WriteCommand {
     }
 
     protected async do(flags: Record<string, any>, args: Record<string, any>): Promise<NestedCommandOutput> {
-        /**
-         * Transaction creation
-         */
-        this.actionStart("Creating transaction");
         const options: UnikTransferCertifiedTransactionBuildOptions = await this.getUnikTransferCertifiedTransactionBuildOptions(
             flags,
             args,
         );
 
+        /**
+         * Transaction creation
+         */
+        this.actionStart("Creating transaction");
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftTransferTransaction(options);
 
         this.actionStop();
@@ -65,6 +66,8 @@ export abstract class TransferCommand extends WriteCommand {
         }
         return {
             data: {
+                from: Identities.Address.fromPassphrase(options.passphrase),
+                to: options.recipientAddress,
                 id: options.unikId,
                 transaction: result.id,
                 confirmations: transactionFromNetwork.confirmations,
