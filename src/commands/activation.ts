@@ -1,13 +1,13 @@
-import { BaseCommand } from "../../baseCommand";
-import { CommandOutput, Formater, OUTPUT_FORMAT } from "../../formater";
-import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
+import { BaseCommand } from "../baseCommand";
+import { CommandOutput, Formater, OUTPUT_FORMAT } from "../formater";
+import { PropertiesUpdateCommand } from "../updatePropertiesCommand";
 import { LIFE_CYCLE_PROPERTY_KEY, LifeCycleGrades, NftFactoryServicesList } from "@uns/ts-sdk";
 import { Managers } from "@uns/ark-crypto";
 
 export class UnikActivationCommand extends PropertiesUpdateCommand {
     public static description = "Sandbox @unikname activation.";
 
-    public static examples = ["$ unikname unik:activation @bob -n sandbox"];
+    public static examples = ["$ unikname activation @bob -n sandbox"];
 
     public static flags = PropertiesUpdateCommand.getUpdateCommandFlags();
 

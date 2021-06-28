@@ -1,12 +1,12 @@
-import { BaseCommand } from "../../baseCommand";
-import { Formater, OUTPUT_FORMAT } from "../../formater";
-import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
+import { BaseCommand } from "../baseCommand";
+import { Formater, OUTPUT_FORMAT } from "../formater";
+import { PropertiesUpdateCommand } from "../updatePropertiesCommand";
 import { NftFactoryServicesList, LIFE_CYCLE_PROPERTY_KEY, LifeCycleGrades } from "@uns/ts-sdk";
 
 export class EverlastingCommand extends PropertiesUpdateCommand {
     public static description = "Buy Everlasting status for a @unikname.";
 
-    public static examples = ["$ unikname unik:everlasting @bob"];
+    public static examples = ["$ unikname everlasting @bob"];
 
     public static flags = PropertiesUpdateCommand.getUpdateCommandFlags();
 

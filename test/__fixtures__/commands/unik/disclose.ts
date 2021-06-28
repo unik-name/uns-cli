@@ -1,6 +1,6 @@
 import { DIDTypes, Wallet } from "@uns/ts-sdk";
 
-export const commandName: string = "unik:disclose";
+export const commandName: string = "disclose";
 
 const unikId = "ad165bad9ae65009b0379e9f839d0c91e05f59f613f9ea2ef5f2b1ef2bbe81a1";
 

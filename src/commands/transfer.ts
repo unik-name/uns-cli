@@ -6,18 +6,18 @@ import {
     createCertifiedNftTransferTransaction,
     UnikTransferCertifiedTransactionBuildOptions,
 } from "@uns/ts-sdk";
-import { BaseCommand } from "../../baseCommand";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { CryptoAccountPassphrases } from "../../types";
-import { WriteCommand } from "../../writeCommand";
-import { getTargetArg } from "../../utils";
+import { BaseCommand } from "../baseCommand";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { CryptoAccountPassphrases } from "../types";
+import { WriteCommand } from "../writeCommand";
+import { getTargetArg } from "../utils";
 
 export class UnikTransferCommand extends WriteCommand {
     public static description = "Transfer UNIKNAME token";
 
-    public static usage = "unik:transfer TARGET --to {recipient}";
+    public static usage = "transfer TARGET --to {recipient}";
 
-    public static examples = [`$ unikname unik:transfer TARGET --to {recipient}`];
+    public static examples = [`$ unikname transfer TARGET --to {recipient}`];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(true),

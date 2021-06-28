@@ -78,16 +78,16 @@
         "bin": "unikname",
         "topics": {
             "unik": {
-                "description": "Manage UNIKNAME (`unikname unik` to display UNIKNAME commands)"
+                "description": "Manage UNIK protocol token (`unikname unik` to display UNIK commands)"
             },
             "cryptoaccount": {
-                "description": "Manage Crypto Account (`uns cryptoaccount` to display Crypto Account commands)"
+                "description": "Manage Crypto Account (`unikname cryptoaccount` to display Crypto Account commands)"
             },
             "properties": {
                 "description": "Manage UNIKNAME properties (`unikname properties` to display UNIKNAME properties commands)"
             },
             "delegate": {
-                "description": "Manage UNS delegates (`uns delegate` to display Delegate commands)"
+                "description": "Manage unikname delegates (`unikname delegate` to display Delegate commands)"
             }
         },
         "plugins": [

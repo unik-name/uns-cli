@@ -1,6 +1,6 @@
 import { Interfaces } from "@uns/ark-crypto";
 import { cli } from "cli-ux";
-import { SendCommand } from "../commands/send";
+import { SendCommand } from "../commands/unik/send";
 import { createTransferTransaction } from "../utils";
 import { CommandHelper } from "./command-helper";
 

@@ -1,9 +1,9 @@
 import { flags } from "@oclif/command";
 import { Interfaces } from "@uns/ark-crypto";
 import { CryptoAccountPassphrases } from "types";
-import { BaseCommand } from "../baseCommand";
-import { SendCommandHelper } from "../commandHelpers/send-helper";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { BaseCommand } from "../../baseCommand";
+import { SendCommandHelper } from "../../commandHelpers/send-helper";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import {
     checkFlag,
     getTargetArg,
@@ -12,15 +12,15 @@ import {
     isDid,
     isTokenId,
     toSatoshi,
-} from "../utils";
-import { WriteCommand } from "../writeCommand";
+} from "../../utils";
+import { WriteCommand } from "../../writeCommand";
 
 const feesIncludedFlagId = "fees-included";
 
 export class SendCommand extends WriteCommand {
     public static description = "Send owned UNIK protocol tokens to another wallet.";
 
-    public static examples = [`$ unikname send 1237.77 "@bob"`];
+    public static examples = [`$ unikname unik:send 1237.77 "@bob"`];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),

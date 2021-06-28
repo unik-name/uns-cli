@@ -1,6 +1,6 @@
 import { expect as oclifExpect, test } from "@oclif/test";
 import { cli } from "cli-ux";
-import { UnikDiscloseCommand } from "../../../src/commands/unik/disclose";
+import { UnikDiscloseCommand } from "../../src/commands/disclose";
 import {
     CHAINMETA,
     DISCLOSE_DEMAND,
@@ -16,14 +16,14 @@ import {
     WALLET,
     WALLET_ADDRESS,
     WALLET_PASSPHRASE,
-} from "../../__fixtures__/commands/unik/disclose";
-import { applyExitCase, EMPTY_COMMAND_CONFIG, NODE_CONFIGURATION_CRYPTO } from "../../__fixtures__/commons";
-import { UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
+} from "../__fixtures__/commands/unik/disclose";
+import { applyExitCase, EMPTY_COMMAND_CONFIG, NODE_CONFIGURATION_CRYPTO } from "../__fixtures__/commons";
+import { UNS_CLIENT_FOR_TESTS } from "../__fixtures__/commons";
 
 import { Managers, Transactions } from "@uns/ark-crypto";
 import * as SDK from "@uns/ts-sdk";
 
-const commandName: string = "unik:disclose";
+const commandName: string = "disclose";
 
 describe(`${commandName} command`, () => {
     beforeEach(() => {

@@ -10,7 +10,7 @@ import { Wallet } from "@uns/ts-sdk";
 //   "network": "devnet"
 // }
 
-const commandName: string = "unik:create";
+const commandName: string = "create";
 
 export const TRANSACTION_ID: string = "7ce8777a1ba0d5979cda8e53fa59d4d5e6b5d50464db90e0ae95b69381d6f6a0";
 export const TRANSACTION_TIMESTAMP: number = 1234493;

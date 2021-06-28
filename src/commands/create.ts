@@ -9,22 +9,20 @@ import {
     isError,
     SdkResult,
 } from "@uns/ts-sdk";
-import { BaseCommand } from "../../baseCommand";
-import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { CryptoAccountPassphrases, getUnikTypesList } from "../../types";
-import { certificationFlag, isDevMode, NFT_NAME, DEFAULT_COMMAND_FEES } from "../../utils";
-import { WriteCommand } from "../../writeCommand";
+import { BaseCommand } from "../baseCommand";
+import { EXPLICIT_VALUE_MAX_LENGTH } from "../config";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { CryptoAccountPassphrases, getUnikTypesList } from "../types";
+import { certificationFlag, isDevMode, NFT_NAME, DEFAULT_COMMAND_FEES } from "../utils";
+import { WriteCommand } from "../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
     public static description = "Create UNIKNAME token";
 
-    public static usage = "unik:create --explicitValue {explicitValue} --type {type}";
+    public static usage = "create --explicitValue {explicitValue} --type {type}";
 
     public static examples = [
-        `$ unikname unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join(
-            "|",
-        )}] --coupon {coupon}`,
+        `$ unikname create --explicitValue {explicitValue} --type [${getUnikTypesList().join("|")}] --coupon {coupon}`,
     ];
 
     public static flags = {
@@ -129,7 +127,7 @@ export class UnikCreateCommand extends WriteCommand {
             if (this.isFlagSet("fee") && DIDHelpers.fromLabel(didType) !== DIDTypes.INDIVIDUAL) {
                 if (voucher) {
                     throw new Error(
-                        `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
+                        `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for create with coupon must be \"${defaultFees}\"`,
                     );
                 }
                 fee = flags.fee;
