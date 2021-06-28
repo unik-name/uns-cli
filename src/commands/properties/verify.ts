@@ -13,13 +13,13 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
 
     public static usage = "properties:verify TARGET --type {url} --url-channel {html,file} --url-name {label}";
 
-    public static examples = ["$ uns properties:verify @bob --url-channel html "];
+    public static examples = ["$ unikname properties:verify @bob --url-channel html "];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         type: oFlags.string({
             char: "t",
-            description: "Type of unik property to verify",
+            description: "Type of @unikname property to verify",
             options: PropertyVerifyCommand.getAvailablePropertyTypes(),
             required: true,
             default: "url",
@@ -31,13 +31,13 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
             required: true,
         }),
         ["url-name"]: oFlags.string({
-            description: "Property label. Used as property key of UNIK property.",
+            description: "Property label. Used as property key of @unikname property.",
             required: true,
             default: "0",
         }),
         value: oFlags.string({
             char: "V",
-            description: "Value of the Unik property to verify. To use with whitelist verification mode",
+            description: "Value of the @unikname property to verify. To use with whitelist verification mode",
             hidden: true,
         }),
     };
@@ -82,7 +82,7 @@ export class PropertyVerifyCommand extends PropertiesUpdateCommand {
 
             const canContinue = await cli.confirm(
                 `This verified url name is already used (${verifiedPropertyKey}). You can change it using the --url-name option
-See properties in the explorer: https://explorer.uns.network/uniks/${unikId}
+See properties in the explorer: https://explorer.unikname.network/uniks/${unikId}
 Are you sure you want to override this verified URL?`,
             );
 

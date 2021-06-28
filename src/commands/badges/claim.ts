@@ -32,9 +32,9 @@ const badgesConfig: BadgeConfig[] = [
 ];
 
 export class BadgesClaimCommand extends PropertiesUpdateCommand {
-    public static description = "Claim a Badge for a UNIK.";
+    public static description = "Claim a Badge for a UNIKNAME.";
 
-    public static examples = ["$ uns badges:claim @bob --badge {badge name}"];
+    public static examples = ["$ unikname badges:claim @bob --badge {badge name}"];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),

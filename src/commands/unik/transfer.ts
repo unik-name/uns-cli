@@ -13,11 +13,11 @@ import { WriteCommand } from "../../writeCommand";
 import { getTargetArg } from "../../utils";
 
 export class UnikTransferCommand extends WriteCommand {
-    public static description = "Transfer UNIK token";
+    public static description = "Transfer UNIKNAME token";
 
     public static usage = "unik:transfer TARGET --to {recipient}";
 
-    public static examples = [`$ uns unik:transfer TARGET --to {recipient}`];
+    public static examples = [`$ unikname unik:transfer TARGET --to {recipient}`];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(true),
@@ -87,13 +87,13 @@ export class UnikTransferCommand extends WriteCommand {
          */
         if (transactionFromNetwork) {
             this.log(
-                `UNIK nft transfered:  ${transactionFromNetwork.confirmations} confirmation${
+                `UNIKNAME nft transfered:  ${transactionFromNetwork.confirmations} confirmation${
                     transactionFromNetwork.confirmations > 0 ? "s" : ""
                 }`,
             );
 
             const tokenUrl = `${this.unsClientWrapper.getExplorerUrl()}/uniks/${unikId}`;
-            this.log(`UNIK nft in UNS explorer: ${tokenUrl}`);
+            this.log(`UNIKNAME nft in Unikname explorer: ${tokenUrl}`);
         } else {
             this.error(
                 `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,

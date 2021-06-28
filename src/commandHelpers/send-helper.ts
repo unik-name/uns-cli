@@ -51,7 +51,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         }
 
         if (isSatoAmount && !Number.isInteger(amount)) {
-            throw new Error("sato UNS amount has to be an integer");
+            throw new Error("satoUNIK amount has to be an integer");
         }
 
         return amount;

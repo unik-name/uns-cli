@@ -7,7 +7,7 @@ export class CryptoAccountAddressCommand extends ReadCommand {
     public static description = "Get Crypto Account address";
 
     public static examples = [
-        "$ uns cryptoaccount:address 5380aed31fde9cf6a07379bd450f5cc99c5da96a50bfe6db5ab7f117db3d2b53",
+        "$ unikname cryptoaccount:address 5380aed31fde9cf6a07379bd450f5cc99c5da96a50bfe6db5ab7f117db3d2b53",
     ];
 
     public static flags = {

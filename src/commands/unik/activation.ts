@@ -7,7 +7,7 @@ import { Managers } from "@uns/ark-crypto";
 export class UnikActivationCommand extends PropertiesUpdateCommand {
     public static description = "Sandbox @unikname activation.";
 
-    public static examples = ["$ uns unik:activation @bob -n sandbox"];
+    public static examples = ["$ unikname unik:activation @bob -n sandbox"];
 
     public static flags = PropertiesUpdateCommand.getUpdateCommandFlags();
 

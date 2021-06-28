@@ -5,7 +5,7 @@ import { getDelegateArg } from "../../utils";
 export class DelegateUnvoteCreateCommand extends AbstractDelegateVoteCreateCommand {
     public static description = "Remove vote from a delegate with his @unikname or unikid";
 
-    public static examples = ["$ uns delegate:unvote @bob"];
+    public static examples = ["$ unikname delegate:unvote @bob"];
 
     public static flags = {
         ...AbstractDelegateVoteCreateCommand.flags,

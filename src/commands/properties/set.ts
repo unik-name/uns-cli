@@ -5,23 +5,25 @@ import { PropertiesUpdateCommand } from "../../updatePropertiesCommand";
 import { checkUnikPropertyFormat } from "../../utils";
 
 export class PropertiesSetCommand extends PropertiesUpdateCommand {
-    public static description = "Set (add or update) properties of UNIK token.";
+    public static description = "Set (add or update) properties of UNIKNAME token.";
 
     public static usage = "properties:set TARGET --key {propertyKey} --value {propertyValue}";
 
-    public static examples = ["$ uns properties:set @bob --key {key1} --value {value1} --key {key2} --value {value2}"];
+    public static examples = [
+        "$ unikname properties:set @bob --key {key1} --value {value1} --key {key2} --value {value2}",
+    ];
 
     public static flags = {
         ...PropertiesUpdateCommand.getUpdateCommandFlags(),
         key: flags.string({
             char: "k",
-            description: `Key of the property to add to the UNIK: (multiple occurrences, key must start with "usr/")`,
+            description: `Key of the property to add to the UNIKNAME: (multiple occurrences, key must start with "usr/")`,
             required: true,
             multiple: true,
         }),
         value: flags.string({
             char: "V",
-            description: "Value of the property to add to the UNIK",
+            description: "Value of the property to add to the UNIKNAME",
             required: true,
             multiple: true,
         }),

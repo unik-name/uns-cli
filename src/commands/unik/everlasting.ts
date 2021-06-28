@@ -6,7 +6,7 @@ import { NftFactoryServicesList, LIFE_CYCLE_PROPERTY_KEY, LifeCycleGrades } from
 export class EverlastingCommand extends PropertiesUpdateCommand {
     public static description = "Buy Everlasting status for a @unikname.";
 
-    public static examples = ["$ uns unik:everlasting @bob"];
+    public static examples = ["$ unikname unik:everlasting @bob"];
 
     public static flags = PropertiesUpdateCommand.getUpdateCommandFlags();
 

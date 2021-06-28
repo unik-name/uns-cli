@@ -18,9 +18,9 @@ import { WriteCommand } from "../writeCommand";
 const feesIncludedFlagId = "fees-included";
 
 export class SendCommand extends WriteCommand {
-    public static description = "Send owned UNS protocol tokens to another wallet.";
+    public static description = "Send owned UNIK protocol tokens to another wallet.";
 
-    public static examples = [`$ uns send 1237.77 "@bob"`];
+    public static examples = [`$ unikname send 1237.77 "@bob"`];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(),
@@ -32,7 +32,7 @@ export class SendCommand extends WriteCommand {
             default: false,
         }),
         sato: flags.boolean({
-            description: "Specify that the provided amount is in sato-UNS, not in UNS",
+            description: "Specify that the provided amount is in satoUNIK, not in UNIK",
             default: false,
         }),
         text: flags.string({

@@ -5,9 +5,9 @@ import { ReadCommand } from "../../readCommand";
 import { checkConfirmations, confirmedFlag, getChainContext, getTargetArg } from "../../utils";
 
 export class UnikIsDisclosedCommand extends ReadCommand {
-    public static description = "Check if UNIK has one or more disclosed explicit values.";
+    public static description = "Check if UNIKNAME has one or more disclosed explicit values.";
 
-    public static examples = ["$ uns unik:is-disclosed @bob"];
+    public static examples = ["$ unikname unik:is-disclosed @bob"];
 
     public static args = [getTargetArg()];
 

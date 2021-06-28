@@ -272,7 +272,7 @@ function getDidDocsUrl(): string {
 }
 
 function getDocsUrl() {
-    return "https://docs.uns.network";
+    return "https://docs.unikname.network";
 }
 
 export function getTargetArg() {

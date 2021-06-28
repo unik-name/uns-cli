@@ -15,11 +15,11 @@ import { checkFlag, createDiscloseTransaction, explicitValueFlag, getTargetArg, 
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikDiscloseCommand extends WriteCommand {
-    public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
+    public static description = "Disclose one or multiple explicitValues of your UNIKNAME identifier.";
 
     public static usage: string | string[] | undefined = 'unik:disclose TARGET -e "explicitValueToDisclose"';
 
-    public static examples = ["$ uns unik:disclose @bob -e bob"];
+    public static examples = ["$ unikname unik:disclose @bob -e bob"];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(false),

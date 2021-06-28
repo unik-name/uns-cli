@@ -7,7 +7,7 @@ import { handleFetchError } from "../../errorHandler";
 export class DelegateVoteCreateCommand extends AbstractDelegateVoteCreateCommand {
     public static description = "Vote for a delegate with his @unikname or unikid";
 
-    public static examples = ["$ uns delegate:vote @bob"];
+    public static examples = ["$ unikname delegate:vote @bob"];
 
     public static flags = {
         ...AbstractDelegateVoteCreateCommand.flags,

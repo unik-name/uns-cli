@@ -5,7 +5,7 @@ export const DEFAULT_COMMAND_FEES: number = 100000000;
 export const passphraseFlag = {
     passphrase: flags.string({
         description:
-            "The passphrase of the owner of UNIK. If you do not enter a passphrase you will be prompted for it.",
+            "The passphrase of the owner of UNIKNAME. If you do not enter a passphrase you will be prompted for it.",
     }),
 };
 
@@ -27,7 +27,7 @@ export const awaitConfirmationFlag = {
 export const feeFlag = (defaultFee: number = DEFAULT_COMMAND_FEES): { [_: string]: flags.IOptionFlag<number> } => {
     return {
         fee: flags.integer({
-            description: `Specify transaction fee in satoUNS. Defaults to ${defaultFee} (100 000 000 satoUNS = 1 UNS).`,
+            description: `Specify transaction fee in satoUNIK. Defaults to ${defaultFee} (100 000 000 satoUNIK = 1 UNIK).`,
             default: defaultFee,
         }),
     };
@@ -52,7 +52,8 @@ export const chainmetaFlag = {
 export const confirmedFlag = {
     confirmed: flags.integer({
         default: 3,
-        description: "Minimum number of confirmation since the last update of the UNIK required to return the value.",
+        description:
+            "Minimum number of confirmation since the last update of the UNIKNAME required to return the value.",
     }),
 };
 

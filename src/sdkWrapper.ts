@@ -131,7 +131,7 @@ export class UnsClientWrapper {
 
             return fingerPrintResponse.data;
         } catch (e) {
-            throw new Error(`Error computing  UNIK id. Caused by ${e.message}`);
+            throw new Error(`Error computing  UNIKNAME id. Caused by ${e.message}`);
         }
     }
 
@@ -147,7 +147,7 @@ export class UnsClientWrapper {
                 chainmeta: unikResponse.chainmeta,
             };
         } catch (e) {
-            return handleFetchError("UNIK", unikid)(e);
+            return handleFetchError("UNIKNAME", unikid)(e);
         }
     }
 
@@ -167,7 +167,7 @@ export class UnsClientWrapper {
                 chainmeta: propertiesResponse.chainmeta,
             };
         } catch (e) {
-            return handleFetchError("UNIK properties", unikid)(e);
+            return handleFetchError("UNIKNAME properties", unikid)(e);
         }
     }
 

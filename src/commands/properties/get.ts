@@ -11,11 +11,13 @@ import {
 } from "../../utils";
 
 export class PropertiesGetCommand extends ReadCommand {
-    public static description = "Get the value of a specific property of a UNIK token.";
+    public static description = "Get the value of a specific property of a UNIKNAME token.";
 
     public static usage = "properties:get TARGET --propertyKey {propertyKey}";
 
-    public static examples = ["$ uns properties:get @bob -k {propertyKey} [--confirmed {number of confirmations}]"];
+    public static examples = [
+        "$ unikname properties:get @bob -k {propertyKey} [--confirmed {number of confirmations}]",
+    ];
 
     public static flags = {
         ...ReadCommand.flags,
