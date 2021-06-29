@@ -3,9 +3,9 @@ import { CommandOutput, Formater, OUTPUT_FORMAT } from "../../formater";
 import { generatePassphrase, getWalletFromPassphrase } from "../../utils";
 
 export class CryptoAccountCreateCommand extends BaseCommand {
-    public static description = "Create UNS Crypto Account";
+    public static description = "Create unikname Crypto Account";
 
-    public static examples = ["$ uns cryptoaccount:create"];
+    public static examples = ["$ unikname cryptoaccount:create"];
 
     public static flags = {
         ...BaseCommand.baseFlags,

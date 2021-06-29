@@ -24,7 +24,7 @@ export abstract class BaseCommand extends Command {
         help: flags.help({ char: "h" }),
         network: flags.string({
             char: "n",
-            description: "Network used to create UNIK nft token",
+            description: "Network used to create UNIKNAME nft token",
             default: "livenet",
             options: UTILS.getNetworksList(),
             env: "UNS_NETWORK",
@@ -38,7 +38,7 @@ export abstract class BaseCommand extends Command {
             env: "UNS_NODE",
         }),
         nftfactory: flags.string({
-            description: "URL of custom UNS service provider",
+            description: "URL of custom Unikname.network service provider",
             env: "UNS_SERVICES",
         }),
     };
@@ -223,7 +223,7 @@ export abstract class BaseCommand extends Command {
             ownerAddress = resolved?.data.ownerAddress;
             chainmeta = resolved?.chainmeta as ChainMeta;
         } else {
-            throw new Error(`Unik target argument does not match expected format.`);
+            throw new Error(`@unikname target argument does not match expected format.`);
         }
 
         return { unikid, ownerAddress, chainmeta, transactions };
@@ -373,7 +373,9 @@ export abstract class BaseCommand extends Command {
         let unikType: string;
 
         if (unikTypeResponse.error) {
-            throw new Error(`Unable to get UNIK type (id: ${unikId}). Caused by ${unikTypeResponse.error?.message}`);
+            throw new Error(
+                `Unable to get UNIKNAME type (id: ${unikId}). Caused by ${unikTypeResponse.error?.message}`,
+            );
         } else {
             unikType = unikTypeResponse.data as string;
         }
@@ -383,7 +385,7 @@ export abstract class BaseCommand extends Command {
         const didType = DIDHelpers.fromCode(type);
 
         if (!didType) {
-            throw new Error("Unknown UNIK type");
+            throw new Error("Unknown UNIKNAME type");
         }
 
         return didType;

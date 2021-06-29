@@ -1,14 +1,14 @@
 import { ChainMeta, NodeConfiguration, Transaction, Wallet } from "@uns/ts-sdk";
 import { WithChainmeta } from "types";
-import { BaseCommand } from "../../baseCommand";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { ReadCommand } from "../../readCommand";
-import { fromSatoshi, getChainContext, getTargetArg } from "../../utils";
+import { BaseCommand } from "../baseCommand";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { ReadCommand } from "../readCommand";
+import { fromSatoshi, getChainContext, getTargetArg } from "../utils";
 
 export class UnikReadCommand extends ReadCommand {
-    public static description = "Display UNIK token information";
+    public static description = "Display UNIKNAME token information";
 
-    public static examples = ["$ uns unik:read @bob"];
+    public static examples = ["$ unikname read @bob"];
 
     public static flags = {
         ...ReadCommand.flags,
@@ -51,7 +51,7 @@ export class UnikReadCommand extends ReadCommand {
         }
 
         if (!owner) {
-            throw new Error(`Error fetching unik owner ${target.ownerAddress}`);
+            throw new Error(`Error fetching @unikname owner ${target.ownerAddress}`);
         }
 
         if (!nodeConf) {

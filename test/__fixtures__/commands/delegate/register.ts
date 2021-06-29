@@ -13,7 +13,7 @@ export const shouldExit = [
     {
         description: "Should exit with code 1 if delegate not found with token id",
         args: [commandName, "-n", "dalinet", UNIK_ID],
-        errorMsg: `» :stop: No UNIK found with id ${UNIK_ID}.;\n`,
+        errorMsg: `» :stop: No UNIKNAME found with id ${UNIK_ID}.;\n`,
         mocks: {
             nodeConfigurationCrypto: true,
             blockchain: true,

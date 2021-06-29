@@ -9,17 +9,17 @@ import {
 } from "@uns/ts-sdk";
 import { cli } from "cli-ux";
 import { CryptoAccountPassphrases } from "types";
-import { BaseCommand } from "../../baseCommand";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { checkFlag, createDiscloseTransaction, explicitValueFlag, getTargetArg, isDid } from "../../utils";
-import { WriteCommand } from "../../writeCommand";
+import { BaseCommand } from "../baseCommand";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { checkFlag, createDiscloseTransaction, explicitValueFlag, getTargetArg, isDid } from "../utils";
+import { WriteCommand } from "../writeCommand";
 
 export class UnikDiscloseCommand extends WriteCommand {
-    public static description = "Disclose one or multiple explicitValues of your UNIK identifier.";
+    public static description = "Disclose one or multiple explicitValues of your UNIKNAME identifier.";
 
-    public static usage: string | string[] | undefined = 'unik:disclose TARGET -e "explicitValueToDisclose"';
+    public static usage: string | string[] | undefined = 'disclose TARGET -e "explicitValueToDisclose"';
 
-    public static examples = ["$ uns unik:disclose @bob -e bob"];
+    public static examples = ["$ unikname disclose @bob -e bob"];
 
     public static flags = {
         ...WriteCommand.getWriteCommandFlags(false),

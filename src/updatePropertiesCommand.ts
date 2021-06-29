@@ -62,7 +62,7 @@ export abstract class PropertiesUpdateCommand extends WriteCommand {
             throw new Error("Transaction id can't be undefined");
         }
 
-        this.log("Binding new propert" + (Object.keys(properties).length > 1 ? "ies" : "y") + " to UNIK.");
+        this.log("Binding new propert" + (Object.keys(properties).length > 1 ? "ies" : "y") + " to UNIKNAME.");
         const finalTransaction = await this.sendAndWaitConfirmationsIfNeeded(transactionStruct, flags);
 
         return {

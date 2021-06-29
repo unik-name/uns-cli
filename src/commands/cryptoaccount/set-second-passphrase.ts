@@ -7,7 +7,7 @@ import { WriteCommand } from "../../writeCommand";
 export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
     public static description = "Set Crypto Account second passphrase";
 
-    public static examples = ["$ uns cryptoaccount:set-second-passphrase"];
+    public static examples = ["$ unikname cryptoaccount:set-second-passphrase"];
 
     public static flags = {
         ...CryptoAccountSetSecondPassphraseCommand.getFlags(),
@@ -66,7 +66,7 @@ export class CryptoAccountSetSecondPassphraseCommand extends WriteCommand {
         }
 
         this.warn(
-            "This information is not saved anywhere. You need to copy and save it by your own or you will lose your uns and UNIKs name.",
+            "This information is not saved anywhere. You need to copy and save it by your own or you will lose your UNIKs and UNIKNAMEs name.",
         );
 
         return {

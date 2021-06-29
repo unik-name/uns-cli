@@ -69,7 +69,7 @@ export abstract class AbstractDelegateVoteCreateCommand extends WriteCommand {
         }
 
         if (!wallet.isDelegate) {
-            throw new Error("This Unikname is not registered as delegate.");
+            throw new Error("This @unikname is not registered as delegate.");
         }
 
         return wallet.publicKey;

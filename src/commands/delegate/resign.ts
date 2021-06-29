@@ -4,9 +4,9 @@ import { AbstractDelegateCommand } from "../../abstract-delegate";
 import { createDelegateResignTransaction, getDelegateArg } from "../../utils";
 
 export abstract class DelegateResignCommand extends AbstractDelegateCommand {
-    public static description = "Resign delegate registration of a UNIK or unikid";
+    public static description = "Resign delegate registration of a @unikname or unikid";
 
-    public static examples = ["$ uns delegate:resign @bob"];
+    public static examples = ["$ unikname delegate:resign @bob"];
 
     public static args = [getDelegateArg("resign")];
 

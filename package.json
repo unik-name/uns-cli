@@ -1,6 +1,6 @@
 {
     "name": "@uns/cli",
-    "description": "UNS.network CLI",
+    "description": "unikname.network CLI",
     "version": "4.11.0",
     "author": "Space Elephant",
     "contributors": [
@@ -10,7 +10,7 @@
         "Guillaume Nicolas <guillaume.nicolas@spacelephant.org>"
     ],
     "bin": {
-        "uns": "./bin/run"
+        "unikname": "./bin/run"
     },
     "dependencies": {
         "@oclif/color": "^0.1.2",
@@ -75,19 +75,19 @@
     "main": "dist/index.js",
     "oclif": {
         "commands": "./dist/commands",
-        "bin": "uns",
+        "bin": "unikname",
         "topics": {
             "unik": {
-                "description": "Manage UNIK (`uns unik` to display UNIK commands)"
+                "description": "Manage UNIK protocol token (`unikname unik` to display UNIK commands)"
             },
             "cryptoaccount": {
-                "description": "Manage Crypto Account (`uns cryptoaccount` to display Crypto Account commands)"
+                "description": "Manage Crypto Account (`unikname cryptoaccount` to display Crypto Account commands)"
             },
             "properties": {
-                "description": "Manage UNIK properties (`uns properties` to display UNIK properties commands)"
+                "description": "Manage UNIKNAME properties (`unikname properties` to display UNIKNAME properties commands)"
             },
             "delegate": {
-                "description": "Manage UNS delegates (`uns delegate` to display Delegate commands)"
+                "description": "Manage unikname delegates (`unikname delegate` to display Delegate commands)"
             }
         },
         "plugins": [
@@ -105,7 +105,7 @@
         },
         "warn-if-update-available": {
             "timeoutInDays": 7,
-            "message": "UNS CLI update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>.\nPlease run 'uns update' to update it."
+            "message": "Unikname CLI update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>.\nPlease run 'unikname update' to update it."
         }
     },
     "scripts": {

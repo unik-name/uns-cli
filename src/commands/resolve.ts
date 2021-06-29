@@ -8,7 +8,7 @@ import { confirmedFlag, getChainContext, resolveUnikName } from "../utils";
 export class ResolveCommand extends ReadCommand {
     public static description = "Resolve a decentralized identifier.";
 
-    public static examples = [`$ uns resolve --confirmed {number of confirmations} "@bob?usr/phone"`];
+    public static examples = [`$ unikname resolve --confirmed {number of confirmations} "@bob?usr/phone"`];
 
     public static flags = {
         ...ReadCommand.flags,

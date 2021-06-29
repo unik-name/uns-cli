@@ -1,6 +1,6 @@
 import { Interfaces } from "@uns/ark-crypto";
 import { cli } from "cli-ux";
-import { SendCommand } from "../commands/send";
+import { SendCommand } from "../commands/unik/send";
 import { createTransferTransaction } from "../utils";
 import { CommandHelper } from "./command-helper";
 
@@ -51,7 +51,7 @@ export class SendCommandHelper extends CommandHelper<SendCommand> {
         }
 
         if (isSatoAmount && !Number.isInteger(amount)) {
-            throw new Error("sato UNS amount has to be an integer");
+            throw new Error("satoUNIK amount has to be an integer");
         }
 
         return amount;

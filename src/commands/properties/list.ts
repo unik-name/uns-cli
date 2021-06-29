@@ -3,9 +3,9 @@ import { CommandOutput, Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../
 import { confirmedFlag, getTargetArg } from "../../utils";
 
 export class PropertiesListCommand extends BaseCommand {
-    public static description = "Get properties of UNIK token.";
+    public static description = "Get properties of UNIKNAME token.";
 
-    public static examples = ["$ uns properties:list @bob [--confirmed {number of confirmations}]"];
+    public static examples = ["$ unikname properties:list @bob [--confirmed {number of confirmations}]"];
 
     public static flags = {
         ...BaseCommand.baseFlags,

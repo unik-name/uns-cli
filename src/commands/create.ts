@@ -9,20 +9,20 @@ import {
     isError,
     SdkResult,
 } from "@uns/ts-sdk";
-import { BaseCommand } from "../../baseCommand";
-import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
-import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
-import { CryptoAccountPassphrases, getUnikTypesList } from "../../types";
-import { certificationFlag, isDevMode, NFT_NAME, DEFAULT_COMMAND_FEES } from "../../utils";
-import { WriteCommand } from "../../writeCommand";
+import { BaseCommand } from "../baseCommand";
+import { EXPLICIT_VALUE_MAX_LENGTH } from "../config";
+import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../formater";
+import { CryptoAccountPassphrases, getUnikTypesList } from "../types";
+import { certificationFlag, isDevMode, NFT_NAME, DEFAULT_COMMAND_FEES } from "../utils";
+import { WriteCommand } from "../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
-    public static description = "Create UNIK token";
+    public static description = "Create UNIKNAME token";
 
-    public static usage = "unik:create --explicitValue {explicitValue} --type {type}";
+    public static usage = "create --explicitValue {explicitValue} --type {type}";
 
     public static examples = [
-        `$ uns unik:create --explicitValue {explicitValue} --type [${getUnikTypesList().join("|")}] --coupon {coupon}`,
+        `$ unikname create --explicitValue {explicitValue} --type [${getUnikTypesList().join("|")}] --coupon {coupon}`,
     ];
 
     public static flags = {
@@ -32,9 +32,9 @@ export class UnikCreateCommand extends WriteCommand {
     protected static getFlags() {
         const unikFlags = {
             ...WriteCommand.getWriteCommandFlags(true, 0),
-            explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
+            explicitValue: flags.string({ description: "UNIKNAME nft token explicit value", required: true }),
             type: flags.string({
-                description: "UNIK nft type",
+                description: "UNIKNAME nft type",
                 required: true,
                 options: getUnikTypesList(),
             }),
@@ -72,14 +72,14 @@ export class UnikCreateCommand extends WriteCommand {
         const didType: DIDType = flags.type.toUpperCase();
         if (explicitValue.length > EXPLICIT_VALUE_MAX_LENGTH) {
             throw new Error(
-                `Error computing  UNIK id. Too long explicitValue ([${explicitValue.length}] max length: ${EXPLICIT_VALUE_MAX_LENGTH})`,
+                `Error computing  UNIKNAME id. Too long explicitValue ([${explicitValue.length}] max length: ${EXPLICIT_VALUE_MAX_LENGTH})`,
             );
         }
 
         /**
          * Compute Fingerprint
          */
-        this.actionStart("Computing UNIK fingerprint");
+        this.actionStart("Computing UNIKNAME fingerprint");
         const computeFingerprintResult: FingerprintResult = await this.unsClientWrapper.computeTokenId(
             explicitValue,
             didType,
@@ -127,7 +127,7 @@ export class UnikCreateCommand extends WriteCommand {
             if (this.isFlagSet("fee") && DIDHelpers.fromLabel(didType) !== DIDTypes.INDIVIDUAL) {
                 if (voucher) {
                     throw new Error(
-                        `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
+                        `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for create with coupon must be \"${defaultFees}\"`,
                     );
                 }
                 fee = flags.fee;
@@ -167,13 +167,13 @@ export class UnikCreateCommand extends WriteCommand {
          */
         if (transactionFromNetwork) {
             this.log(
-                `UNIK nft forged:  ${transactionFromNetwork.confirmations} confirmation${
+                `UNIKNAME nft forged:  ${transactionFromNetwork.confirmations} confirmation${
                     transactionFromNetwork.confirmations > 0 ? "s" : ""
                 }`,
             );
 
             const tokenUrl = `${this.unsClientWrapper.getExplorerUrl()}/uniks/${tokenId}`;
-            this.log(`UNIK nft in UNS explorer: ${tokenUrl}`);
+            this.log(`UNIKNAME nft in Unikname explorer: ${tokenUrl}`);
         } else {
             this.error(
                 `Transaction not found yet, the network can be slow. Check this url in a while: ${transactionUrl}`,

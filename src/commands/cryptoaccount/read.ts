@@ -9,11 +9,11 @@ import { fromSatoshi, getChainContext, getWalletAddress } from "../../utils";
 export class CryptoAccountReadCommand extends ReadCommand {
     public static description = "Read current data of a specified crypto account, ic. balance";
 
-    public static examples = ["$ uns cryptoaccount:read {publicKey|address} --listunik"];
+    public static examples = ["$ unikname cryptoaccount:read {publicKey|address} --listunikname"];
 
     public static flags = {
         ...ReadCommand.flags,
-        listunik: flags.boolean({ description: "List UNIK tokens owned by the crypto account, if any." }),
+        listunikname: flags.boolean({ description: "List UNIKNAME tokens owned by the crypto account, if any." }),
     };
 
     public static args = [
@@ -69,7 +69,7 @@ export class CryptoAccountReadCommand extends ReadCommand {
             /**
              * LIST OF UNIK
              */
-            this.log(`\nLIST OF UNIK:${tokens.data.length === 0 ? " none" : ""}`);
+            this.log(`\nLIST OF UNIKNAME:${tokens.data.length === 0 ? " none" : ""}`);
             if (tokens.data.length > 0) {
                 tokens.data.forEach((tokenProps) => {
                     this.logAttribute("unikid", tokenProps.id);

@@ -11,7 +11,7 @@ export class PropertyRegisterCommand extends BaseCommand {
 
     public static usage = "properties:register TARGET --value {propertyValue}";
 
-    public static examples = ['$ uns properties:register @bob --value  "www.mydomain.com"'];
+    public static examples = ['$ unikname properties:register @bob --value  "www.mydomain.com"'];
 
     public static getFlags() {
         const cmdFlags: any = {
@@ -19,14 +19,14 @@ export class PropertyRegisterCommand extends BaseCommand {
             ...passphraseFlag,
             type: flags.string({
                 char: "t",
-                description: "type of unik property to register",
+                description: "type of @unikname property to register",
                 options: PropertyRegisterCommand.getAvailablePropertyTypes(),
                 default: "url",
                 required: true,
             }),
             value: flags.string({
                 char: "V",
-                description: "Value of the Unik property to verify",
+                description: "Value of the @unikname property to verify",
                 required: true,
             }),
         };

@@ -40,7 +40,7 @@ export const shouldExit = [
     {
         description: "Should exit with code 1 if delegate id malformed (no @)",
         args: [commandName, "-n", "dalinet", "delegateId"],
-        errorMsg: "» :stop: Unik target argument does not match expected format.;\n",
+        errorMsg: "» :stop: @unikname target argument does not match expected format.;\n",
         mocks: {
             nodeConfigurationCrypto: true,
             blockchain: true,
@@ -49,7 +49,7 @@ export const shouldExit = [
     {
         description: "Should exit with code 1 if delegate not found with token id",
         args: [commandName, "-n", "dalinet", UNIK_ID_NOT_FOUND],
-        errorMsg: `» :stop: No UNIK found with id ${UNIK_ID_NOT_FOUND}.;\n`,
+        errorMsg: `» :stop: No UNIKNAME found with id ${UNIK_ID_NOT_FOUND}.;\n`,
         mocks: {
             nodeConfigurationCrypto: true,
             blockchain: true,
@@ -64,7 +64,7 @@ export const shouldExit = [
     {
         description: "Should exit with code 1 if delegate found but not registered",
         args: [commandName, "-n", "dalinet", "@delegateId"],
-        errorMsg: "» :stop: This Unikname is not registered as delegate.;\n",
+        errorMsg: "» :stop: This @unikname is not registered as delegate.;\n",
         mocks: {
             blockchain: true,
             nodeConfigurationCrypto: true,
