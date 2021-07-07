@@ -21,6 +21,16 @@ If you discover a security vulnerability within this package, please send an e-m
 
 If you find any bugs, submit an [issue](https://github.com/unik-name/uns-cli/issues) or open [pull-request](https://github.com/unik-name/uns-cli/pulls), helping us catch and fix them and join our [contributors](https://github.com/unik-name/uns-cli/graphs/contributors).
 
+### Naming convention
+
+⚠️ **universal-name-system, UNS, uns.network** are previous names of the **unikname.network blockchain**.
+
+⚠️ **UNIK** is the previous name of the **UNIKNAME nft token**
+
+⚠️ **UNS** is the previous name of the **UNIK protocol token**
+
+_=> Renaming in codebase will be made progressively._
+
 ### Install dependencies
 
 ```
