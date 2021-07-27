@@ -170,9 +170,8 @@ export class UnikDiscloseCommand extends WriteCommand {
             passphrase,
         );
 
-        const discloseDemandCertification: IDiscloseDemandCertification = await this.unsClientWrapper.getDiscloseDemandCertification(
-            discloseDemand,
-        );
+        const discloseDemandCertification: IDiscloseDemandCertification =
+            await this.unsClientWrapper.getDiscloseDemandCertification(discloseDemand);
 
         /**
          * Read emitter's wallet nonce
