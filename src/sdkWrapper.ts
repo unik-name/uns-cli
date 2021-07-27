@@ -325,9 +325,8 @@ export class UnsClientWrapper {
     }
 
     public async getDiscloseDemandCertification(discloseDemand: IDiscloseDemand) {
-        const discloseDemandCertification: Response<IDiscloseDemandCertification> = await this.unsClient.discloseDemandCertification.create(
-            discloseDemand,
-        );
+        const discloseDemandCertification: Response<IDiscloseDemandCertification> =
+            await this.unsClient.discloseDemandCertification.create(discloseDemand);
 
         if (discloseDemandCertification.error) {
             throw new Error(discloseDemandCertification.error.message);

@@ -24,15 +24,12 @@ export class StatusCommand extends BaseCommand {
         const blockchainStatus: BlockchainState = await this.unsClientWrapper.getBlockchain();
 
         // Parallel requests + destructurating alltogether
-        const [nftStatus, nodeStatus, nodeConf]: [
-            ResponseWithChainMeta<INftStatus[]>,
-            NodeStatus,
-            NodeConfiguration,
-        ] = await Promise.all([
-            this.unsClientWrapper.unsClient.nft.status(),
-            this.unsClientWrapper.getNodeStatus(),
-            this.unsClientWrapper.getNodeConfiguration(),
-        ]);
+        const [nftStatus, nodeStatus, nodeConf]: [ResponseWithChainMeta<INftStatus[]>, NodeStatus, NodeConfiguration] =
+            await Promise.all([
+                this.unsClientWrapper.unsClient.nft.status(),
+                this.unsClientWrapper.getNodeStatus(),
+                this.unsClientWrapper.getNodeConfiguration(),
+            ]);
 
         if (!nodeConf || !blockchainStatus || !nodeStatus) {
             throw new Error(`Error fetching blockchain configuration ${nodeConf}, ${blockchainStatus}, ${nodeStatus}`);
