@@ -22,6 +22,7 @@ export const WALLET: Wallet = {
     publicKey: "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011",
     balance: 999974660000000,
     isDelegate: false,
+    isResigned: false,
 };
 
 export const WALLET_CHAINMETA = {
@@ -104,6 +105,7 @@ export const wallet: Wallet = {
     publicKey: "020d5e36cce37494811c1a6d8c5e05f744f45990cbcc1274d16914e093a5061011",
     balance: 999974660000000,
     isDelegate: false,
+    isResigned: false,
 };
 
 export const meta = {

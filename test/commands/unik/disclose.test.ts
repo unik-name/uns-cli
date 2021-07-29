@@ -19,9 +19,12 @@ import {
 } from "../../__fixtures__/commands/unik/disclose";
 import { applyExitCase, EMPTY_COMMAND_CONFIG, NODE_CONFIGURATION_CRYPTO } from "../../__fixtures__/commons";
 import { UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
-
 import { Managers, Transactions } from "@uns/ark-crypto";
-import * as SDK from "@uns/ts-sdk";
+
+jest.mock("@uns/ts-sdk", () => ({
+    ...jest.requireActual("@uns/ts-sdk"),
+    buildDiscloseDemand: () => DISCLOSE_DEMAND,
+}));
 
 const commandName: string = "unik:disclose";
 
@@ -46,7 +49,6 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Success", () => {
-        jest.spyOn(SDK, "buildDiscloseDemand").mockImplementation(() => DISCLOSE_DEMAND);
         jest.spyOn(Transactions.Utils, "getId").mockImplementation(() => DISCLOSE_TRANSACTION_ID);
 
         test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.services, (api) =>

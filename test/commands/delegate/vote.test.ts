@@ -1,6 +1,16 @@
-import * as SDK from "@uns/ts-sdk";
 import { commandName, meta, shouldExit, wallet } from "../../__fixtures__/commands/delegate/vote";
 import { applyExitCase } from "../../__fixtures__/commons";
+
+jest.mock("@uns/ts-sdk", () => ({
+    ...jest.requireActual("@uns/ts-sdk"),
+    didResolve: () =>
+        Promise.resolve({
+            data: { ownerAddress: wallet.address, unikid: "unikid" },
+            chainmeta: meta,
+            confirmations: 12,
+        }),
+    throwIfNotAllowedToVote: jest.fn,
+}));
 
 describe(`${commandName} command`, () => {
     beforeEach(() => {
@@ -8,14 +18,6 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Exit cases", () => {
-        jest.spyOn(SDK, "didResolve").mockResolvedValue({
-            data: { ownerAddress: wallet.address, unikid: "unikid" },
-            chainmeta: meta,
-            confirmations: 12,
-        });
-
-        jest.spyOn(SDK, "throwIfNotAllowedToVote").mockResolvedValueOnce();
-
         shouldExit.forEach((exitCase) => applyExitCase(exitCase));
     });
 });

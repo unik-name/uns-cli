@@ -59,6 +59,7 @@ export const WALLET: Wallet = {
     publicKey: WALLET_PUB_KEY,
     balance: 120,
     isDelegate: false,
+    isResigned: false,
 };
 
 const DISCLOSE_DEMAND_PAYLOAD = {

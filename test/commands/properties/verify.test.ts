@@ -1,7 +1,6 @@
 import { expect, test } from "@oclif/test";
 import { Transactions } from "@uns/ark-crypto";
 import { CertifiedNftUpdateTransaction } from "@uns/crypto";
-import * as SDK from "@uns/ts-sdk";
 import { BLOCKCHAIN, NODE_CONFIGURATION_CRYPTO, UNS_CLIENT_FOR_TESTS } from "../../__fixtures__/commons";
 import {
     URL_VERIFY_TRANSACTION,
@@ -18,6 +17,11 @@ import * as fs from "fs";
 import { VERIFIED_URL_KEY_PREFIX } from "@uns/ts-sdk";
 import { escapeSlashes } from "@uns/ts-sdk/dist/clients/repositories/unik/utils";
 
+jest.mock("@uns/ts-sdk", () => ({
+    ...jest.requireActual("@uns/ts-sdk"),
+    createCertifiedNftUpdateTransaction: () => URL_VERIFY_TRANSACTION,
+}));
+
 const commandName: string = "properties:verify";
 describe(`${commandName} command`, () => {
     beforeAll(() => {
@@ -29,8 +33,6 @@ describe(`${commandName} command`, () => {
     });
 
     describe("Run cases", () => {
-        jest.spyOn(SDK, "createCertifiedNftUpdateTransaction").mockResolvedValueOnce(URL_VERIFY_TRANSACTION);
-
         test.nock(UNS_CLIENT_FOR_TESTS.currentEndpointsConfig.network, (api) =>
             api.get(`/uniks/${UNIK_ID}`).twice().reply(200, UNIK_RESULT),
         )
