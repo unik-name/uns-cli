@@ -1,19 +1,11 @@
 import { flags } from "@oclif/command";
 import { Interfaces, Managers } from "@uns/ark-crypto";
-import {
-    createCertifiedNftMintTransaction,
-    DIDHelpers,
-    DIDType,
-    DIDTypes,
-    FingerprintResult,
-    isError,
-    SdkResult,
-} from "@uns/ts-sdk";
+import { createCertifiedNftMintTransaction, DIDType, FingerprintResult, isError, SdkResult } from "@uns/ts-sdk";
 import { BaseCommand } from "../../baseCommand";
 import { EXPLICIT_VALUE_MAX_LENGTH } from "../../config";
 import { Formater, NestedCommandOutput, OUTPUT_FORMAT } from "../../formater";
 import { CryptoAccountPassphrases, getUnikTypesList } from "../../types";
-import { certificationFlag, isDevMode, NFT_NAME, DEFAULT_COMMAND_FEES } from "../../utils";
+import { certificationFlag, isDevMode, NFT_NAME } from "../../utils";
 import { WriteCommand } from "../../writeCommand";
 
 export class UnikCreateCommand extends WriteCommand {
@@ -31,7 +23,7 @@ export class UnikCreateCommand extends WriteCommand {
 
     protected static getFlags() {
         const unikFlags = {
-            ...WriteCommand.getWriteCommandFlags(true, 0),
+            ...WriteCommand.getWriteCommandFlags(true),
             explicitValue: flags.string({ description: "UNIK nft token explicit value", required: true }),
             type: flags.string({
                 description: "UNIK nft type",
@@ -117,21 +109,12 @@ export class UnikCreateCommand extends WriteCommand {
             voucher = await this.unsClientWrapper.createUnikVoucher(explicitValue, didType, flags.coupon);
         }
 
-        const defaultFees: number =
-            DIDHelpers.fromLabel(didType) === DIDTypes.INDIVIDUAL
-                ? 0
-                : Managers.configManager.getMilestone().fees.staticFees?.UnsCertifiedNftMint || DEFAULT_COMMAND_FEES;
-
-        let fee: number = defaultFees;
-        if (flags.fee !== defaultFees) {
-            if (this.isFlagSet("fee") && DIDHelpers.fromLabel(didType) !== DIDTypes.INDIVIDUAL) {
-                if (voucher) {
-                    throw new Error(
-                        `Specified fee \"${flags.fee}\" does not respect fees policy. Fee for unik:create with coupon must be \"${defaultFees}\"`,
-                    );
-                }
-                fee = flags.fee;
-            }
+        let fee: number = flags.fee;
+        if (voucher) {
+            fee =
+                didType === "INDIVIDUAL"
+                    ? 0
+                    : Managers.configManager.getMilestone().voucherRewards[didType.toLowerCase()].forger;
         }
 
         const result: SdkResult<Interfaces.ITransactionData> = await createCertifiedNftMintTransaction(
